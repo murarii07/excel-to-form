@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { changeFieldValue } from "../redux/formElement";
-import Form from "../Molecules/Form";
+import Form from "./Form";
 function XlUpload() {
 
     const dispatch = useDispatch();
