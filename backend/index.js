@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
         .status(200)
         .json({
             success: true,
-            message: "hell0..."
+            message: "hell..."
         })
 })
 
