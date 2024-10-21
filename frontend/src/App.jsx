@@ -1,12 +1,15 @@
-import Form from './Form';
-import Nav from './Navbar';
-import Preview from './preview';
+
+import Nav from './Organism/Navbar';
+import Preview from './Organism/preview';
+import XlUpload from './Organism/xlUpload';
 
 function App() {
   return (
     <div className="App">
       <Nav />
-     <Form />
+     <XlUpload />
+   
+    
      <Preview />
     </div>
   );
