@@ -7,9 +7,9 @@ function XlUpload() {
     
     const fetchData = async (file, url) => {
         try {
-            const r = await fetch(url, { method: "POST", body: file })
-            const j = await r.json();
-            return j;
+            let response = await fetch(url, { method: "POST", body: file })
+            let resJson = await response.json();
+            return resJson;
         }
         catch (error) {
             return false;
@@ -20,7 +20,7 @@ function XlUpload() {
         e.preventDefault();
         const form = document.querySelector('form');
         const file = new FormData(form);
-        const response = await fetchData(file, "http://localhost:5000/generate");
+        const response = await fetchData(file, "http://localhost:5000/form/generate");
         if (response.success) {
             form.reset();
             //here  logic will be added for preview

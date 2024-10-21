@@ -6,7 +6,8 @@ const app = express();
 app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
-app.use("/generate", router)
+const formId=[];
+app.use("/form", router)
 app.get("/", (req, res) => {
     res
         .status(200)

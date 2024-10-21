@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../Atoms/Button";
 import { changeFieldValue } from "../redux/formElement";
-import EditBox from "../Molecules/editBox";
+import EditBox from "./editBox";
 import { useEffect, useState } from "react"
 function Preview() {
     const fields = useSelector((state) => state.Field.value);
@@ -15,7 +15,6 @@ function Preview() {
     useEffect(()=>{
         console.log(fields)
     })
-
     return (
         <>
             {fields.length ? (
@@ -28,9 +27,9 @@ function Preview() {
                     <div className="preview-btn">
                         <Button
                             buttonName="download-btn"
-                            name={<a href="http://localhost:3000" download={"form.html"}>download</a>} />
+                            name={<a href="http://localhost:5000/form/download/12345">download</a>} />
                         <Button
-                            name="Save"
+                            name={<a href="http://localhost:3000/formId">save</a>}
                             buttonName={"save-btn"} />
                     </div>
                 </>

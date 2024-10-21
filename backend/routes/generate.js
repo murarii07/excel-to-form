@@ -21,8 +21,8 @@ async function fieldCreation(path) {
     return headers;
 }
 
-
-router.post("/", uploads.single('excelFile'), async (req, res) => {
+const formId=[]
+router.post("/generate", uploads.single('excelFile'), async (req, res) => {
     try {
         console.log(req.file);
         const path = `./uploads/${req.file.originalname}`
@@ -30,18 +30,13 @@ router.post("/", uploads.single('excelFile'), async (req, res) => {
         const headers = await fieldCreation(path)
         // Log or process headers
         console.log('Headers:', headers);
-        const obj=[]
-        for (const element of headers) {
-            
-            const fieldJSON={
-                labelName:element,
-                Id:element,
-                Name:element,
-                Type:'text'
-            }
-            obj.push(fieldJSON)
-
-        }
+        const obj=headers.map(element=>({
+            labelName:element,
+            Id:element,
+            Name:element,
+            Type:'text'
+        }))
+        formId.push("12345") //create a id and push in this
         res
             .status(200)
             .json({
@@ -59,5 +54,20 @@ router.post("/", uploads.single('excelFile'), async (req, res) => {
                 message: error
             })
 
+    }
+})
+router.get("/download/:id", (req, res) => {
+    const forms=formId.filter(r=>r===req.params.id)
+    if(forms[0]){
+        res.status(200).download("./public/formTemplate.html");
+    }
+    else{
+
+        res
+            .status(404)
+            .json({
+                success: false,
+                message: "Error..."
+            })
     }
 })
