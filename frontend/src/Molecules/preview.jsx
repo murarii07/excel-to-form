@@ -10,18 +10,18 @@ function Preview() {
     const editHandle = (fieldId) => {
         const updatedFields = fields.filter((field) => field.Id !== fieldId);
         console.log("Filtered fields:", updatedFields);
-        dispatch(changeFieldValue(updatedFields));
+         dispatch(changeFieldValue(updatedFields));
     };
     useEffect(()=>{
         console.log(fields)
-    })
+    },[fields])
     return (
         <>
             {fields.length ? (
                 <>
                     <div className="preview-form">
                         {fields.map((x, index) =>
-                            <EditBox key={index} index={index} field={x} onClick={() => editHandle(x.Id)} />
+                            <EditBox key={x.Id} index={index} field={x} editHandle={() => editHandle(x.Id)} />
                         )}
                     </div>
                     <div className="preview-btn">

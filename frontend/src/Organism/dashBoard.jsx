@@ -28,6 +28,8 @@ const MyTask = () => {
                 <div className="box-border min-w-20 min-h-24 flex flex-col gap-y-3 items-center  ">
                     <div className="img border-black border-2 w-full py-3 min-h-16 text-center box-border text-3xl text-amber-800 rounded-md">+</div>
                     <div className="caption"><a href="http://localhost:3000/">New form</a></div> </div>
+
+                    {/* #aftewrwords use x.Id  for the value of key */}
                 {formList.map((x, index) => (
                     <div className="box-border min-w-20 min-h-24 flex flex-col gap-y-3 items-center " key={index}>
                         <div className="img border-black border-2 w-full min-h-16 text-center box-border rounded-md">image</div>
