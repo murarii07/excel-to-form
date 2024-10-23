@@ -22,7 +22,7 @@ function Form(props) {
                             
                         )}
                         <Button
-                            buttonName="submit-button"
+                            buttonName="submit-button  border-green-500 text-green-500 hover:bg-green-500 hover:text-white "
                             name='Generate'
                             buttonType='submit' />
         </form>

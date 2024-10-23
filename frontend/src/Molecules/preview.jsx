@@ -26,11 +26,11 @@ function Preview() {
                     </div>
                     <div className="preview-btn">
                         <Button
-                            buttonName="download-btn"
-                            name={<a href="http://localhost:5000/form/download/12345">download</a>} />
+                            buttonName="download-btn border-green-500  text-green-500 hover:bg-green-500 px-3 hover:text-white "
+                            name={<a href="http://localhost:5000/form/download/12345" className="text-green-500">download</a>} />
                         <Button
-                            name={<a href="http://localhost:3000/formId">save</a>}
-                            buttonName={"save-btn"} />
+                            name={<a href="http://localhost:3000/formId " className="text-green-500">save</a>}
+                            buttonName={"save-btn border-green-500  text-green-500 hover:bg-green-500 px-3 hover:text-white "} />
                     </div>
                 </>
             )
