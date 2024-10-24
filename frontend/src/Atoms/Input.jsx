@@ -1,9 +1,9 @@
 function Input(props) {
-    const {name, labelName,...rest}=props
+    const {name, labelName,className,...rest}=props
     return (
        <>
             <label htmlFor={name}  >{labelName}</label>
-            <input name={name} {...rest} />
+            <input name={name} className={`${className}`} {...rest} />
        </>
          
         

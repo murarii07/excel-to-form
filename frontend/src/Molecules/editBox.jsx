@@ -45,7 +45,7 @@ const EditBox = (props) => {
                         type={f.Type}
                     />
                     <Button
-                        buttonName={"delete-btn text-white font-bold bg-red-600 text-center p-0.5"}
+                        buttonName={"delete-btn  text-white  font-bold bg-red-600 text-center p-0.5 border-2"}
                         name="X"
                         onClick={props.editHandle}
 

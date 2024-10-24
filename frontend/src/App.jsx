@@ -18,11 +18,10 @@ function App() {
           <Preview />
         </div>} />
         
-        <Route path='MyTasks' element={<MyTask />}  />
-        
+        <Route path='tasks' element={<MyTask />}  />
         <Route path='form' element={<MyTask />}  /> {/* changes  should be made  */}
         <Route path='my-profile' element={<Profile />}  />
-        <Route path='formId' element={<FormUpload />}  />
+        <Route path='formId' element={<FormUpload fields={[]}  />}  />
       </Routes>
 
     </BrowserRouter>

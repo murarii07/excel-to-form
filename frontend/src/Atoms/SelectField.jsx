@@ -3,7 +3,7 @@ const Select = (props) => {
     return (
         <select 
         name={selcetName} 
-        className={className} 
+        className={`${className} rounded-md border-2 border-black p-2 bg-white `}
         id={id} 
         onChange={onChange}>
             {
