@@ -1,25 +1,35 @@
 import express from "express";
 import { MongoClient } from "mongodb";
 export const liveFormRouter = express.Router();
+import CryptoJS from "crypto-js";
 const mongoUrl = "mongodb://localhost:27017"
 const client = new MongoClient(mongoUrl);
 
+
+function urlGenerator(userName, id) {
+    let obj = JSON.stringify({ user: userName, id: id });
+    const encryptedUrl = CryptoJS.AES.encrypt(obj, 'secret key 123').toString();
+    return encryptedUrl;
+
+}
 liveFormRouter.post("/upload", async (req, res) => {
-    //mongo operation
-    await client.connect()
-    //mongo operation
-    const user = "tempData" //this will get through cookies
-    let db=client.db(user);
-    let col=db.collection(req.body.formId);
-    let result=col.insertOne({_id:"0newly_uploaded",temp:"temperory purpose only"});
-
-    //here the data will be saveds in mongodb and give form id
-
-    //after mongo operation
     try {
+        const token=req.cookies.jwt
+        const data = jwt.verify(token,"mur@rii07")
+        const user=data.user
+        //mongo operation
+        await client.connect()
+        let db = client.db(user);
+        console.log(req.body)
+        let col = db.collection(req.body.formId);
+        const url = urlGenerator(user, req.body.formId);
+        let result = await col.insertOne({ _id: url, fields: req.body.fieldName });
+        console.log(result)
+        
+        //after mongo operation
 
         res.status(200).json({
-            data:[{url:"url"}],
+            data: { url: url },
             success: true,
             message: "form upload is successfull...."
         })
@@ -28,10 +38,13 @@ liveFormRouter.post("/upload", async (req, res) => {
         res.status(404).json({
             data: null,
             success: false,
-            message: "failure...."
+            message: "failure....."
         })
     }
 })
+
+
+
 
 //this  api hit when user want to edit the form after being uploaded
 liveFormRouter.get("/:formId", async (req, res) => {
@@ -41,10 +54,10 @@ liveFormRouter.get("/:formId", async (req, res) => {
         const user = "tempData" //this will get through cookies
         let obj = []
         const databasesList = await client.db().admin().listDatabases();//returns object
-        console.log(databasesList.databases.some(db=>db.name===user))
+        console.log(databasesList.databases.some(db => db.name === user))
 
         //checking whether database is presented or not
-        if (databasesList.databases.some(db=>db.name===user)) {
+        if (databasesList.databases.some(db => db.name === user)) {
             let formId = req.params.formId;
             let db = client.db(user); //user name
             let col = db.collection(formId);

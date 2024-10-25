@@ -1,20 +1,30 @@
 import express from "express";
 import { MongoClient } from "mongodb";
+import CryptoJS from "crypto-js";
 export const formSubmissionRouter = express.Router();
 const mongoUrl = "mongodb://localhost:27017"
 const client = new MongoClient(mongoUrl);
 
+
+async function decryptionObj(encrypted) {
+    const jsonObjBytes = CryptoJS.AES.decrypt(encrypted, 'secret key 123');
+    const jsonObj = await JSON.parse(jsonObjBytes.toString(CryptoJS.enc.Utf8));
+    console.log(jsonObj)
+    return jsonObj
+}
+
 formSubmissionRouter.get("/:encryptedUrl", async (req, res) => {
     try {
 
-        //decoding the url we get db and formId as col 
-        let user;
-        let formId;
+        //decoding the url we get db and formId as col
+        let jsonObj = await decryptionObj(req.params.encryptedUrl)
+        console.log("f", jsonObj)
+        const { user, formId } = jsonObj
         let db = client.db(user);
         let col = db.collection(formId);
-       let result= await col.find({}).toArray();
+        let result = await col.find({}).toArray();
         res.status(200).json({
-            data:result,
+            data: result,
             success: true,
             message: "successfull...."
         })
@@ -31,10 +41,10 @@ formSubmissionRouter.get("/:encryptedUrl", async (req, res) => {
 
 formSubmissionRouter.post("/:encryptedUrl", async (req, res) => {
     try {
-
-        //decoding the url we get db and formId as col 
-        let user;
-        let formId;
+        //decoding the url we get db and formId as col
+        let jsonObj = await decryptionObj(req.params.encryptedUrl)
+        console.log("f", jsonObj)
+        const { user, formId } = jsonObj
         let db = client.db(user);
         let col = db.collection(formId);
         await col.insertOne(req.body);

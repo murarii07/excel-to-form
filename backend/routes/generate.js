@@ -1,8 +1,8 @@
 import express from "express";
-export const router = express.Router();
 import ExcelJS from 'exceljs';
 import multer from "multer";
 import fs from 'fs';
+export const router = express.Router();
 // // Multer memory storage configuration
 const storage = multer.memoryStorage();
 const uploads = multer({ storage });
@@ -37,7 +37,7 @@ router.post("/generate", uploads.single('excelFile'), async (req, res) => {
             Type:'text'
         }))
         formId.push("12345") //create a id and push in this
-        fs.unlinkSync(path)
+        fs.unlinkSync(path) //deleting the xl file
         res
             .status(200)
             .json({

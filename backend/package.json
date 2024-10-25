@@ -11,11 +11,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "crypto-js": "^4.2.0",
     "epxress": "^0.0.1-security",
     "exceljs": "^4.4.0",
     "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.10.0",
+    "mongoose": "^8.7.2",
     "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
