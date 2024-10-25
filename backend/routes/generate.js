@@ -37,6 +37,7 @@ router.post("/generate", uploads.single('excelFile'), async (req, res) => {
             Type:'text'
         }))
         formId.push("12345") //create a id and push in this
+        fs.unlinkSync(path)
         res
             .status(200)
             .json({
@@ -47,7 +48,7 @@ router.post("/generate", uploads.single('excelFile'), async (req, res) => {
     }
     catch (error) {
         res
-            .status(200)
+            .status(404)
             .json({
                 data: null,
                 success: false,
@@ -60,7 +61,8 @@ router.get("/download/:id", (req, res) => {
     
     const forms=formId.filter(r=>r===req.params.id)
     if(forms[0]){
-        res.status(200).download("./public/formTemplate.html");
+        formId=formId.filter(r=>r!==req.params.id);
+        res.status(200).download("formTemplate.html");
     }
     else{
 

@@ -1,7 +1,7 @@
 import express from "express";
 export const Register= express.Router();
 
-router.post("/", (req, res) => {
+Register.post("/", (req, res) => {
     //mongo operation
 
 

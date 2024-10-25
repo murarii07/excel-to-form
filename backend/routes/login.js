@@ -1,6 +1,6 @@
 import express from "express";
 export const login= express.Router();
-router.post("/", (req, res) => {
+login.post("/", (req, res) => {
     //mongo operation
     //after mongo operation
     try {
