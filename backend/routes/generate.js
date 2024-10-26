@@ -58,19 +58,24 @@ router.post("/generate", uploads.single('excelFile'), async (req, res) => {
     }
 })
 router.get("/download/:id", (req, res) => {
-    
-    const forms=formId.filter(r=>r===req.params.id)
-    if(forms[0]){
-        formId=formId.filter(r=>r!==req.params.id);
-        res.status(200).download("formTemplate.html");
-    }
-    else{
+    try{
 
+        const forms=formId.filter(r=>r===req.params.id)
+        if(forms[0]){
+            formId=formId.filter(r=>r!==req.params.id);
+            res.status(200).download("formTemplate.html");
+        }
+        else{
+            throw new Error("not found");
+            
+        }
+    }
+    catch(e){
         res
             .status(404)
             .json({
                 success: false,
-                message: "Error..."
+                message: e.message
             })
     }
 })

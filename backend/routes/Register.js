@@ -1,12 +1,13 @@
 import express from "express";
-import { AuthStructure } from "../models/r.js";
+import { AuthStructure } from "../models/AuthSchema.js";
 export const Register = express.Router();
 import { hashSync } from "bcrypt";
 Register.post("/", async (req, res) => {
     try {
         const isUsernameExist=await AuthStructure.findOne({   username: req.body.username})
-        if(isUsernameExist){
-            throw new Error("username exist");   
+        const isEmailExist=await AuthStructure.findOne({   email: req.body.email})
+        if(isUsernameExist && isEmailExist){
+            throw new Error("username or Email exist");   
         }
         //mongo operation
         const user = await AuthStructure.create({

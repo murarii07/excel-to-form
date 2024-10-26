@@ -1,6 +1,6 @@
 import express from "express";
 import { compareSync } from "bcrypt";
-import { AuthStructure } from "../models/r.js";
+import { AuthStructure } from "../models/AuthSchema.js";
 import mongoose from "mongoose";
 export const login= express.Router();
 import jwt from 'jsonwebtoken';
