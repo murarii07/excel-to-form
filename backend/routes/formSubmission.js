@@ -2,7 +2,9 @@ import express from "express";
 import { MongoClient } from "mongodb";
 import CryptoJS from "crypto-js";
 export const formSubmissionRouter = express.Router();
-const mongoUrl = "mongodb://localhost:27017"
+import { config } from "dotenv";
+config() //loading the env file
+const mongoUrl = process.env.MONGODB_URL
 const client = new MongoClient(mongoUrl);
 
 

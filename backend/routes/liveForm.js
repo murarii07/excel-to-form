@@ -2,13 +2,15 @@ import express from "express";
 import { MongoClient } from "mongodb";
 export const liveFormRouter = express.Router();
 import CryptoJS from "crypto-js";
-const mongoUrl = "mongodb://localhost:27017"
+import { config } from "dotenv";
+config() //loading the env file
+const mongoUrl = process.env.MONGODB_URL
 const client = new MongoClient(mongoUrl);
 
 
 function urlGenerator(userName, id) {
     let obj = JSON.stringify({ user: userName, id: id });
-    const encryptedUrl = CryptoJS.AES.encrypt(obj, 'secret key 123').toString();
+    const encryptedUrl = CryptoJS.AES.encrypt(obj, process.env.ENCRYPTED_SECRET_KEY).toString();
     return encryptedUrl;
     
 }
@@ -17,7 +19,7 @@ function urlGenerator(userName, id) {
 liveFormRouter.post("/upload", async (req, res) => {
     try {
         const token = req.cookies.jwt
-        const data = jwt.verify(token, "mur@rii07")
+        const data = jwt.verify(token, process.env.JWT_SECRET_KEY)
         const user = data.user
         //mongo operation
         await client.connect()
@@ -87,7 +89,7 @@ liveFormRouter.get("/edit/:formId", async (req, res) => {
 liveFormRouter.get('/formlist', async (req, res) => {
     try {
         const token = req.cookies.jwt
-        const data = jwt.verify(token, "mur@rii07")
+        const data = jwt.verify(token,process.env.JWT_SECRET_KEY)
         const user = data.user
         let db = client.db(user);
         let collectList =await db.listCollections().toArray();

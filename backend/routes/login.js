@@ -2,9 +2,11 @@ import express from "express";
 import { compareSync } from "bcrypt";
 import { AuthStructure } from "../models/AuthSchema.js";
 import mongoose from "mongoose";
-export const login= express.Router();
 import jwt from 'jsonwebtoken';
-mongoose.connect("mongodb://localhost:27017/ProjectAdmin")
+import { config } from "dotenv";
+export const login= express.Router();
+config() //loading the env file
+mongoose.connect(`${process.env.MONGODB_URL}/ProjectAdmin`)
 .then(()=>{console.log("login server connected");})
 .catch(()=>{console.log("login server failed");})
 login.post("/", async (req, res) => {
@@ -24,7 +26,7 @@ login.post("/", async (req, res) => {
                 const payload={
                     user:user.username
                 }
-                const secretKey="mur@rii07"
+                const secretKey=process.env.JWT_SECRET_KEY
                 const expireAge=1000*60*60;
                 let token= jwt.sign(payload,secretKey,{expiresIn:expireAge});
                 
