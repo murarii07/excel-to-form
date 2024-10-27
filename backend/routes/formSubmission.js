@@ -4,12 +4,11 @@ import CryptoJS from "crypto-js";
 export const formSubmissionRouter = express.Router();
 import { config } from "dotenv";
 config() //loading the env file
-const mongoUrl = process.env.MONGODB_URL
-const client = new MongoClient(mongoUrl);
+const client = new MongoClient(process.env.MONGODB_URL);
 
 
-async function decryptionObj(encrypted) {
-    const jsonObjBytes = CryptoJS.AES.decrypt(encrypted, 'secret key 123');
+const decryptionObj = async (encryptedString) => {
+    const jsonObjBytes = CryptoJS.AES.decrypt(encryptedString, process.env.ENCRYPTED_SECRET_KEY);
     const jsonObj = await JSON.parse(jsonObjBytes.toString(CryptoJS.enc.Utf8));
     console.log(jsonObj)
     return jsonObj

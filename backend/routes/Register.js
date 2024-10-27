@@ -10,14 +10,15 @@ Register.post("/", async (req, res) => {
             throw new Error("username or Email exist");   
         }
         //mongo operation
+        //using create we do not need to save it manually user.save() not needed
         const user = await AuthStructure.create({
             username: req.body.username,
             email: req.body.email,
             password: hashSync(req.body.password, 10)
         })
-        await user.save()
+        
+        
         //after mongo operation
-
         res.status(200).json({
             success: true,
             message: "successfull register...."
