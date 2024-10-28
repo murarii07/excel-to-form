@@ -2,7 +2,10 @@ import express from "express";
 import ExcelJS from 'exceljs';
 import multer from "multer";
 import fs from 'fs';
+import { randomBytes } from "crypto";
 export const router = express.Router();
+import { config } from "dotenv";
+config();
 // // Multer memory storage configuration
 const storage = multer.memoryStorage();
 const uploads = multer({ storage });
@@ -21,7 +24,7 @@ async function fieldCreation(path) {
     return headers;
 }
 
-const formId=[]
+let formIdList = []
 router.post("/generate", uploads.single('excelFile'), async (req, res) => {
     try {
         console.log(req.file);
@@ -30,21 +33,36 @@ router.post("/generate", uploads.single('excelFile'), async (req, res) => {
         const headers = await fieldCreation(path)
         // Log or process headers
         console.log('Headers:', headers);
-        const obj=headers.map(element=>({
-            labelName:element,
-            Id:element,
-            Name:element,
-            Type:'text'
+        const obj = headers.map(element => ({
+            LabelName: element,
+            Id: element,
+            Name: element,
+            Type: 'text'
         }))
-        formId.push("12345") //create a id and push in this
+        let formId = randomBytes(8).toString('hex')
+        while(formIdList.some(x=>x===formId)){
+            formId = randomBytes(8).toString('hex')
+        }
+        formIdList.push(formId) //create a id and push in this
         fs.unlinkSync(path) //deleting the xl file
         res
-            .status(200)
-            .json({
-                data: obj,
-                success: true,
-                message: "successfull...."
-            })
+        .cookie('formId', formId, {
+            maxAge:  1000 * 60 * 60,
+            httpOnly: true,
+            signed:true,
+            sameSite:'none',
+            secure: true, // Only secure in production,
+            path: "/"
+        })
+        .status(200)
+        .json({
+            data: obj,
+            success: true,
+            message: "successfull...."
+        })
+        // console.log(formId)
+            
+
     }
     catch (error) {
         res
@@ -57,20 +75,26 @@ router.post("/generate", uploads.single('excelFile'), async (req, res) => {
 
     }
 })
-router.get("/download/:id", (req, res) => {
-    try{
-
-        const forms=formId.filter(r=>r===req.params.id)
-        if(forms[0]){
-            formId=formId.filter(r=>r!==req.params.id);
-            res.status(200).download("formTemplate.html");
+router.get("/download", (req, res) => {
+    try {
+        const formId = req.signedCookies?.formId;
+        console.log(formId)
+        if (!formId) {
+            return res.status(400).json({ success: false, message: "Cookie not found." });
         }
-        else{
+        const forms = formIdList.find(r => r === formId)
+        console.log(formId, forms)
+        if (forms) {
+            formIdList.splice(formIdList.indexOf(formId), 1)
+            res.clearCookie("formId", { signed: true });
+            res.status(200).download("public/formTemplate.html");
+        }
+        else {
             throw new Error("not found");
-            
+
         }
     }
-    catch(e){
+    catch (e) {
         res
             .status(404)
             .json({

@@ -3,16 +3,34 @@ import Nav from "../Molecules/Navbar";
 import Input from "../Atoms/Input";
 import { useEffect, useState } from "react";
 const MyTask = () => {
-    const [formList, setFormList] = useState(["formId1", "formId2", "formId3"]);
+    const [formList, setFormList] = useState([]);
+    const [formListFilter, setFormListFilter] = useState(formList);
     const searching = (e) => {
         console.log(e.target.value)
         if (e.target.value != null) {
-            let arr = ["formId1", "formId2", "formId3"].filter(x => x.includes(e.target.value));
-            setFormList(arr);
+            let arr = formList.filter(x => x.includes(e.target.value));
+            setFormListFilter(arr);
+            // fetchw()
         }
 
-   
     }
+    const fetchw=async ()=>{
+        const r=await fetch("http://localhost:5000/user/formlist", {
+            method: "GET",
+            credentials: "include" // Sends cookies with the request
+        });
+        const s=await r.json();
+        if(s.success){
+            setFormList(s.data.formlist)
+            console.log(s.data)
+        }
+    }
+    useEffect(()=>{
+        fetchw() 
+    },[])
+    useEffect(()=>{
+        console.log(formList)
+    },[formList])
 
 return (
     <>
@@ -30,7 +48,7 @@ return (
                     <div className="caption"><a href="http://localhost:3000/">New form</a></div>
                      </div>
             {/* #aftewrwords use x.Id  for the value of key */}
-            {formList.map((x, index) => (
+            {formListFilter.map((x, index) => (
                 <div className="box-border min-w-20 min-h-28 flex flex-col gap-y-3 items-center " key={index}>
                     <div className="img border-black border-2 w-full min-h-20 text-center box-border rounded-md">image</div>
                     <div className="caption">{x}</div>

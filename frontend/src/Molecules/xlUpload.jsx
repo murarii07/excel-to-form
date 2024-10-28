@@ -7,7 +7,7 @@ function XlUpload() {
     
     const fetchData = async (file, url) => {
         try {
-            let response = await fetch(url, { method: "POST", body: file })
+            let response = await fetch(url, { method: "POST", credentials:'include', body: file })
             let resJson = await response.json();
             return resJson;
         }

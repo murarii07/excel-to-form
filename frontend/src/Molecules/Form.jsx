@@ -14,16 +14,17 @@ function Form(props) {
                 (x,index) => 
                     
                         <Input
+                            className={"border-2 p-1 mt-5"}
                             name={x.Name}
-                            key={index}
+                            key={x.Id}
                             id={x.Id}
-                            labelName={x.labelName}
+                            labelName={x.LabelName}
                             type={x.Type}/>   
                             
                         )}
                         <Button
-                            buttonName="submit-button  border-green-500 text-green-500 hover:bg-green-500 hover:text-white "
-                            name='Generate'
+                            buttonName="submit-button w-2/4 hover:text-white "
+                            name={props.buttonName}
                             buttonType='submit' />
         </form>
         </div>

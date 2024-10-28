@@ -3,18 +3,53 @@ import Button from "../Atoms/Button";
 import { changeFieldValue } from "../redux/formElement";
 import EditBox from "./editBox";
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom";
 function Preview() {
+    const navigate = useNavigate();
     const fields = useSelector((state) => state.Field.value);
     console.log(fields)
     const dispatch = useDispatch()
     const editHandle = (fieldId) => {
         const updatedFields = fields.filter((field) => field.Id !== fieldId);
         console.log("Filtered fields:", updatedFields);
-         dispatch(changeFieldValue(updatedFields));
+        dispatch(changeFieldValue(updatedFields));
     };
-    useEffect(()=>{
+    useEffect(() => {
         console.log(fields)
-    },[fields])
+    }, [fields])
+    const handled = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/form/download', {
+                method: 'GET',
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const blob = await response.blob();
+            console.log(blob)
+            const url = URL.createObjectURL(blob);
+            console.log(url)
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'form.html'); // Replace with your desired file name
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url); // Cleanup
+        } catch (error) {
+            console.error('Download failed:', error);
+        }
+    }
+    const handleds = () => {
+        try {
+            navigate("/formId")
+        } catch (e) {
+            console.log(e)
+        }
+    }
     return (
         <>
             {fields.length ? (
@@ -27,9 +62,9 @@ function Preview() {
                     <div className="preview-btn">
                         <Button
                             buttonName="download-btn border-green-500  text-green-500 hover:bg-green-500 px-3 hover:text-white "
-                            name={<a href="http://localhost:5000/form/download/12345" className="text-green-500">download</a>} ></Button>
+                            name={"download"} onClick={handled}></Button>
                         <Button
-                            name={<a href="http://localhost:3000/formId " className="text-green-500">save</a>}
+                            name="livePreview" onClick={handleds}
                             buttonName={"save-btn border-green-500  text-green-500 hover:bg-green-500 px-3 hover:text-white "} />
                     </div>
                 </>

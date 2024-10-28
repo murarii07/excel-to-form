@@ -4,18 +4,18 @@ import { AuthStructure } from "../models/AuthSchema.js";
 import mongoose from "mongoose";
 import jwt from 'jsonwebtoken';
 import { config } from "dotenv";
-export const login = express.Router();
 config() //loading the env file
+export const login = express.Router();
 mongoose.connect(`${process.env.MONGODB_URL}/ProjectAdmin`)
-    .then(() => { console.log("login server connected"); })
-    .catch(() => { console.log("login server failed"); })
+    .then(() => { console.log("Authentication server connected"); })
+    .catch(() => { console.log("Authentication server failed"); })
 
 
 login.post("/", async (req, res) => {
     //mongo operation
     try {
         const user = await AuthStructure.findOne({ username: req.body.username })
-      //  console.log("ff", user)
+        console.log("ff", user)
         if (user) {
             const pas = compareSync(req.body.password, user.password);
             console.log(pas)
@@ -27,19 +27,28 @@ login.post("/", async (req, res) => {
                 let token = jwt.sign(payload, secretKey, { expiresIn: expireAge });
 
                 // cookie
-                res.status(200).cookie("jwt", token, {
-                    maxAge: expireAge,
-                    httpOnly: true,
-                    path: "/"
-                })
+                res
+                    .cookie("jwt", token, {
+                        maxAge: expireAge,
+                        httpOnly: true,
+                        path: "/",
+                        secure: true,
+                        sameSite:"none",
+                        
+                    })
+                    .status(200)
+                    .json({
+                        success: true,
+                        message: "logged in"
+                    })
             }
             else {
-                throw new Error("login failed");
+                throw new Error("logins failed");
 
             }
         }
         else {
-            throw new Error("login failed");
+            throw new Error("loginaa failed");
 
         }
     }

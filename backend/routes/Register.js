@@ -16,8 +16,6 @@ Register.post("/", async (req, res) => {
             email: req.body.email,
             password: hashSync(req.body.password, 10)
         })
-        
-        
         //after mongo operation
         res.status(200).json({
             success: true,

@@ -5,7 +5,9 @@ function Nav(props){
             <div className="navbar  my-3 mb-10 w-11/12 m-auto">
                 <ul className="flex justify-between"> 
                     <li>FormX</li>
-                    <li>userdp</li>
+                    <li>
+                        userdp
+                        </li>
                 </ul>
             </div>
            
@@ -17,7 +19,7 @@ function Nav(props){
                 <ul className="flex justify-evenly"> 
                     <li>logo</li>
                     <li><a href="/login" target="_blank">login</a></li>
-                    <li><a href="/login" target="_blank">signup</a></li>
+                    <li><a href="/signup" target="_blank">signup</a></li>
                 </ul>
             </div>
         )

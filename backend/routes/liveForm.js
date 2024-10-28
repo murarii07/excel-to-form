@@ -3,6 +3,7 @@ import { MongoClient } from "mongodb";
 export const liveFormRouter = express.Router();
 import CryptoJS from "crypto-js";
 import { config } from "dotenv";
+import jwt from 'jsonwebtoken'
 config() //loading the env file
 const client = new MongoClient(process.env.MONGODB_URL);
 
@@ -15,24 +16,28 @@ function urlGenerator(userName, id) {
 
 }
 //extract data from token
-function extractDataFromToken() {
+function extractDataFromToken(req) {
     const token = req.cookies.jwt
+    console.log(token)
     const data = jwt.verify(token, process.env.JWT_SECRET_KEY)
+    // this is use for testing purpose only
+    // const data={user:"tempData"}
     return data.user
 }
 
 //form upload of user
 liveFormRouter.post("/upload", async (req, res) => {
+
     try {
-        const user = extractDataFromToken()
+        const user = extractDataFromToken(req)
         //mongo operation
         await client.connect()
         let db = client.db(user);
-        console.log(req.body)
+        console.log(req.body.formId)
         let col = db.collection(req.body.formId);
         const url = urlGenerator(user, req.body.formId);
-        let result = await col.insertOne({ _id: url, fields: req.body.fieldName });
-        console.log(result)
+        let result = await col.insertOne({ _id: url, fields: req.body.fieldDetails });
+        console.log("sd",result)
 
         //after mongo operation
         res.status(200).json({
@@ -58,8 +63,7 @@ liveFormRouter.get("/edit/:formId", async (req, res) => {
     try {
         await client.connect()
         //mongo operation
-        //const user = "tempData" //this will get through cookies
-        const user = extractDataFromToken();
+        const user = extractDataFromToken(req);
         const databasesList = await client.db().admin().listDatabases();//returns object
         console.log(databasesList.databases.some(db => db.name === user))
 
@@ -92,18 +96,19 @@ liveFormRouter.get("/edit/:formId", async (req, res) => {
 
 liveFormRouter.get('/formlist', async (req, res) => {
     try {
-        // const user = extractDataFromToken()
-        const user="tempData"
+        await client.connect()
+        const user = extractDataFromToken(req)
+        console.log(user)
         let db = client.db(user);
         let collectList = await db.listCollections().toArray();
         console.log(collectList)
-        const userDbDeatails=await db.stats() //give user db details by using db.stats which returns a promise 
+        const userDbDeatails = await db.stats() //give user db details by using db.stats which returns a promise 
         console.log(userDbDeatails.storageSize)
-        collectList=collectList.map(x=>x.name)
+        collectList = collectList.map(x => x.name)
         res.status(200).json({
             data: {
-                formlist:collectList,
-                storageInBytes:userDbDeatails.storageSize
+                formlist: collectList,
+                storageInBytes: userDbDeatails.storageSize
             },
             success: true,
             message: "successfull...."
@@ -120,8 +125,7 @@ liveFormRouter.get('/formlist', async (req, res) => {
 
 liveFormRouter.delete("/delete/:formId", async (req, res) => {
     try {
-        const user = extractDataFromToken()
-        // let user="tempData";
+        const user = extractDataFromToken(req)
         let db = client.db(user);
         const collectionFilter = { name: req.params.formId };
         const result = await db.listCollections(collectionFilter).toArray()
@@ -139,7 +143,8 @@ liveFormRouter.delete("/delete/:formId", async (req, res) => {
     catch (e) {
         res.status(404).json({
             success: false,
-            message: e.message})
+            message: e.message
+        })
     }
 
 })
