@@ -40,28 +40,28 @@ router.post("/generate", uploads.single('excelFile'), async (req, res) => {
             Type: 'text'
         }))
         let formId = randomBytes(8).toString('hex')
-        while(formIdList.some(x=>x===formId)){
+        while (formIdList.some(x => x === formId)) {
             formId = randomBytes(8).toString('hex')
         }
         formIdList.push(formId) //create a id and push in this
         fs.unlinkSync(path) //deleting the xl file
         res
-        .cookie('formId', formId, {
-            maxAge:  1000 * 60 * 60,
-            httpOnly: true,
-            signed:true,
-            sameSite:'none',
-            secure: true, // Only secure in production,
-            path: "/"
-        })
-        .status(200)
-        .json({
-            data: obj,
-            success: true,
-            message: "successfull...."
-        })
+            .cookie('formId', formId, {
+                maxAge: 1000 * 60 * 10,  //10minute
+                httpOnly: true,
+                signed: true,
+                sameSite: 'none',
+                secure: true, // Only secure in production,
+                path: "/"
+            })
+            .status(200)
+            .json({
+                data: obj,
+                success: true,
+                message: "successfull...."
+            })
         // console.log(formId)
-            
+
 
     }
     catch (error) {

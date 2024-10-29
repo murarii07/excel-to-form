@@ -30,10 +30,10 @@ formSubmissionRouter.get("/:encryptedUrl", async (req, res) => {
             message: "successfull...."
         })
     } catch (e) {
-        res.status(404).json({
+        res.status(500).json({
             data: null,
             success: false,
-            message: "failure...."
+            message: e.message
         })
     }
 
@@ -48,17 +48,24 @@ formSubmissionRouter.post("/:encryptedUrl", async (req, res) => {
         const { user, formId } = jsonObj
         let db = client.db(user);
         let col = db.collection(formId);
-        await col.insertOne(req.body);
+        // !req.body is used to check if req.body is "falsy. means empty or undefined or null"
+        if (!req.body || Object.keys(req.body).length == 0) {
+            return res.status(400).json({
+                success: false,
+                message: e.message
+            })
+        }
+        await col.insertOne(req.body)
         res.status(200).json({
             data: [{ url: "url" }],
             success: true,
             message: "form response submission is successfull...."
         })
     } catch (e) {
-        res.status(404).json({
+        res.status(500).json({
             data: null,
             success: false,
-            message: "failure...."
+            message: e.message
         })
     }
 

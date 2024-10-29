@@ -17,9 +17,9 @@ login.post("/", async (req, res) => {
         const user = await AuthStructure.findOne({ username: req.body.username })
         console.log("ff", user)
         if (user) {
-            const pas = compareSync(req.body.password, user.password);
-            console.log(pas)
-            if (pas) {
+            const psw = compareSync(req.body.password, user.password);
+            console.log(psw)
+            if (psw) {
                 //creating jwt 
                 const payload = { user: user.username }
                 const secretKey = process.env.JWT_SECRET_KEY

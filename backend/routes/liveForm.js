@@ -3,7 +3,7 @@ import { MongoClient } from "mongodb";
 export const liveFormRouter = express.Router();
 import CryptoJS from "crypto-js";
 import { config } from "dotenv";
-import jwt from 'jsonwebtoken'
+import jwt, { JsonWebTokenError } from 'jsonwebtoken'
 config() //loading the env file
 const client = new MongoClient(process.env.MONGODB_URL);
 
@@ -17,12 +17,20 @@ function urlGenerator(userName, id) {
 }
 //extract data from token
 function extractDataFromToken(req) {
-    const token = req.cookies.jwt
-    console.log(token)
-    const data = jwt.verify(token, process.env.JWT_SECRET_KEY)
-    // this is use for testing purpose only
-    // const data={user:"tempData"}
-    return data.user
+        const token = req.cookies?.jwt
+        if(token){
+
+            console.log(token)
+            const data = jwt.verify(token, process.env.JWT_SECRET_KEY)
+            // this is use for testing purpose only
+            // const data={user:"tempData"}
+            return data.user
+        }
+        else{
+            throw new Error(400,"jwt not found");
+            
+        }
+    
 }
 
 //form upload of user
@@ -47,10 +55,11 @@ liveFormRouter.post("/upload", async (req, res) => {
         })
     }
     catch (e) {
+    
         res.status(404).json({
             data: null,
             success: false,
-            message: "failure....."
+            message: e.message
         })
     }
 })
@@ -88,7 +97,7 @@ liveFormRouter.get("/edit/:formId", async (req, res) => {
         res.status(404).json({
             data: null,
             success: false,
-            message: "failure happend...."
+            message: e.message
         })
     }
 })
