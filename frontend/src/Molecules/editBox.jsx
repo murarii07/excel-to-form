@@ -39,9 +39,10 @@ const EditBox = (props) => {
             <>
                 <div className="edit-box">
                     <Input name={f.Name}
+                    className=""
                         key={props.index}
                         id={f.Id}
-                        labelName={f.labelName}
+                        labelName={f.LabelName}
                         type={f.Type}
                     />
                     <Button

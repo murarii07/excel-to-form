@@ -7,7 +7,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from './Organism/Login';
 import Register from './Organism/Register';
 import Home from './Organism/Home';
-
+import './App.css'
+import './index.css'
 function App() {
   return (
     <BrowserRouter>

@@ -1,33 +1,34 @@
 import Input from "../Atoms/Input";
 import Button from "../Atoms/Button";
 function Form(props) {
-    const {field}=props
-    const formHandle =  (e) => {
-        e.preventDefault();}
+    const { field } = props
+    const formHandle = (e) => {
+        e.preventDefault();
+    }
     return (
         <>
-      
-        <div className={props.Name}>
+            <form onSubmit={props.formHandle ?? formHandle} encType="multipart/form-data" method="post" className="w-full ">
+                {field.map(
+                    (x, index) =>
+                        <div className="input-preview input-div  mt-3 flex flex-col">
 
-        <form onSubmit={props.formHandle ?? formHandle} encType="multipart/form-data" method="post">   
-            {field.map(
-                (x,index) => 
-                    
-                        <Input
-                            className={"border-2 p-1 mt-5"}
-                            name={x.Name}
-                            key={x.Id}
-                            id={x.Id}
-                            labelName={x.LabelName}
-                            type={x.Type}/>   
-                            
-                        )}
-                        <Button
-                            buttonName="submit-button w-2/4 hover:text-white "
-                            name={props.buttonName}
-                            buttonType='submit' />
-        </form>
-        </div>
+                            <Input
+                                className={" border-2 border-black"}
+                                name={x.Name}
+                                key={x.Id}
+                                id={x.Id}
+                                labelName={x.LabelName}
+                                type={x.Type} element={ <div className="error">sdsd</div>} />
+                           
+
+                        </div>
+                )}
+                <Button
+                    buttonName="submit-button border-purple-600 w-1/4 md:min-w-12 hover:text-white hover:bg-purple-600 hover:font-bold 
+                    text-purple-600"
+                    name={props.buttonName}
+                    buttonType='submit' />
+            </form>
         </>
     );
 }

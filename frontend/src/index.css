@@ -36,6 +36,10 @@ code {
   padding: 0px 10px;
   background-color: aliceblue;
 }
+input{
+  border: none;
+  border-bottom: 2px solid black;
+}
 .edit-box input,.form1 input{
   width: 90%;
   height: 30%;
@@ -114,4 +118,32 @@ label{
 }
 .edit-box select{
   max-width: 100px;
+}
+.upload-button{
+  /* border: 2px solid black; */
+  min-height: 20%;
+}
+.MainForm{
+  /* border: 2px solid black; */
+  min-height: 100%;
+  gap: 20px;
+}
+.MainForm form{
+  /* border:2px solid black; */
+  height: 65%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.MainForm .formDescription{
+  height: 25%;
+}
+.MainForm h1{
+  height: 10%;
+}
+.MainForm .input-preview{
+  min-height: 100px;
+  display:flex;
+  flex-direction: column;
+  justify-content: space-around;
 }

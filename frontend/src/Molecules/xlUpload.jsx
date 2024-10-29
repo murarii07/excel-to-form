@@ -18,11 +18,12 @@ function XlUpload() {
     
     const formHandle = async (e) => {
         e.preventDefault();
-        const form = document.querySelector('form');
-        const file = new FormData(form);
+        console.log(e)
+
+        const file = new FormData(e.target);
         const response = await fetchData(file, "http://localhost:5000/form/generate");
         if (response.success) {
-            form.reset();
+            e.target.reset();
             //here  logic will be added for preview
             console.log(response.data)
             dispatch(changeFieldValue(response.data))
@@ -33,6 +34,8 @@ function XlUpload() {
         }
     }
     return (
+        <div className="drag-form border-2 border-black rounded-md w-11/12 m-auto min-h-fit">
+
         <Form 
         Name="upload-form"
         formHandle={formHandle} field={[{     
@@ -41,6 +44,7 @@ function XlUpload() {
             labelName:"upload a file:",
             Id:"excelFile"
         }]} />
+        </div>
        
     );
 }
