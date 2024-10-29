@@ -3,7 +3,7 @@ import { MongoClient } from "mongodb";
 export const liveFormRouter = express.Router();
 import CryptoJS from "crypto-js";
 import { config } from "dotenv";
-import jwt, { JsonWebTokenError } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 config() //loading the env file
 const client = new MongoClient(process.env.MONGODB_URL);
 

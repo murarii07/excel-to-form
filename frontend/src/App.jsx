@@ -1,10 +1,8 @@
 
 import MyTask from './Organism/dashBoard';
 import FormUpload from './Organism/FormUpload';
-import Nav from './Molecules/Navbar';
-import Preview from './Molecules/preview';
+
 import Profile from './Organism/Profile';
-import XlUpload from './Molecules/xlUpload';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from './Organism/Login';
 import Register from './Organism/Register';
