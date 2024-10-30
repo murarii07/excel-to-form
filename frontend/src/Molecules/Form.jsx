@@ -7,25 +7,26 @@ function Form(props) {
     }
     return (
         <>
-            <form onSubmit={props.formHandle ?? formHandle} encType="multipart/form-data" method="post" className="w-full ">
+            <form onSubmit={props.formHandle ?? formHandle} encType="multipart/form-data" method="post" className="w-full  ">
                 {field.map(
                     (x, index) =>
-                        <div className="input-preview input-div  mt-3 flex flex-col">
-
+                        <div className="input-preview input-div   flex flex-col bg-purple-200 rounded-xl px-2">
                             <Input
-                                className={" border-2 border-black"}
+                                className={" border-2 border-black bg-purple-200"}
                                 name={x.Name}
-                                key={x.Id}
+                                key={index}
                                 id={x.Id}
                                 labelName={x.LabelName}
-                                type={x.Type} element={ <div className="error">sdsd</div>} />
-                           
+                                type={x.Type}
+                                element={
+                                    x.isElement && <div className="error">This indicates error</div>} />
+
 
                         </div>
                 )}
                 <Button
-                    buttonName="submit-button border-purple-600 w-1/4 md:min-w-12 hover:text-white hover:bg-purple-600 hover:font-bold 
-                    text-purple-600"
+                    buttonName="text-purple-600 submit-button border-purple-600 w-1/4 md:min-w-12 hover:text-white hover:bg-purple-600 hover:font-bold 
+                    "
                     name={props.buttonName}
                     buttonType='submit' />
             </form>

@@ -5,7 +5,7 @@ function Button(props) {
 
     return (
         <button
-            type={buttonType}
+            type={buttonType || "button"}
             className={`${buttonName}`}
             {...rest}
         >

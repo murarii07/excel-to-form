@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Input from "../Atoms/Input";
 import Button from "../Atoms/Button";
-import Cookies from "js-cookie";
+
 import { useNavigate } from "react-router-dom";
 const Login = () => {
     const [username, setUsername] = useState("");

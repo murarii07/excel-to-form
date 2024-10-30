@@ -1,29 +1,33 @@
 import { useDispatch } from "react-redux";
 import { changeFieldValue } from "../redux/formElement";
-import Form from "./Form";
+import Button from "../Atoms/Button.jsx";
+import DragBox from "../Atoms/dragBox";
+import { useState } from "react";
 function XlUpload() {
-
+    const [file, setFile] = useState(null)
     const dispatch = useDispatch();
-    
-    const fetchData = async (file, url) => {
+
+    const fetchData = async (url, options) => {
         try {
-            let response = await fetch(url, { method: "POST", credentials:'include', body: file })
+            let response = await fetch(url, options)
             let resJson = await response.json();
             return resJson;
         }
         catch (error) {
+            console.log(error)
             return false;
         }
     }
-    
-    const formHandle = async (e) => {
-        e.preventDefault();
-        console.log(e)
-
-        const file = new FormData(e.target);
-        const response = await fetchData(file, "http://localhost:5000/form/generate");
+    const takingFile = (file) => {
+        setFile(file)
+    }
+    const formHandle = async () => {
+        const files = new FormData();
+        files.append("excelFile", file)
+        const options = { method: "POST", credentials: 'include', body: files }
+        const response = await fetchData("http://localhost:5000/form/generate", options);
         if (response.success) {
-            e.target.reset();
+            setFile(null)
             //here  logic will be added for preview
             console.log(response.data)
             dispatch(changeFieldValue(response.data))
@@ -34,18 +38,20 @@ function XlUpload() {
         }
     }
     return (
-        <div className="drag-form border-2 border-black rounded-md w-11/12 m-auto min-h-fit">
+        <div className="drag-form  w-11/12 m-auto min-h-fit flex flex-col items-center justify-center gap-5">
 
-        <Form 
-        Name="upload-form"
-        formHandle={formHandle} field={[{     
-            Type:"file",
-            Name:"excelFile",
-            labelName:"upload a file:",
-            Id:"excelFile"
-        }]} />
+
+
+            <>
+                <DragBox takingFile={takingFile} />
+                <Button
+                    name={"Generate"}
+                    buttonName={"text-purple-600 submit-button border-purple-600 w-1/4 md:min-w-12 hover:text-white hover:bg-purple-600 hover:font-bold "}
+                    onClick={formHandle} />
+
+            </>
         </div>
-       
+
     );
 }
 export default XlUpload;

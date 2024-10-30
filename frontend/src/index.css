@@ -54,7 +54,7 @@ input:focus{
 button{
   min-height: 35px;
   /* font-family: 'Courier New', Courier, monospace; */
-  color: white;
+  color:black;
   background-color: rgb(23, 180, 23);
   border: 2px solid rgb(23, 180, 23);
   cursor: pointer;
@@ -134,6 +134,7 @@ label{
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  gap: 15px;
 }
 .MainForm .formDescription{
   height: 25%;

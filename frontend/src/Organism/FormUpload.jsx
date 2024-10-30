@@ -3,11 +3,12 @@ import Form from "../Molecules/Form";
 import { useEffect, useState } from "react";
 import Button from "../Atoms/Button";
 
-const FormUpload = (props) => {
+const FormUpload = () => {
     const fields = useSelector(state => state.Field.value)
     const fetchData = async () => {
         try {
-            let ob = { fieldDetails: fields, formId: "ajayx" }
+            const formId=prompt("enter unique formName")
+            let ob = { fieldDetails: fields, formId:formId}
             console.log(ob)
             const response = await fetch('http://localhost:5000/user/upload', {
                 method: 'POST',
@@ -24,6 +25,7 @@ const FormUpload = (props) => {
             console.log(e)
         }
     }
+
     useEffect(()=>{
         console.log(fields)
     })
@@ -36,8 +38,8 @@ const FormUpload = (props) => {
         </div>
             <div className="MainForm
              mx-auto pl-2 pr-2 w-11/12 box-border flex flex-col">
-                <h1 className="font-bold text-center border-2 p-2 ">Form TITLE</h1>
-                <div className="formDescription  text-center ">Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit reiciendis nisi adipisci porro sint cum reprehenderit animi. Rerum, cumque. Iusto soluta dignissimos, dolorum vel fugit repellendus dolorem nesciunt voluptatibus, totam qui quas voluptatum quidem! Lorem ipsum dolor sit, amet consectetur adipisicing elit. Excepturi, expedita vel est omnis ea dolore dolorum neque, autem blanditiis, natus maxime modi ut nam tempore optio et quidem iure eos sapiente consequuntur voluptate assumenda.</div>
+                <h1 contentEditable="true" className="font-bold text-center border-2 p-2 ">Form TITLE</h1>
+                <div className="formDescription  text-center " contentEditable="true"    >Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit reiciendis nisi adipisci porro sint cum reprehenderit animi. Rerum, cumque. Iusto soluta dignissimos, dolorum vel fugit repellendus dolorem nesciunt voluptatibus, totam qui quas voluptatum quidem! Lorem ipsum dolor sit, amet consectetur adipisicing elit. Excepturi, expedita vel est omnis ea dolore dolorum neque, autem blanditiis, natus maxime modi ut nam tempore optio et quidem iure eos sapiente consequuntur voluptate assumenda.</div>
                 <Form field={fields} Name={"form1"} buttonName={"Submit"} >
                     
                     </ Form>

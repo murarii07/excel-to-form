@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Input from "../Atoms/Input";
 import Button from "../Atoms/Button";
-import Cookies from "js-cookie";
+
 import { useNavigate } from "react-router-dom";
 const Register = () => {
     const [username, setUsername] = useState("");
@@ -30,9 +30,6 @@ const Register = () => {
             const response = await fetch("http://localhost:5000/Register", { method: "POST", headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) })
             const result = await response.json();
             if (result.success) {
-                const s=Cookies.get("jwt")
-
-                console.log(result,s)
                navigate("/login")
             }
         }
