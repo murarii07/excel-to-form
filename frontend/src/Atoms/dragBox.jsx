@@ -15,7 +15,7 @@ const DragBox = ({ takingFile }) => {
     }, [fileName])
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
     return (
-        <div {...getRootProps()} className="dragBox  border-dashed border-2 hover:border-gray-700 min-h-48 w-3/4 m-auto bg-teal-200 rounded-md flex items-center  justify-center  font-bold">
+        <div {...getRootProps()} className="dragBox  border-dashed border-2 hover:border-gray-700 min-h-48 w-3/4 m-auto bg-teal-200 rounded-md flex items-center  justify-center  font-bold cursor-pointer">
             <input {...getInputProps({
                 name: "files",
                 type: "file",

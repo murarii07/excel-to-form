@@ -10,7 +10,7 @@ function Form(props) {
             <form onSubmit={props.formHandle ?? formHandle} encType="multipart/form-data" method="post" className="w-full  ">
                 {field.map(
                     (x, index) =>
-                        <div className="input-preview input-div   flex flex-col bg-purple-200 rounded-xl px-2">
+                        <div className="input-preview  flex flex-col bg-purple-200 rounded-xl px-2">
                             <Input
                                 className={" border-2 border-black bg-purple-200"}
                                 name={x.Name}

@@ -3,21 +3,12 @@ import { changeFieldValue } from "../redux/formElement";
 import Button from "../Atoms/Button.jsx";
 import DragBox from "../Atoms/dragBox";
 import { useState } from "react";
+import { fetchData } from "../fetchData.js";
 function XlUpload() {
     const [file, setFile] = useState(null)
     const dispatch = useDispatch();
 
-    const fetchData = async (url, options) => {
-        try {
-            let response = await fetch(url, options)
-            let resJson = await response.json();
-            return resJson;
-        }
-        catch (error) {
-            console.log(error)
-            return false;
-        }
-    }
+
     const takingFile = (file) => {
         setFile(file)
     }

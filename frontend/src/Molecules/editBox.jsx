@@ -5,63 +5,60 @@ import Select from "../Atoms/SelectField"
 import { useDispatch, useSelector } from "react-redux";
 import { changeFieldValue } from "../redux/formElement";
 const EditBox = (props) => {
-    const dispatch = useDispatch();
-    const fields = useSelector(state => state.Field.value)
-    const [fieldlist, setFieldlist] = useState(fields)
     const { field } = props
+    const fields = useSelector(state => state.Field.value)
     const [f, setF] = useState(field)
+    const dispatch = useDispatch();
     const inputTypes = [
         "text", "password", "email", "url", "number", "checkbox",
         "radio", "file", "date"
     ]
     const handle = (e) => {
-
-        if (field.labelName === e.target.className) {
-            const change = []
-            console.log(field.labelName)
+        console.log(e.target.id)
+        if (field.LabelName === e.target.id) {
+            console.log(field.LabelName)
             setF((prevField) => ({
                 ...prevField,
                 Type: e.target.value // Update the type with the 
             }));
-            // for (const element of fieldlist) {
-            //     if (element.Id === f.Id) {
-            //         console.log(element.Id)
-            //         setFieldlist((element=>(...element,)))
-            //         element.Type = e.target.value
-
-            //     }
-            //     change.push(element)
-            // }
-            // dispatch(changeFieldValue(change));
-            // console.log(fields)
-            }}
-        return (
-            <>
-                <div className="edit-box">
-                    <Input name={f.Name}
+            // console.log(fieldlist.indexOf(field))
+            const updatelist=fields.map((x)=>{
+                if (x.LabelName === e.target.id) {
+                    return {...x,Type:e.target.value}
+                }
+                return x;
+            })
+            console.log(fields)
+            dispatch(changeFieldValue(updatelist))
+        }
+    }
+    return (
+        <>
+            <div className="edit-box">
+                <Input name={f.Name}
                     className=""
-                        key={props.index}
-                        id={f.Id}
-                        labelName={f.LabelName}
-                        type={f.Type}
-                    />
-                    <Button
-                        buttonName={"delete-btn  text-white  font-bold bg-red-600 text-center p-0.5 border-2"}
-                        name="X"
-                        onClick={props.editHandle}
+                    key={props.index}
+                    id={f.Id}
+                    labelName={f.LabelName}
+                    type={f.Type}
+                />
+                <Button
+                    buttonName={"delete-btn  text-white  font-bold bg-red-600 text-center p-0.5 border-2"}
+                    name="X"
+                    onClick={props.editHandle}
 
-                    />
-                    <Select
-                        id={"edit-file-type"}
-                        name={"edit-file-type"}
-                        className={f.Name}
-                        onChange={e => handle(e)}
-                        inputTypes={inputTypes} />
-                </div>
+                />
+                <Select
+                    id={f.Name}
+                    name={"edit-file-type"}
+                    className={`${f.Name} bg-teal-100 cursor-pointer border-2  border-teal-100`}
+                    onChange={handle}
+                    inputTypes={inputTypes} />
+            </div>
 
 
-            </>
-        )
-    
+        </>
+    )
+
 }
 export default EditBox;

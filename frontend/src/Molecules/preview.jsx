@@ -54,7 +54,7 @@ function Preview() {
         <>
             {fields.length ? (
                 <>
-                    <div className="preview-form">
+                    <div className="preview-form rounded-lg bg-purple-200 border-2 border-purple-200">
                         {fields.map((x, index) =>
                             <EditBox key={x.Id} index={index} field={x} editHandle={() => editHandle(x.Id)} />
                         )}
