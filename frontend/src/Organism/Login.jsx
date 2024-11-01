@@ -1,12 +1,13 @@
 import { useState } from "react";
 import Input from "../Atoms/Input";
 import Button from "../Atoms/Button";
-
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { changeIsLoginValue } from "../redux/flag";
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-
+    const dispatch=useDispatch();
 
     const navigate= useNavigate();
     const changeUsername = (e) => {
@@ -27,6 +28,7 @@ const Login = () => {
             const result = await response.json();
             if (result.success) {
                 console.log(result)
+                dispatch(changeIsLoginValue(true));
                navigate("/")
             }
         }
