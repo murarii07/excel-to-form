@@ -51,7 +51,7 @@ const Register = () => {
                     type="text"
                     name="username"
                     value={username}
-                    className={"border-2 rounded-md  w-11/12 p-2 "}
+                    className={"border-2  w-11/12 p-2 "}
                     onChange={changeUsername}
                     labelName="Username" />
 
@@ -59,7 +59,7 @@ const Register = () => {
                     type="password"
                     name="password"
                     value={password}
-                    className={"border-2 rounded-md h-full w-11/12  p-2"}
+                    className={"border-2  h-full w-11/12  p-2"}
                     onChange={changePassoword}
                     labelName="Password" />
 
@@ -67,13 +67,13 @@ const Register = () => {
                     type="email"
                     name="email"
                     value={email}
-                    className={"border-2 rounded-md w-11/12 p-2 "}
+                    className={"border-2  w-11/12 p-2 "}
                     onChange={changeEmail}
                     labelName="Email" />
 
                 <Button
-                    name="login"
-                    buttonName={" text-white  font-bold bg-green-500 border-green-500  text-center p-0.5 border-2 w-1/4 h-full "}
+                    name="Create Account"
+                    buttonName={" text-white  font-bold bg-purple-600 border-purple-600  text-center text-md p-0.5 border-2 w-2/4 h-full "}
                     onClick={handle} />
             </div>
         </>

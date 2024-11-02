@@ -148,3 +148,29 @@ label{
   flex-direction: column;
   justify-content: space-around;
 }
+.user-dp{
+  box-sizing: border-box;
+  min-height: 300px;
+  /* border:2px solid black; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.userImg{
+  height: 300px;
+  /* border: 2px solid black; */
+  display:  flex;
+  justify-content: center;
+  align-items: center;
+
+}
+.userImg img{
+  object-fit: contain;
+  height: 95%;
+  width: 95%;
+}
+.userName{
+  height: 50px;
+  border: 2px solid black;
+  
+}

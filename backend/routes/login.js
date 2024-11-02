@@ -63,5 +63,7 @@ login.post("/", async (req, res) => {
 
 //logout
 login.delete('/', (req, res) => {
-    res.status(204).clearCookie('jwt')
+    console.log(req.cookies.jwt)
+    //use end to make request end so  it should not be hanging state
+    res.status(204).clearCookie('jwt').end()
 })

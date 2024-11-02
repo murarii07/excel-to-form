@@ -61,11 +61,11 @@ function Preview() {
                     </div>
                     <div className="preview-btn">
                         <Button
-                            buttonName="download-btn border-green-500  text-green-500 hover:bg-green-500 px-3 hover:text-white "
+                            buttonName="download-btn border-teal-700  text-teal-700 hover:bg-teal-700 px-3 hover:text-white "
                             name={"download"} onClick={handled}></Button>
                         <Button
                             name="livePreview" onClick={handleds}
-                            buttonName={"save-btn border-green-500  text-green-500 hover:bg-green-500 px-3 hover:text-white "} />
+                            buttonName={"save-btn border-teal-700  text-teal-700 hover:bg-teal-700 px-3 hover:text-white "} />
                     </div>
                 </>
             )
