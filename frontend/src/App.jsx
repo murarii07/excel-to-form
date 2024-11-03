@@ -10,6 +10,7 @@ import './App.css'
 import './index.css'
 import NotFound from './Organism/NotFound';
 import PrivateRoute from './Organism/PrivateRoute';
+import UserForm from './Organism/userForm';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path='my-profile' element={<PrivateRoute element={<Profile />} />} />
         <Route path='tasks' element={<PrivateRoute element={<MyTask />} />} />
         <Route path='formId' element={<PrivateRoute element={<FormUpload />} />} />
+        <Route path='public/*'element={<UserForm />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
 

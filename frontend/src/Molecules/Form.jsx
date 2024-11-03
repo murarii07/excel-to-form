@@ -7,7 +7,7 @@ function Form(props) {
     }
     return (
         <>
-            <form onSubmit={props.formHandle ?? formHandle} encType="multipart/form-data" method="post" className="w-full  ">
+            <form onSubmit={props.formHandle ?? formHandle} encType="multipart/form-data" className="w-full  ">
                 {field.map(
                     (x, index) =>
                         <div className="input-preview  flex flex-col bg-purple-200 rounded-xl px-2">

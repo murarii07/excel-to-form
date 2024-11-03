@@ -8,24 +8,32 @@ const client = new MongoClient(process.env.MONGODB_URL);
 
 
 const decryptionObj = async (encryptedString) => {
-    const jsonObjBytes = CryptoJS.AES.decrypt(encryptedString, process.env.ENCRYPTED_SECRET_KEY);
+
+    //this step have to do has we change / and + in _ and - for properly get encrypted url so we have reverse it for decrypt to maintain its format
+    let encryptedUrl =encryptedString
+    .replace(/_/g,"/")
+    .replace(/-/g,"+")
+    console.log(encryptedUrl)
+    const jsonObjBytes = CryptoJS.AES.decrypt(encryptedUrl, process.env.ENCRYPTED_SECRET_KEY);
+    console.log(jsonObjBytes)
     const jsonObj = await JSON.parse(jsonObjBytes.toString(CryptoJS.enc.Utf8));
-    console.log(jsonObj)
+    
     return jsonObj
 }
-
 formSubmissionRouter.get("/:encryptedUrl", async (req, res) => {
     try {
-
+        console.log(req.params.encryptedUrl)
         //decoding the url we get db and formId as col
         let jsonObj = await decryptionObj(req.params.encryptedUrl)
         console.log("f", jsonObj)
-        const { user, formId } = jsonObj
+        const { user, id } = jsonObj
+        console.log(id)
         let db = client.db(user);
-        let col = db.collection(formId);
+        let col = db.collection(id);
         let result = await col.find({}).toArray();
+        let finalResult=result[0].fields
         res.status(200).json({
-            data: result,
+            data: finalResult,
             success: true,
             message: "successfull...."
         })
