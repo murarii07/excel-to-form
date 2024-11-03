@@ -18,7 +18,7 @@ app.use(cors({
     credentials: true
 }))
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: true }))
 
 //if use signed cookie then i need to add  secret key also
 app.use(cookieParser(process.env.COOKIE_SECRET_KEY))

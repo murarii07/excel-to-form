@@ -8,7 +8,7 @@ import { config } from "dotenv";
 config();
 // // Multer memory storage configuration
 const storage = multer.memoryStorage();
-const uploads = multer({ storage });
+ const uploads = multer({ storage });
 
 async function fieldCreation(path) {
 

@@ -29,7 +29,8 @@ const UserForm=()=>{
     async function dataSubmission(e) {
         try {
             e.preventDefault();
-            const newUrl = `http://localhost:5000/public/` + url.toString();
+            const ext=url.split("/public/")
+            const newUrl = "http://localhost:5000/public/" + ext[1];
             const form = new FormData(e.target);
             const res = await fetchData(newUrl, { method: "POST", body: form });
             if (res.ok) {
@@ -46,7 +47,7 @@ const UserForm=()=>{
         dataExtraction()
     },[])
     return(
-        <Form field={fields} buttonName={"submit"} formHandle={dataSubmission} />
+        <Form field={fields} buttonName={"submit"} formHandles={dataSubmission} />
     )
 }
 export  default UserForm;

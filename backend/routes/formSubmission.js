@@ -5,8 +5,10 @@ export const formSubmissionRouter = express.Router();
 import { config } from "dotenv";
 config() //loading the env file
 const client = new MongoClient(process.env.MONGODB_URL);
-
-
+import multer from "multer";
+// // Multer memory storage configuration
+const storage = multer.memoryStorage();
+ const upload = multer({ storage });
 const decryptionObj = async (encryptedString) => {
 
     //this step have to do has we change / and + in _ and - for properly get encrypted url so we have reverse it for decrypt to maintain its format
@@ -48,14 +50,15 @@ formSubmissionRouter.get("/:encryptedUrl", async (req, res) => {
 });
 
 
-formSubmissionRouter.post("/:encryptedUrl", async (req, res) => {
+formSubmissionRouter.post("/:encryptedUrl",upload.none(), async (req, res) => {
     try {
         //decoding the url we get db and formId as col
         let jsonObj = await decryptionObj(req.params.encryptedUrl)
         console.log("f", jsonObj)
-        const { user, formId } = jsonObj
+        const { user, id } = jsonObj
         let db = client.db(user);
-        let col = db.collection(formId);
+        let col = db.collection(id);
+        console.log(req.body)
         // !req.body is used to check if req.body is "falsy. means empty or undefined or null"
         if (!req.body || Object.keys(req.body).length == 0) {
             return res.status(400).json({
