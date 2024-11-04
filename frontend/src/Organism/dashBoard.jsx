@@ -40,7 +40,7 @@ const MyTask = () => {
 
 return (
     <>
-        <Nav/>
+        <Nav flag={true}/>
         {/* <Button buttonName="filter"  name="filter" /> */}
         <div className="search mx-auto w-11/12 h-14 box-border flex items-center gap-3.5 ">
             <Input
@@ -57,7 +57,7 @@ return (
             {formListFilter.map((x, index) => (
                         <div className="box-border min-w-20 min-h-28 flex flex-col gap-y-3 items-center " key={index}>
                         <div className="img  border-2 w-full min-h-24 text-red-600 box-border text-xl flex items-center justify-center rounded-md shadow-md ">iss</div>
-                        <div className="caption">{x}</div>
+                        <a className="caption hover:text-blue-500 cursor-pointer hover:underline" href={`/tasks/${x}`}>{x}</a>
                          </div>
             ))}
 

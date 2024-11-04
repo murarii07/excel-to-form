@@ -11,6 +11,7 @@ import './index.css'
 import NotFound from './Organism/NotFound';
 import PrivateRoute from './Organism/PrivateRoute';
 import UserForm from './Organism/userForm';
+import FormDetails from './Organism/FormDetails';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path='formId' element={<PrivateRoute element={<FormUpload />} />} />
         <Route path='public/*'element={<UserForm />} />
         <Route path='*' element={<NotFound />} />
+        <Route path="forms/*" element={<FormDetails />} />
       </Routes>
 
     </BrowserRouter>

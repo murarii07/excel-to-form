@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
 
-function Nav(){
+function Nav(props){
     const flag=useSelector(state=>state.isLogin.value)
     console.log(flag)
-    if(flag){
+    if(props.flag){
 
         return(
             <div className="navbar   mt-3 mb-10  rounded-md h-11 mx-auto  w-11/12">

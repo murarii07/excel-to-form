@@ -8,17 +8,17 @@ function PrivateRoute({element}) {
     const navigate=useNavigate
     const dispatch=useDispatch()
     const [isLog, setIsLog] = useState(false);
-    useEffect(() => {
-        // const d = await fetchData("http://localhost:5000/user", {
-        //     methods: 'GET',
-        //     credentials: 'include'
-        // })
-        // if (!d.success) {
-            // setEr(true);
-            // dispatch(changeIsLoginValue(true))
+    // useEffect(async () => {
+    //     const d = await fetchData("http://localhost:5000/user", {
+    //         methods: 'GET',
+    //         credentials: 'include'
+    //     })
+    //     if (!d.success) {
+    //         setEr(true);
+    //         dispatch(changeIsLoginValue(true))
             
-        // }
-    }, [])
+    //     }
+    // }, [])
     return isLog ? <Navigate to="/login" /> : element
 }
 export default PrivateRoute;

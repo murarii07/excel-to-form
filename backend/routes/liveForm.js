@@ -12,11 +12,11 @@ const client = new MongoClient(process.env.MONGODB_URL);
 function urlGenerator(userName, id) {
     let obj = JSON.stringify({ user: userName, id: id });
     const encryptedUrl = CryptoJS.AES.encrypt(obj, process.env.ENCRYPTED_SECRET_KEY).toString();
-    const urlSafeEncryptedUrl = encryptedUrl
-    console.log(urlSafeEncryptedUrl)
     // as '/' violates the url logic of us and give error
+    const urlSafeEncryptedUrl = encryptedUrl
     .replace(/\+/g, '-')    // Replace + with -
     .replace(/\//g, '_') 
+    console.log(urlSafeEncryptedUrl)
     return urlSafeEncryptedUrl;
 
 }

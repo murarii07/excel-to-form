@@ -47,7 +47,10 @@ const UserForm=()=>{
         dataExtraction()
     },[])
     return(
+        <div className="border-2 w-11/12  mt-12 flex">
         <Form field={fields} buttonName={"submit"} formHandles={dataSubmission} />
+        <div>sdsd</div>
+        </div>
     )
 }
 export  default UserForm;

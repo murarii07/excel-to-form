@@ -3,8 +3,12 @@ import Form from "../Molecules/Form";
 import { useEffect, useState } from "react";
 import Button from "../Atoms/Button";
 import { fetchData } from "../fetchData";
+import { Navigate, useNavigate } from "react-router-dom";
+import Nav from "../Molecules/Navbar";
 
 const FormUpload = () => {
+    const navigate=useNavigate()
+    const [error,setError]=useState(false)
     const [isEdit, setIsEdit] = useState(true);
     const fields = useSelector(state => state.Field.value)
     const formUpload = async () => {
@@ -23,7 +27,9 @@ const FormUpload = () => {
             const result = await fetchData('http://localhost:5000/user/upload', options)
 
             if (result.success) {
-                console.log(result)
+                console.log(result.data.url)
+                navigate(`/public/${result.data.url}`)
+                
             }
             else {
                 throw new Error("error");
@@ -32,15 +38,20 @@ const FormUpload = () => {
         } catch (e) {
             alert("something went wrong")
             console.log(e)
+            setError(true)
         }
     }
 
     useEffect(() => {
         console.log(fields)
     })
-
+    if (error) {
+        console.log(error)
+        return <Navigate to="/error" />
+    }
     return (
         <>
+        <Nav flag={true} />
             <div className="upload-button  w-full  mt-5 flex justify-center mb-5">
 
                 <Button name={"upload"} buttonName={`p-1   flex justify-center bg-purple-600 border-purple-600 text-white font-bold s`} onClick={formUpload} />
