@@ -44,8 +44,8 @@ const Profile = () => {
         fetchw()
     }, [])
     if (error) {
-        return <Navigate to="/error" />
         console.log(error)
+        return <Navigate to="/login" />
     }
     else {
 

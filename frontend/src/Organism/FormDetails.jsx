@@ -7,20 +7,24 @@ import Nav from "../Molecules/Navbar";
 const FormDetails=()=>{
     const [er,setEr]=useState(false)
     const [form,setForm]=useState({name:"temp",link:"adsd",description:"this is form detials "})
-    // useEffect(async ()=>{
-    //     try{
+    // useEffect(()=>{
+    //     const fet=async ()=>{
 
-    //         const res=await fetchData("http://localhost:5000/user/formlist",{
-    //             method: "GET",
-    //             credentials: "include" // Sends cookies with the request
-    //         })
-    //         if(!res.success){
+    //         try{
+                
+    //             const res=await fetchData("http://localhost:5000/user/formlist",{
+    //                 method: "GET",
+    //                 credentials: "include" // Sends cookies with the request
+    //             })
+    //             if(!res.success){
+    //                 setEr(true)
+    //             }
+    //             setForm(res.data[0])
+    //         }catch(e){
     //             setEr(true)
     //         }
-    //         setForm(res.data[0])
-    //     }catch(e){
-    //         setEr(true)
     //     }
+    //     fet()
 
     // },[])
     const deleteHandle=async ()=>{

@@ -1,24 +1,36 @@
-import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux";
+import React,{ useEffect, useState } from "react"
 // import { fetchData } from "../fetchData";
-import { changeIsLoginValue } from "../redux/flag";
 import { Navigate, useNavigate } from "react-router-dom";
-import Login from "./Login";
+
 function PrivateRoute({element}) {
-    const navigate=useNavigate
-    const dispatch=useDispatch()
-    const [isLog, setIsLog] = useState(false);
-    // useEffect(async () => {
-    //     const d = await fetchData("http://localhost:5000/user", {
-    //         methods: 'GET',
-    //         credentials: 'include'
-    //     })
-    //     if (!d.success) {
-    //         setEr(true);
-    //         dispatch(changeIsLoginValue(true))
-            
-    //     }
-    // }, [])
-    return isLog ? <Navigate to="/login" /> : element
+    const [fields,setFields]=useState([])
+    const [url,setUrl]=useState(window.location.pathname)
+    const [error, setError] = useState(false);
+    async function dataExtraction() {
+        try {
+            const ext=url.split("/public/")
+            const newUrl = "http://localhost:5000/public/" + ext[1]
+            console.log(url,newUrl)
+            let res = await fetch(newUrl);
+            if(res.ok){
+
+                res=await res.json();
+                if (res)
+                    setFields(res.data);
+                console.log(res.data);
+            }
+            else{
+                setError(true)
+            }
+        }
+        catch (e) {
+            console.error(e);
+           setError(true)
+        }
+
+    } useState(()=>{
+        dataExtraction()
+    },[])
+    return error ? <Navigate to="/error" /> : React.cloneElement(element,{field:fields})
 }
 export default PrivateRoute;
