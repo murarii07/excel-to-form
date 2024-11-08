@@ -121,6 +121,7 @@ liveFormRouter.get('/formlist', async (req, res) => {
         collectList = collectList.map(x => x.name)
         res.status(200).json({
             data: {
+                name:user,
                 formlist: collectList,
                 storageInBytes: userDbDeatails.storageSize
             },
@@ -161,4 +162,38 @@ liveFormRouter.delete("/delete/:formId", async (req, res) => {
         })
     }
 
+})
+liveFormRouter.get("/formDetails/:formId",async (req,res)=>{
+    try {
+        const user = extractDataFromToken(req);
+        // const user="murli"
+        let db=client.db(user);
+        let filterQuery={name:req.params.formId}
+        let isCollectionExist=await db.listCollections(filterQuery).toArray();
+        if(!isCollectionExist.length){
+            return res.status(500).json({
+                success: false,
+                message: "try again later"
+            })
+        }
+        let col=db.collection(req.params.formId);
+        let result=await col.findOne({});
+        console.log(result);
+        return res.status(200).json({
+            data:{
+                name:req.params.formId,
+                description:result.description || "kuch nhi hai",
+                link:result._id
+            },
+            success: true,
+            message:"successfull...."
+        })
+        
+    }
+    catch (e) {
+        res.status(404).json({
+            success: false,
+            message: e.message
+        })
+    }
 })

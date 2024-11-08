@@ -61,7 +61,7 @@ const MyTask = () => {
                     <Input
                         className="box-border border-2  h-full px-3 w-7/12 border-black "
                         placeholder="enter form name or id" onChange={searching} />
-                    <Button buttonName="search font-bold rounded-xl px-3 h-11/12 border-green-500  text-green-500 hover:bg-green-500 hover:text-white " name="search" onClick={searching} />
+                    <Button buttonName="search font-bold rounded-xl px-3 h-11/12 border-teal-500  text-teal-500 hover:bg-teal-500 hover:text-white " name="search" onClick={searching} />
                 </div>
                 <div className="form-container  mx-auto my-4 box-border w-11/12 px-5 py-5 flex gap-10 flex-wrap  bg-teal-100 rounded-md ">
                     <div className="box-border min-w-20 min-h-28 flex flex-col gap-y-3 items-center ">
