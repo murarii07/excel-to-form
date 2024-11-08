@@ -2,12 +2,13 @@ import Input from "../Atoms/Input";
 import Button from "../Atoms/Button";
 function Form(props) {
     const { field,formHandles } = props
+    console.log(field)
     const formHandle = (e) => {
         e.preventDefault();
     }
     return (
         <>
-            <form onSubmit={(e)=>formHandles(e)} encType="multipart/form-data" className={`w-full ${props.formClass}`}>
+            <form onSubmit={(e)=>formHandles(e)} encType="multipart/form-data" className={`w-full  ${props.formClass}`}>
                 {field.map(
                     (x, index) =>
                         <div key={x.Id} className="input-preview  flex flex-col bg-purple-200 rounded-xl px-2">
@@ -20,8 +21,6 @@ function Form(props) {
                                 type={x.Type}
                                 element={
                                     x.isElement && <div className="error">This indicates error</div>} />
-
-
                         </div>
                 )}
                 <Button

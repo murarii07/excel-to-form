@@ -56,7 +56,7 @@ const Profile = () => {
                     <div className="userImg font-bold text-center  w-full ">
                         <img src='/assets/user.png' alt="sdd" />
                     </div>
-                    <div className="userName  m-auto  rounded-md    w-full font-bold md:text-2xl flex justify-center items-center">{details.name}</div>
+                    <div className="userName border-none m-auto  rounded-md    w-full font-bold md:text-2xl flex justify-center items-center">{details.name}</div>
                 </div>
 
                 {/* tasks */}

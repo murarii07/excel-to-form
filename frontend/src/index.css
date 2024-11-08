@@ -174,10 +174,20 @@ label{
   border: 2px solid black;
   
 }
-.userForm{
-  border: 2px solid black;
-  min-height: 100%;
+.userform{
+  /* border: 2px solid black; */
+  min-height: 100vh;
 }
-.userForm form{
-  border: 2px solid black;
+
+.userform .input-preview{
+  /* border: 2px solid black; */
+  min-height: 150px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 100%;
+  justify-content: space-around;
 }
