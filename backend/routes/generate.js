@@ -8,43 +8,72 @@ import { config } from "dotenv";
 config();
 // // Multer memory storage configuration
 const storage = multer.memoryStorage();
- const uploads = multer({ storage });
+const uploads = multer({ storage });
 
-async function fieldCreation(path) {
+class Formlist {
+    formIdList = [];
 
-    const workbook = new ExcelJS.Workbook();
-    await workbook.xlsx.readFile(path)
-    const worksheet = workbook.getWorksheet(1); //
-    // console.log(worksheet)
-    // Access the first row
-    const firstRow = worksheet.getRow(1);
+    add(value) {
+        this.formIdList.push(value)
+    }
+    remove(formId) {
+        this.formIdList.splice(this.formIdList.indexOf(formId), 1);
+    }
+    find(formId) {
+        const isEx = this.formIdList.some(x => x === formId)
+        return isEx
+    }
+    generateUniqueElement() {
+        let formId = randomBytes(8).toString('hex')
+        while (this.find(formId)) {
+            formId = randomBytes(8).toString('hex')
+            return formId
 
-    // Extract headers from the first row
-    const headers = firstRow.values.slice(1);
-    return headers;
+        }
+    }
 }
 
-let formIdList = []
-router.post("/generate", uploads.single('excelFile'), async (req, res) => {
+const FormListObj = new Formlist()
+
+async function fieldCreation(path) {
     try {
+
+        const workbook = new ExcelJS.Workbook();
+        await workbook.xlsx.readFile(path)
+        const worksheet = workbook.getWorksheet(1); //
+        // console.log(worksheet)
+        // Access the first row
+        const firstRow = worksheet.getRow(1);
+        // Extract headers from the first row
+        const headers = firstRow.values.slice(1);
+        return headers;
+    } catch (e) {
+        throw new Error(e.message);
+
+    }
+}
+router.post("/generate", uploads.single('excelFile'), async (req, res) => {
+    let formId = FormListObj.generateUniqueElement()
+    try {
+        if (!fs.existsSync("./uploads")) {
+            fs.mkdirSync("./uploads")
+        }
+
         console.log(req.file);
-        const path = `./uploads/${req.file.originalname}`
+        const path = `./uploads/${formId}.xlsx`
+        console.log(path)
         fs.writeFileSync(path, req.file.buffer)
         const headers = await fieldCreation(path)
         // Log or process headers
         console.log('Headers:', headers);
         const obj = headers.map(element => ({
-            LabelName: element,
-            Id: element,
-            Name: element,
-            Type: 'text'
+            LabelName: element.replace(/\s/g, ""),
+            Id: element.replace(/\-/g, '_').replace(/\s/g, ""),
+            Name: element.replace(/\-/g, '_').replace(/\s/g, ""),
+            Type:  RegExp(/date/).test(element)?"date":"text"
         }))
-        let formId = randomBytes(8).toString('hex')
-        while (formIdList.some(x => x === formId)) {
-            formId = randomBytes(8).toString('hex')
-        }
-        formIdList.push(formId) //create a id and push in this
-        fs.unlinkSync(path) //deleting the xl file
+        FormListObj.add(formId) //create a id and push in this
+
         res
             .cookie('formId', formId, {
                 maxAge: 1000 * 60 * 10,  //10minute
@@ -70,9 +99,14 @@ router.post("/generate", uploads.single('excelFile'), async (req, res) => {
             .json({
                 data: null,
                 success: false,
-                message: error
+                message: error.message
             })
 
+    }
+    finally {
+        if (fs.existsSync(`./uploads/${formId}.xlsx`)) {
+            fs.unlinkSync(`./uploads/${formId}.xlsx`) //deleting the xl file
+        }
     }
 })
 router.get("/download", (req, res) => {
@@ -82,10 +116,10 @@ router.get("/download", (req, res) => {
         if (!formId) {
             return res.status(400).json({ success: false, message: "Cookie not found." });
         }
-        const forms = formIdList.find(r => r === formId)
+        const forms = FormListObj.find(formId)
         console.log(formId, forms)
         if (forms) {
-            formIdList.splice(formIdList.indexOf(formId), 1)
+            FormListObj.remove(formId)
             res.clearCookie("formId", { signed: true });
             res.status(200).download("public/formTemplate.html");
         }

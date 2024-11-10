@@ -10,12 +10,14 @@ const FormUpload = () => {
     const navigate=useNavigate()
     const [error,setError]=useState(false)
     const [isEdit, setIsEdit] = useState(true);
+    const [formDetails, setFormDetails] = useState({title:"form title",description:"lorem 45"});
     const fields = useSelector(state => state.Field.value)
     const formUpload = async () => {
         try {
             setIsEdit(false)
             const formId = prompt("enter unique formName")
-            let ob = { fieldDetails: fields, formId: formId }
+            console.log(fields)
+            let ob = { fieldDetails: fields, formId: formId,title:formDetails.title,description:formDetails.description }
             console.log(ob)
             const options = {
                 method: 'POST',
@@ -51,15 +53,15 @@ const FormUpload = () => {
     }
     return (
         <>
-        <Nav flag={true} />
+        {/* <Nav flag={true} />? */}
             <div className="upload-button  w-full  mt-5 flex justify-center mb-5">
 
                 <Button name={"upload"} buttonName={`p-1   flex justify-center bg-purple-600 border-purple-600 text-white font-bold s`} onClick={formUpload} />
             </div>
             <div className="MainForm
              mx-auto pl-2 pr-2 w-11/12 box-border flex flex-col">
-                <h1 contentEditable={isEdit} className="font-bold text-center text-2xl p-2 ">FORM TITLE</h1>
-                <div className="formDescription  text-center " contentEditable={isEdit}   >Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit reiciendis nisi adipisci porro sint cum reprehenderit animi. Rerum, cumque. Iusto soluta dignissimos, dolorum vel fugit repellendus dolorem nesciunt voluptatibus, totam qui quas voluptatum quidem! Lorem ipsum dolor sit, amet consectetur adipisicing elit. Excepturi, expedita vel est omnis ea dolore dolorum neque, autem blanditiis, natus maxime modi ut nam tempore optio et quidem iure eos sapiente consequuntur voluptate assumenda.</div>
+                <h1 contentEditable={isEdit} className="font-bold text-center text-2xl p-2 ">{formDetails.title}</h1>
+                <div className="formDescription  text-center " contentEditable={isEdit}   >{formDetails.description}</div>
                 <Form field={fields} Name={"form1"} buttonName={"Submit"} >
 
                 </ Form>

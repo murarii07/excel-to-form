@@ -49,7 +49,7 @@ liveFormRouter.post("/upload", async (req, res) => {
         console.log(req.body.formId)
         let col = db.collection(req.body.formId);
         const url = urlGenerator(user, req.body.formId);
-        let result = await col.insertOne({ _id: url, fields: req.body.fieldDetails });
+        let result = await col.insertOne({ _id: url, fields: req.body.fieldDetails,title:req.body.title,description:req.body.description });
         console.log("sd",result)
 
         //after mongo operation

@@ -50,13 +50,28 @@ function Preview() {
             console.log(e)
         }
     }
+
+    //event delegation approach
+    const editHandleF = (e) => {
+        let r=e.target.classList
+        console.log(r.contains("delete-btn"))
+        if(r.contains("delete-btn")){
+            let fieldId=e.target.getAttribute("data-field-id")
+            const updatedFields = fields.filter((field) => field.Id !== fieldId);
+            console.log("Filtered fields:", updatedFields);
+            dispatch(changeFieldValue(updatedFields));
+        }
+    };
     return (
         <>
             {fields.length ? (
                 <>
-                    <div className="preview-form rounded-lg bg-purple-200 border-2 border-purple-200">
+                    <div className="preview-form rounded-lg bg-purple-200 border-2 border-purple-200"
+                    //  onClick={editHandleF}
+                     >
                         {fields.map((x, index) =>
-                            <EditBox key={x.Id} index={index} field={x} editHandle={() => editHandle(x.Id)} />
+                            <EditBox key={x.Id} index={index} field={x}
+                            editHandle={() => editHandle(x.Id)}  />
                         )}
                     </div>
                     <div className="preview-btn">

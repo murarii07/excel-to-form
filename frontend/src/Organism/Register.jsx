@@ -4,21 +4,45 @@ import Button from "../Atoms/Button";
 
 import { useNavigate } from "react-router-dom";
 const Register = () => {
+    const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
 
-    const navigate= useNavigate();
-    const changeUsername = (e) => {
-        console.log(e.target.value)
-        setUsername(e.target.value)
+    //debouncing 
+    /*
+     basically create a closure
+     1.function of debounce(function,timer)
+     2.save timoutId in a var of a outer func
+     3.return a func in which  first clear the previous func using his id and set var =setTImout(function,timer)
+
+    */
+    function debounce(func, timer) {
+        let timoutId;
+        return (...ass) => {
+            clearTimeout(timoutId);
+            timoutId = setTimeout(() => func(...ass), timer)
+        }
     }
-    const changePassoword = (e) => {
-        setPassword(e.target.value)
-    }
-    const changeEmail = (e) => {
-        setEmail(e.target.value)
-    }
+
+    const changeUsername = debounce((e) => {
+        if (e.target.value) {
+            console.log(e.target.value)
+            setUsername(e.target.value)
+        }
+    }, 500)
+    const changePassoword = debounce((e) => {
+        if (e.target.value) {
+            // console.log(e.target.value)
+            setPassword(e.target.value)
+        }
+    }, 500)
+    const changeEmail = debounce((e) => {
+        if (e.target.value) {
+            console.log(e.target.value)
+            setEmail(e.target.value)
+        }
+    }, 500)
     const handle = async () => {
         try {
 
@@ -30,7 +54,7 @@ const Register = () => {
             const response = await fetch("http://localhost:5000/Register", { method: "POST", headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) })
             const result = await response.json();
             if (result.success) {
-               navigate("/login")
+                navigate("/login")
             }
         }
         catch (e) {
@@ -50,7 +74,7 @@ const Register = () => {
                 <Input
                     type="text"
                     name="username"
-                    value={username}
+
                     className={"border-2  w-11/12 p-2 "}
                     onChange={changeUsername}
                     labelName="Username" />
@@ -58,7 +82,7 @@ const Register = () => {
                 <Input
                     type="password"
                     name="password"
-                    value={password}
+
                     className={"border-2  h-full w-11/12  p-2"}
                     onChange={changePassoword}
                     labelName="Password" />
@@ -66,7 +90,7 @@ const Register = () => {
                 <Input
                     type="email"
                     name="email"
-                    value={email}
+
                     className={"border-2  w-11/12 p-2 "}
                     onChange={changeEmail}
                     labelName="Email" />

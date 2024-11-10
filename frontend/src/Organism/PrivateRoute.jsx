@@ -3,7 +3,7 @@ import React,{ useEffect, useState } from "react"
 import { Navigate, useNavigate } from "react-router-dom";
 
 function PrivateRoute({element}) {
-    const [fields,setFields]=useState([])
+    const [data,setData]=useState({fields:[],title:"as",description:"asa"})
     const [url,setUrl]=useState(window.location.pathname)
     const [error, setError] = useState(false);
     async function dataExtraction() {
@@ -16,8 +16,8 @@ function PrivateRoute({element}) {
 
                 res=await res.json();
                 if (res)
-                    setFields(res.data);
-                console.log(res.data);
+                    setData(res.data);
+                console.log(data);
             }
             else{
                 setError(true)
@@ -28,9 +28,9 @@ function PrivateRoute({element}) {
            setError(true)
         }
 
-    } useState(()=>{
+    } useEffect(()=>{
         dataExtraction()
     },[])
-    return error ? <Navigate to="/error" /> : React.cloneElement(element,{field:fields})
+    return error ? <Navigate to="/error" /> : React.cloneElement(element,{data:data})
 }
 export default PrivateRoute;

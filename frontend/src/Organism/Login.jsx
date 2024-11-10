@@ -7,16 +7,29 @@ import { changeIsLoginValue } from "../redux/flag";
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const dispatch=useDispatch();
+    const dispatch = useDispatch();
 
-    const navigate= useNavigate();
-    const changeUsername = (e) => {
-        console.log(e.target.value)
-        setUsername(e.target.value)
+    const navigate = useNavigate();
+
+    //closure for debouncing
+    function debounceF(func, timer) {
+        let timoutId;
+        return (...args) => {
+            clearTimeout(timoutId);
+            timoutId = setTimeout(() => func(...args), timer)
+        }
     }
-    const changePassoword = (e) => {
-        setPassword(e.target.value)
-    }
+    const changeUsername = debounceF((e) => {
+        if (e.target.value) {
+            console.log(e.target.value)
+            setUsername(e.target.value)
+        }
+    }, 500)
+    const changePassoword = debounceF((e) => {
+        if (e.target.value) {
+            setPassword(e.target.value)
+        }
+    }, 500);
     const handle = async () => {
         try {
 
@@ -24,12 +37,12 @@ const Login = () => {
                 "username": username,
                 "password": password,
             }
-            const response = await fetch("http://localhost:5000/login", { method: "POST", headers: { 'Content-Type': 'application/json' , },  credentials: 'include', body: JSON.stringify(form) })
+            const response = await fetch("http://localhost:5000/login", { method: "POST", headers: { 'Content-Type': 'application/json', }, credentials: 'include', body: JSON.stringify(form) })
             const result = await response.json();
             if (result.success) {
                 console.log(result)
                 dispatch(changeIsLoginValue(true));
-               navigate("/")
+                navigate("/")
             }
         }
         catch (e) {
@@ -48,7 +61,6 @@ const Login = () => {
                 <Input
                     type="text"
                     name="username"
-                    value={username}
                     className={"border-2  w-11/12 p-2 "}
                     onChange={changeUsername}
                     labelName="Username" />
@@ -56,7 +68,6 @@ const Login = () => {
                 <Input
                     type="password"
                     name="password"
-                    value={password}
                     className={"border-2 h-full w-11/12  p-2"}
                     onChange={changePassoword}
                     labelName="Password" />

@@ -38,11 +38,12 @@ const EditBox = (props) => {
                 <Input name={f.Name}
                     className=""
                     key={props.index}
-                    id={f.Id}
+                    
                     labelName={f.LabelName}
                     type={f.Type}
                 />
                 <Button
+                    // data-field-id={f.Id}  this is used for event delegation using data-* attribute
                     buttonName={"delete-btn  text-white  font-bold bg-red-600 text-center p-0.5 border-2"}
                     name="X"
                     onClick={props.editHandle}

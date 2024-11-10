@@ -7,7 +7,10 @@ Register.post("/", async (req, res) => {
         const isUsernameExist = await AuthStructure.findOne({ username: req.body.username })
         const isEmailExist = await AuthStructure.findOne({ email: req.body.email })
         if (isUsernameExist && isEmailExist) {
-            throw new Error("username or Email exist");
+           return res.status(400).json({
+                success: false,
+                message: "invalid fields value...."
+            })
         }
         //mongo operation
         //using create we do not need to save it manually user.save() not needed

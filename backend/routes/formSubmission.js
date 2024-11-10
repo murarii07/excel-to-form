@@ -32,10 +32,12 @@ formSubmissionRouter.get("/:encryptedUrl", async (req, res) => {
         console.log(id)
         let db = client.db(user);
         let col = db.collection(id);
-        let result = await col.find({}).toArray();
-        let finalResult=result[0].fields
+        // in findOne project is as parement in findOne
+        let result = await col.findOne({},{projection:{_id:0,fields:1,title:1,description:1}});
+        console.log(result)
+        // let finalResult=result[0].fields
         res.status(200).json({
-            data: finalResult,
+            data: result,
             success: true,
             message: "successfull...."
         })
