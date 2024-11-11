@@ -9,7 +9,7 @@ integrating form with the backend server
 Clone the project
 
 ```bash
-  git clone https://formPage
+  git clone https://github.com/murarii07/excel-to-form.git
 ```
 
 Go to the project directory
@@ -55,9 +55,5 @@ To run this project, you will need to add the following environment variables to
 `PATH_PUBLIC_DIRECTORY`
 
 
-## Tech Stack
 
-**Client:** React, Redux, TailwindCSS
-
-**Server:** Node, Express
 
