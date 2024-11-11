@@ -15,16 +15,17 @@ const EditBox = (props) => {
     ]
     const handle = (e) => {
         console.log(e.target.id)
-        if (field.LabelName === e.target.id) {
+        if (field.Id=== e.target.id) {
             console.log(field.LabelName)
+           
             setF((prevField) => ({
                 ...prevField,
                 Type: e.target.value // Update the type with the 
             }));
             // console.log(fieldlist.indexOf(field))
-            const updatelist=fields.map((x)=>{
+            const updatelist = fields.map((x) => {
                 if (x.LabelName === e.target.id) {
-                    return {...x,Type:e.target.value}
+                    return { ...x, Type: e.target.value }
                 }
                 return x;
             })
@@ -38,10 +39,16 @@ const EditBox = (props) => {
                 <Input name={f.Name}
                     className=""
                     key={props.index}
-                    
+
                     labelName={f.LabelName}
                     type={f.Type}
-                />
+                    element={
+                        f.Type==="radio"?<Button name="+" />:""
+                    }
+                >
+                  
+                </Input>
+
                 <Button
                     // data-field-id={f.Id}  this is used for event delegation using data-* attribute
                     buttonName={"delete-btn  text-white  font-bold bg-red-600 text-center p-0.5 border-2"}

@@ -57,9 +57,8 @@ const MyTask = () => {
         fetchFormList();
     }, []);
 
-    useEffect(() => {
-        console.log(formListFilter)
-    }, [formList])
+
+
     if (error) {
         // alert("please login first")
         return <Navigate to="/login" />

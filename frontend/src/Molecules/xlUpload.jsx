@@ -30,9 +30,6 @@ function XlUpload() {
     }
     return (
         <div className="drag-form  w-11/12 m-auto min-h-fit flex flex-col items-center justify-center gap-5">
-
-
-
             <>
                 <DragBox takingFile={takingFile} />
                 <Button

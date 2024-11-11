@@ -2,7 +2,7 @@ import express from "express";
 import ExcelJS from 'exceljs';
 import multer from "multer";
 import fs from 'fs';
-import { randomBytes } from "crypto";
+import { Formlist } from "../temp.js";
 export const router = express.Router();
 import { config } from "dotenv";
 config();
@@ -10,28 +10,6 @@ config();
 const storage = multer.memoryStorage();
 const uploads = multer({ storage });
 
-class Formlist {
-    formIdList = [];
-
-    add(value) {
-        this.formIdList.push(value)
-    }
-    remove(formId) {
-        this.formIdList.splice(this.formIdList.indexOf(formId), 1);
-    }
-    find(formId) {
-        const isEx = this.formIdList.some(x => x === formId)
-        return isEx
-    }
-    generateUniqueElement() {
-        let formId = randomBytes(8).toString('hex')
-        while (this.find(formId)) {
-            formId = randomBytes(8).toString('hex')
-            return formId
-
-        }
-    }
-}
 
 const FormListObj = new Formlist()
 
