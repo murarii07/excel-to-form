@@ -1,0 +1,23 @@
+import InputField from "./inputField";
+import Label from "./Label";
+
+// outline-none  is usedwhen input is foucus and we not want to make border to display
+function Radio(props) { 
+    const { className} = props
+    return (
+        <>
+        
+            {props.radioInputs.map((x, index) => (
+                <div className="w-11/12 flex bottom-2 items-center justify-around " key={index}>
+
+                    <InputField type={x.Type} name={x.Name} value={x.Value} className={`${className} px-1 outline-none`} />
+                    <Label htmlFor={x.Name} className="text-black" labelname= {x.Value} />
+
+                </div>
+            ))}
+        </>
+
+
+    )
+}
+export default Radio;

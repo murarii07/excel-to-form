@@ -97,7 +97,7 @@ label{
 .edit-box {
   width: 95%;
   /* border:2px solid  rgb(252, 248, 242);; */
-  height:120px;
+  min-height:120px;
   margin-bottom: 15px;
   border-radius: 10px;
   display:  flex;
@@ -106,6 +106,7 @@ label{
   padding: 0px 10px;
   background-color: aliceblue;
   position: relative;
+  padding-bottom: 5px;
 }
 .edit-box .field-name{
   width: 100%;

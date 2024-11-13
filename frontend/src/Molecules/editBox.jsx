@@ -1,53 +1,181 @@
 import { useEffect, useState } from "react"
 import Button from "../Atoms/Button"
-import Input from "../Atoms/Input"
 import Select from "../Atoms/SelectField"
 import { useDispatch, useSelector } from "react-redux";
 import { changeFieldValue } from "../redux/formElement";
+import Radio from "../Atoms/RadioButton";
+import InputField from "../Atoms/inputField";
+import Label from "../Atoms/Label";
 const EditBox = (props) => {
     const { field } = props
     const fields = useSelector(state => state.Field.value)
     const [f, setF] = useState(field)
+    const [input, setInput] = useState(true)
     const dispatch = useDispatch();
+    const [arr, setArr] = useState([f])
     const inputTypes = [
         "text", "password", "email", "url", "number", "checkbox",
         "radio", "file", "date"
     ]
+    const debounce = (func, timer) => {
+        let timeoutId;
+        return (...args) => {
+            clearTimeout(timeoutId)
+            timeoutId = setTimeout(() => func(...args), timer)
+        }
+    }
+    function changeFFlag(obj) {
+        setF((prevField) => ({
+            ...prevField,
+            ...obj // Update the type with the 
+        }));
+    }
+    // function updateFieldList({ obj }, q1,q2) {
+    //     const updatelist = fields.map((x) => {
+    //         if (x[q1]===q2) {
+    //             return { ...x, ...obj }
+    //         }
+    //         return x;
+    //     })
+    //     console.log(fields)
+    //     dispatch(changeFieldValue(updatelist))
+    // }
     const handle = (e) => {
         console.log(e.target.id)
-        if (field.Id=== e.target.id) {
-            console.log(field.LabelName)
-           
-            setF((prevField) => ({
-                ...prevField,
-                Type: e.target.value // Update the type with the 
-            }));
+        if (field.Id === e.target.id) {
+            changeFFlag({ Type: e.target.value })
+
             // console.log(fieldlist.indexOf(field))
             const updatelist = fields.map((x) => {
-                if (x.LabelName === e.target.id) {
+                if (x.Id === e.target.id) {
                     return { ...x, Type: e.target.value }
                 }
                 return x;
             })
             console.log(fields)
             dispatch(changeFieldValue(updatelist))
+             
         }
+}
+    const handleInput = () => {
+        setInput(false)
     }
+    const handleChange = debounce((e) => {
+        changeFFlag({ LabelName: e.target.value })
+        const updatelist = fields.map((x) => {
+            console.log(e.target.id)
+            if (x.Id === e.target.id) {
+                console.log("OUCH.....")
+                return { ...x, LabelName: e.target.value }
+            }
+            return x;
+        })
+        dispatch(changeFieldValue(updatelist))
+        console.log("sdsd", fields)
+        // updateFieldList({ LabelName: e.target.value }, con=e.target.id)
+    }, 500)
+
+    useEffect(() => {
+        if ((f.Type === "radio") || (f.Type === "checkbox")) {
+            // const d=prompt("enter options name")
+            setArr([{ ...f, Value: "options" }])
+            const updatelist = fields.map((x) => {
+                if ((x.Type === "radio") || (x.Type === "checkbox")) {
+                    return { ...x, Value: "options" }
+                }
+                return x;
+            })
+            console.log(fields)
+            dispatch(changeFieldValue(updatelist))
+            // updateFieldList({ Value: "options" }, field.Id === e.target.id)
+        }
+    }, [f])
+
+    useEffect(() => {
+        const handleClickOutsidee = (e) => {
+            if (e.target.classList.contains("changeAbleLabelName")) {
+                console.log(e.target.classList.contains("changeAbleLabelName"))
+
+                if (e.key === "Enter") {
+                    setInput(true)
+                }
+            }
+
+        };
+
+        document.querySelector("body").addEventListener("keypress", handleClickOutsidee);
+
+        return () => {
+            document.querySelector("body").removeEventListener("key", handleClickOutsidee);
+        };
+    }, [input]);
     return (
         <>
             <div className="edit-box">
-                <Input name={f.Name}
-                    className=""
-                    key={props.index}
+                {(f.Type === "radio" || f.Type === "checkbox") ?
+                    (<>
+                        {
+                            input ?
+                                <Label labelname={f.LabelName} htmlFor={f.Name} onDoubleClick={handleInput} />
+                                : <InputField name={f.Name}
+                                    className="changeAbleLabelName"
+                                    id={f.Id}
+                                    type={"text"}
+                                    onChange={handleChange}
 
-                    labelName={f.LabelName}
-                    type={f.Type}
-                    element={
-                        f.Type==="radio"?<Button name="+" />:""
-                    }
-                >
-                  
-                </Input>
+                                />
+                        }
+                        {arr.map((x, index) => (
+                            <div className="w-11/12 flex bottom-2 items-center justify-around " key={index}>
+
+                                <InputField
+                                    data={f.Id}
+                                    type={x.Type}
+                                    name={x.Name}
+                                    value={x.Value}
+                                    className={`${"changeAbleLabelName"} px-1 outline-none`} />
+                                <Label
+                                    htmlFor={x.Name}
+                                    className="text-black"
+                                    labelname={x.Value} />
+
+
+                            </div>
+                        ))}
+
+                        {/* <Radio radioInputs={arr} labelName={f.LabelName} /> */}
+
+                        <Button name="+" className="bg-green-500 text-white border-none w-1/6" onClick={
+                            (e) => {
+                                console.log("As", f)
+                                const d = prompt("emter value ");
+                                setArr([...arr, { ...f, Value: d, LabelName: d }]);
+                                console.log(arr)
+                                e.stopPropagation()
+                            }}
+                        />
+                    </>
+
+                    ) : (
+                        <>
+                            {input ? <Label labelname={f.LabelName} htmlFor={f.Name} onDoubleClick={handleInput} />
+                                : <InputField name={f.Name}
+                                    id={f.Id}
+                                    type={"text"}
+                                    onChange={handleChange}
+                                    className="changeAbleLabelName"
+
+                                />}
+                            <InputField name={f.Name}
+                                key={props.index}
+                                type={f.Type}
+                            />
+                        </>
+
+                    )
+                }
+
+
 
                 <Button
                     // data-field-id={f.Id}  this is used for event delegation using data-* attribute
