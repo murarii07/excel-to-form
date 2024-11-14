@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "../Atoms/Input";
 import Button from "../Atoms/Button";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { changeIsLoginValue } from "../redux/flag";
+
 const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -42,6 +43,7 @@ const Login = () => {
             if (result.success) {
                 console.log(result)
                 dispatch(changeIsLoginValue(true));
+                window.localStorage.setItem("isLogged", true)
                 navigate("/")
             }
         }
@@ -53,6 +55,13 @@ const Login = () => {
             setUsername("")
         }
 
+    }
+    if (window.localStorage.getItem("isLogged")) {
+
+        return (
+            <div>you have already logged in return to<br></br> <a className="hover:text-blue-600 hover:text-underline" href="/">Home</a> </div>
+
+        )
     }
     return (
         <>

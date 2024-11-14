@@ -33,6 +33,7 @@ const Profile = () => {
         });
         if (res.ok) {
             console.log("sd")
+            window.localStorage.removeItem("isLogged")
             nav("/")
 
         }

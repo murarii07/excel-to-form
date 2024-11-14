@@ -35,7 +35,7 @@ function App() {
         <Route path='formId' element={<FormUpload />} />
         <Route path='public/*'element={<PrivateRoute element={<UserForm />} />} />
         <Route path='*' element={<NotFound />} />
-        <Route path='demo' element={<UserDp />} />
+        <Route path='submit' element={<UserDp />} />
       </Routes>
 
     </BrowserRouter>

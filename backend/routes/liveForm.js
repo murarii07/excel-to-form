@@ -4,7 +4,7 @@ export const liveFormRouter = express.Router();
 import CryptoJS from "crypto-js";
 import { config } from "dotenv";
 import jwt from 'jsonwebtoken'
-import { DatabaseInstance } from "../temp.js";
+import { DatabaseInstance } from "../Module.js";
 config() //loading the env file
 const client = new MongoClient(process.env.MONGODB_URL);
 liveFormRouter.use(cookieCheckingMiddleware)

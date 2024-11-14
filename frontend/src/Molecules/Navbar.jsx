@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 import UserDp from "../Atoms/userdp";
 import { useEffect, useState } from "react";
 import SideBar from "./SideBar";
@@ -54,12 +53,12 @@ function Nav(props) {
     }
     else {
         return (
-            <div className="navbar   mt-3 mb-10  rounded-md h-11 mx-auto  w-11/12">
+            <div className="navbar   mb-10   h-11 mx-auto  rounded-md w-11/12 bg-teal-500 px-5 shadow-md">
                 <ul className="flex justify-between items-center h-full">
-                    <li className="w-2/4 text-xl font-bold">FormX</li>
+                    <li className="w-2/4 text-xl font-bold text-center">FormX</li>
                     <div className="flex w-2/4 justify-around items-center h-full">
-                        <li className="hover:bg-purple-100 p-3 rounded-md"><a href="/login" target="_blank">login</a></li>
-                        <li className="hover:bg-purple-100 p-3 rounded-md"><a href="/signup" target="_blank">signup</a></li>
+                        <li className="hover:bg-teal-100 p-3 rounded-md"><a href="/login" target="_blank">login</a></li>
+                        <li className="hover:bg-teal-100 p-3 rounded-md"><a href="/signup" target="_blank">signup</a></li>
                     </div>
                 </ul>
             </div>

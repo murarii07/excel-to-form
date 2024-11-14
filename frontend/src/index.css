@@ -179,6 +179,8 @@ label{
 .userform{
   /* border: 2px solid black; */
   min-height: 100vh;
+  /* height: auto; */
+  
 }
 
 .userform .input-preview{
@@ -193,3 +195,7 @@ label{
   width: 100%;
   justify-content: space-around;
 }
+/* .formDiv{
+border:2px solid black;
+min-height: 100vh;
+} */

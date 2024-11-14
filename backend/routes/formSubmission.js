@@ -3,7 +3,7 @@ import CryptoJS from "crypto-js";
 export const formSubmissionRouter = express.Router();
 import { config } from "dotenv";
 config() //loading the env file
-import { DatabaseInstance } from "../temp.js";
+import { DatabaseInstance } from "../Module.js";
 import multer from "multer";
 // // Multer memory storage configuration
 const storage = multer.memoryStorage();

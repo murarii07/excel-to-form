@@ -30,30 +30,22 @@ const EditBox = (props) => {
             ...obj // Update the type with the 
         }));
     }
-    // function updateFieldList({ obj }, q1,q2) {
-    //     const updatelist = fields.map((x) => {
-    //         if (x[q1]===q2) {
-    //             return { ...x, ...obj }
-    //         }
-    //         return x;
-    //     })
-    //     console.log(fields)
-    //     dispatch(changeFieldValue(updatelist))
-    // }
+    function updateFieldList(obj , q2) {
+        const updatelist = fields.map((x) => {
+            if (x.Id===q2) {
+                return { ...x, ...obj }
+            }
+            return x;
+        })
+        console.log(fields)
+        dispatch(changeFieldValue(updatelist))
+    }
     const handle = (e) => {
         console.log(e.target.id)
         if (field.Id === e.target.id) {
             changeFFlag({ Type: e.target.value })
+            updateFieldList({Type: e.target.value},e.target.id)
 
-            // console.log(fieldlist.indexOf(field))
-            const updatelist = fields.map((x) => {
-                if (x.Id === e.target.id) {
-                    return { ...x, Type: e.target.value }
-                }
-                return x;
-            })
-            console.log(fields)
-            dispatch(changeFieldValue(updatelist))
              
         }
 }
@@ -62,18 +54,8 @@ const EditBox = (props) => {
     }
     const handleChange = debounce((e) => {
         changeFFlag({ LabelName: e.target.value })
-        const updatelist = fields.map((x) => {
-            console.log(e.target.id)
-            if (x.Id === e.target.id) {
-                console.log("OUCH.....")
-                return { ...x, LabelName: e.target.value }
-            }
-            return x;
-        })
-        dispatch(changeFieldValue(updatelist))
-        console.log("sdsd", fields)
-        // updateFieldList({ LabelName: e.target.value }, con=e.target.id)
-    }, 500)
+        updateFieldList({ LabelName: e.target.value }, e.target.id)
+    }, 1000)
 
     useEffect(() => {
         if ((f.Type === "radio") || (f.Type === "checkbox")) {
@@ -87,14 +69,13 @@ const EditBox = (props) => {
             })
             console.log(fields)
             dispatch(changeFieldValue(updatelist))
-            // updateFieldList({ Value: "options" }, field.Id === e.target.id)
         }
     }, [f])
 
     useEffect(() => {
         const handleClickOutsidee = (e) => {
             if (e.target.classList.contains("changeAbleLabelName")) {
-                console.log(e.target.classList.contains("changeAbleLabelName"))
+                // console.log(e.target.classList.contains("changeAbleLabelName"))
 
                 if (e.key === "Enter") {
                     setInput(true)
@@ -111,14 +92,14 @@ const EditBox = (props) => {
     }, [input]);
     return (
         <>
-            <div className="edit-box">
+            <div className="edit-box flex gap-2">
                 {(f.Type === "radio" || f.Type === "checkbox") ?
                     (<>
                         {
                             input ?
                                 <Label labelname={f.LabelName} htmlFor={f.Name} onDoubleClick={handleInput} />
                                 : <InputField name={f.Name}
-                                    className="changeAbleLabelName"
+                                    className="changeAbleLabelName  outline-none"
                                     id={f.Id}
                                     type={"text"}
                                     onChange={handleChange}
@@ -133,7 +114,7 @@ const EditBox = (props) => {
                                     type={x.Type}
                                     name={x.Name}
                                     value={x.Value}
-                                    className={`${"changeAbleLabelName"} px-1 outline-none`} />
+                                    className={`${"changeAbleLabelName outline-none"} px-1 outline-none`} />
                                 <Label
                                     htmlFor={x.Name}
                                     className="text-black"
@@ -163,7 +144,8 @@ const EditBox = (props) => {
                                     id={f.Id}
                                     type={"text"}
                                     onChange={handleChange}
-                                    className="changeAbleLabelName"
+                                    placeholder={f.LabelName}
+                                    className="changeAbleLabelName outline-none"
 
                                 />}
                             <InputField name={f.Name}
