@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react"
 import Button from "../Atoms/Button"
 import Select from "../Atoms/SelectField"
-import { useDispatch, useSelector } from "react-redux";
-import { changeFieldValue } from "../redux/formElement";
-import Radio from "../Atoms/RadioButton";
 import InputField from "../Atoms/inputField";
 import Label from "../Atoms/Label";
-const EditBox = (props) => {
+import { useDispatch, useSelector } from "react-redux";
+import { changeFieldValue } from "../redux/formElement";
+function EditBox(props) {
     const { field } = props
     const fields = useSelector(state => state.Field.value)
     const [f, setF] = useState(field)
     const [input, setInput] = useState(true)
     const dispatch = useDispatch();
-    const [arr, setArr] = useState([f])
+    const [arr, setArr] = useState([{ optionLabel: "option1", value: "option1" }])
+    const [inputLabel, setInputLabel] = useState(true)
     const inputTypes = [
         "text", "password", "email", "url", "number", "checkbox",
         "radio", "file", "date"
@@ -30,9 +30,9 @@ const EditBox = (props) => {
             ...obj // Update the type with the 
         }));
     }
-    function updateFieldList(obj , q2) {
+    function updateFieldList(obj, q2) {
         const updatelist = fields.map((x) => {
-            if (x.Id===q2) {
+            if (x.Id === q2) {
                 return { ...x, ...obj }
             }
             return x;
@@ -44,11 +44,9 @@ const EditBox = (props) => {
         console.log(e.target.id)
         if (field.Id === e.target.id) {
             changeFFlag({ Type: e.target.value })
-            updateFieldList({Type: e.target.value},e.target.id)
-
-             
+            updateFieldList({ Type: e.target.value }, e.target.id)
         }
-}
+    }
     const handleInput = () => {
         setInput(false)
     }
@@ -59,11 +57,9 @@ const EditBox = (props) => {
 
     useEffect(() => {
         if ((f.Type === "radio") || (f.Type === "checkbox")) {
-            // const d=prompt("enter options name")
-            setArr([{ ...f, Value: "options" }])
             const updatelist = fields.map((x) => {
                 if ((x.Type === "radio") || (x.Type === "checkbox")) {
-                    return { ...x, Value: "options" }
+                    return { ...x, Value: arr }
                 }
                 return x;
             })
@@ -76,9 +72,9 @@ const EditBox = (props) => {
         const handleClickOutsidee = (e) => {
             if (e.target.classList.contains("changeAbleLabelName")) {
                 // console.log(e.target.classList.contains("changeAbleLabelName"))
-
                 if (e.key === "Enter") {
                     setInput(true)
+                    setInputLabel(true)
                 }
             }
 
@@ -90,6 +86,22 @@ const EditBox = (props) => {
             document.querySelector("body").removeEventListener("key", handleClickOutsidee);
         };
     }, [input]);
+    const handleChangeOption = debounce((e) => {
+        const d = e.target.getAttribute("data-field-id")
+        if (d) {
+            const up = arr.map((x) => {
+                if (x.optionLabel === d) {
+                    return { ...x, optionLabel: e.target.value, value: e.target.value };
+                }
+                return x;
+            })
+            setArr(up)
+        }
+
+    }, 1000)
+    useEffect(() => {
+        setF({ ...f, Value: arr });
+    }, [arr])
     return (
         <>
             <div className="edit-box flex gap-2">
@@ -107,30 +119,40 @@ const EditBox = (props) => {
                                 />
                         }
                         {arr.map((x, index) => (
-                            <div className="w-11/12 flex bottom-2 items-center justify-around " key={index}>
+                            <div className="w-11/12 flex bottom-2 items-center justify-around  " key={index}>
 
                                 <InputField
-                                    data={f.Id}
-                                    type={x.Type}
-                                    name={x.Name}
-                                    value={x.Value}
-                                    className={`${"changeAbleLabelName outline-none"} px-1 outline-none`} />
-                                <Label
-                                    htmlFor={x.Name}
+                                    data-field-id={f.Id}
+                                    type={f.Type}
+                                    name={f.Type}
+                                    value={x.value}
+                                  
+
+                                    className={`${"changeAbleLabelName outline-none"} px-1 text-right`} />
+                                {!(inputLabel) ? <InputField
+                                    className="changeAbleLabelName  cursor-pointer  outline-none"
+                                    onChange={handleChangeOption}
+                                    data-field-id={x.optionLabel}
+                                    type={"text"}
+                                    placeholder={x.value}
+
+
+                                /> : <Label
+                                    htmlFor={f.Name}
                                     className="text-black"
-                                    labelname={x.Value} />
+                                    labelname={x.value}
+                                    onDoubleClick={() => {
+                                        setInputLabel(false)
+                                    }} />}
 
 
                             </div>
                         ))}
-
-                        {/* <Radio radioInputs={arr} labelName={f.LabelName} /> */}
-
                         <Button name="+" className="bg-green-500 text-white border-none w-1/6" onClick={
                             (e) => {
                                 console.log("As", f)
-                                const d = prompt("emter value ");
-                                setArr([...arr, { ...f, Value: d, LabelName: d }]);
+                                let r = arr.length + 1;
+                                setArr([...arr, { optionLabel: `options${r}`, value: `options${r}` }]);
                                 console.log(arr)
                                 e.stopPropagation()
                             }}

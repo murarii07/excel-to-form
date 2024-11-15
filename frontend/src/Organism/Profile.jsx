@@ -4,6 +4,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import Nav from "../Molecules/Navbar";
 const Profile = () => {
     const [error, setError] = useState(false);
+    const [dropdown,SetDropDown] = useState(false);
     const nav = useNavigate()
     const [details, setDetails] = useState({ name: "df", storage: 0 })
     const fetchw = async () => {
@@ -46,6 +47,7 @@ const Profile = () => {
     }, [])
     if (error) {
         console.log(error)
+        window.localStorage.removeItem("isLogged")
         return <Navigate to="/login" />
     }
     else {
@@ -61,9 +63,14 @@ const Profile = () => {
                 </div>
 
                 {/* tasks */}
-                <a href="http://localhost:3000/tasks">
-                    <div className="MyTasks mx-auto mt-10 w-11/12 box-border px-12 py-3 min-h-14 border-2 rounded-lg cursor-pointer     shadow-md">My projects</div>
-                </a>
+                {/* <a href="http://localhost:3000/tasks"> */}
+                    <div className="MyTasks mx-auto mt-10 w-11/12 box-border px-12 py-3 min-h-14 border-2 rounded-lg cursor-pointer     shadow-md relative"> <span>My projects</span>
+                    <div className="" onClick={()=>{
+                        SetDropDown(!dropdown)
+                    }}>checkout</div>
+                    </div>
+                {/* </a> */}
+                {dropdown && <div className="MyTasks mx-auto mt-10 w-9/12 box-border px-12 py-3 min-h-12 border-2 rounded-lg cursor-pointer     shadow-md relative">sdf</div>}
 
                 {/* storage bar */}
                 <div className="storage w-11/12 mx-auto mt-10 px-12 py-3 min-h-14 border-2 rounded-lg cursor-pointer shadow-md">storagebar:{`${details.storage}/5gb`}</div>

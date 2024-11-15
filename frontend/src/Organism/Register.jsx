@@ -69,7 +69,7 @@ const Register = () => {
     }
     return (
         <>
-            <div className="flex flex-col w-7/12  h-2/4 my-10 mx-auto border-2 gap-y-5 p-5 rounded-md">
+            <div className="flex flex-col w-7/12  h-2/4 my-10 mx-auto border-2 gap-y-5 p-5 rounded-md bg-white">
 
                 <Input
                     type="text"

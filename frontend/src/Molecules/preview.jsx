@@ -66,7 +66,7 @@ function Preview() {
         <>
             {fields.length ? (
                 <>
-                    <div className="preview-form rounded-lg bg-purple-200 border-2 border-purple-200"
+                    <div className="preview-form rounded-lg bg-purple-200 border-2 border-purple-200 "
                     //  onClick={editHandleF}
                      >
                         {fields.map((x, index) =>

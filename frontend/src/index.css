@@ -6,6 +6,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: rgb(234, 238, 243);
+  height: 100vh;
 }
 
 code {
@@ -15,7 +16,9 @@ code {
 *{
   box-sizing: border-box;
 }
-
+#root{
+  min-height: 100%;
+}
 .preview-form{
   border:2px solid black;
   min-width: 90%;

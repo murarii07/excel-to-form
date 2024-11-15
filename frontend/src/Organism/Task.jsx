@@ -60,7 +60,7 @@ const MyTask = () => {
 
 
     if (error) {
-        // alert("please login first")
+        window.localStorage.removeItem("isLogged")
         return <Navigate to="/login" />
     }
     else {
@@ -68,9 +68,9 @@ const MyTask = () => {
             <>
                 <Nav flag={true} />
                 {/* <Button buttonName="filter"  name="filter" /> */}
-                <div className="search mx-auto w-11/12 h-14 box-border flex items-center gap-3.5">
+                <div className="search mx-auto w-11/12 h-14 box-border flex items-center gap-3.5 ">
                     <Input
-                        className="box-border border-2  h-full px-3 w-7/12 border-black "
+                        className="box-border border-2  h-full px-3 w-7/12 border-black bg-transparent "
                         placeholder="enter form name or id" onChange={debounceHandler} />
                     <Button buttonName="search font-bold rounded-xl px-3 h-11/12 border-teal-500  text-teal-500 hover:bg-teal-500 hover:text-white " name="search" />
                 </div>

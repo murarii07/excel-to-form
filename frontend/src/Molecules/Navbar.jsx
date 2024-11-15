@@ -33,12 +33,12 @@ function Nav(props) {
         return (
             <>
                 {sideBarFlag && <SideBar handle={handleClickOutside} />}
-                <div className="bg-purple-900 navbar    mt-3 mb-10  rounded-md h-11 mx-auto  w-11/12  relative">
-                    <ul className="flex justify-evenly items-center h-full ">
-                        <li className="w-1/5" onClick={(e) => {
+                <div className=" bg-purple-900 navbar    mt-3 mb-10  rounded-md h-11 mx-auto  w-11/12  relative">
+                    <ul className="flex justify-evenly items-center h-full  ">
+                        <li className="w-1/5 cursor-pointer" onClick={(e) => {
                             setSideBarFlag(true)
                             e.stopPropagation() //this will prevent event bubbling
-                        }}><img src="/assets/layout.png" alt="" width={"40px"} height={"40px"} /></li>
+                        }}><img src="/assets/layout.png" alt="" width={"30px"} height={"30px"} /></li>
                         <li className="w-2/5 text-xl font-bold text-white">FormX</li>
                         <div className="flex w-2/5 justify-around  items-center h-full">
                             {/* <li><div>{props.userName}</div></li> */}
