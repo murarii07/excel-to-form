@@ -74,16 +74,17 @@ export class Formlist {
     remove(formId) {
         this.formIdList.splice(this.formIdList.indexOf(formId), 1);
     }
-    find(formId) {
-        const isEx = this.formIdList.some(x => x === formId)
+    findId(formId) {
+        const isEx = this.formIdList.find(x => x === formId)
         return isEx
     }
     generateUniqueElement() {
         let formId = randomBytes(8).toString('hex')
-        while (this.find(formId)) {
+        while (this.findId(formId)) {
             formId = randomBytes(8).toString('hex')
             return formId
 
         }
+        return formId
     }
 }

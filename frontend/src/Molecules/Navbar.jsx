@@ -13,8 +13,10 @@ function Nav(props) {
 
     useEffect(() => {
         const handleClickOutsidee = () => {
-            console.log(sideBarFlag, "a")
-            if (sideBarFlag) { setSideBarFlag(false) };
+            if (sideBarFlag) {
+                 setSideBarFlag(false)
+                 console.log(sideBarFlag, "a")
+                 };
             if (drop) { setDrop(false) };
         };
 
@@ -23,11 +25,11 @@ function Nav(props) {
         return () => {
             document.querySelector("body").removeEventListener("click", handleClickOutsidee);
         };
-    }, [sideBarFlag,drop]);
+    }, [sideBarFlag, drop]);
     if (props.flag) {
         const userHandle = (e) => {
             console.log("true")
-            setDrop(true)
+            setDrop(!drop)
             e.stopPropagation();
         }
         return (
@@ -38,11 +40,18 @@ function Nav(props) {
                         <li className="w-1/5 cursor-pointer" onClick={(e) => {
                             setSideBarFlag(true)
                             e.stopPropagation() //this will prevent event bubbling
-                        }}><img src="/assets/layout.png" alt="" width={"30px"} height={"30px"} /></li>
+                        }}><svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M5 7h14M5 12h14M5 17h14"/>
+                      </svg>
+                      </li>
                         <li className="w-2/5 text-xl font-bold text-white">FormX</li>
                         <div className="flex w-2/5 justify-around  items-center h-full">
                             {/* <li><div>{props.userName}</div></li> */}
-                            <li className="relative"><div className="cursor-pointer text-white" onClick={userHandle} >Userdp</div></li>
+                            <li className="relative"><div className="cursor-pointer text-white" onClick={userHandle} >
+                                <div className="flex items-center justify-center w-6 h-6 overflow-hidden bg-gray-100 dark:bg-gray-600 rounded-full">
+                                    <img className="object-center" src="/assets/user.png" width={"24px"} height={"24px"} alt=""></img>
+                               
+                                </div></div></li>
                             {drop && <UserDp />}
                         </div>
                     </ul>

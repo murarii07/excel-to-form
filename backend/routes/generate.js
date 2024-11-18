@@ -51,7 +51,7 @@ router.post("/generate", uploads.single('excelFile'), async (req, res) => {
             Type:  RegExp(/date/).test(element)?"date":"text"
         }))
         FormListObj.add(formId) //create a id and push in this
-
+        console.log(FormListObj.formIdList)
         res
             .cookie('formId', formId, {
                 maxAge: 1000 * 60 * 10,  //10minute
@@ -92,9 +92,9 @@ router.get("/download", (req, res) => {
         const formId = req.signedCookies?.formId;
         console.log(formId)
         if (!formId) {
-            return res.status(400).json({ success: false, message: "Cookie not found." });
+            return res.status(400).json({ success: false, message: "Cookie not found" });
         }
-        const forms = FormListObj.find(formId)
+        const forms = FormListObj.findId(formId)
         console.log(formId, forms)
         if (forms) {
             FormListObj.remove(formId)

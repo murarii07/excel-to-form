@@ -5,6 +5,7 @@ import InputField from "../Atoms/inputField";
 import Label from "../Atoms/Label";
 import { useDispatch, useSelector } from "react-redux";
 import { changeFieldValue } from "../redux/formElement";
+import useDebounce from "../CustomHooks/debounce";
 function EditBox(props) {
     const { field } = props
     const fields = useSelector(state => state.Field.value)
@@ -17,13 +18,6 @@ function EditBox(props) {
         "text", "password", "email", "url", "number", "checkbox",
         "radio", "file", "date"
     ]
-    const debounce = (func, timer) => {
-        let timeoutId;
-        return (...args) => {
-            clearTimeout(timeoutId)
-            timeoutId = setTimeout(() => func(...args), timer)
-        }
-    }
     function changeFFlag(obj) {
         setF((prevField) => ({
             ...prevField,
@@ -50,7 +44,7 @@ function EditBox(props) {
     const handleInput = () => {
         setInput(false)
     }
-    const handleChange = debounce((e) => {
+    const handleChange = useDebounce((e) => {
         changeFFlag({ LabelName: e.target.value })
         updateFieldList({ LabelName: e.target.value }, e.target.id)
     }, 1000)
@@ -86,7 +80,7 @@ function EditBox(props) {
             document.querySelector("body").removeEventListener("key", handleClickOutsidee);
         };
     }, [input]);
-    const handleChangeOption = debounce((e) => {
+    const handleChangeOption = useDebounce((e) => {
         const d = e.target.getAttribute("data-field-id")
         if (d) {
             const up = arr.map((x) => {
@@ -99,8 +93,14 @@ function EditBox(props) {
         }
 
     }, 1000)
+    const requireHandle=useDebounce((e)=>{
+        console.log(e.target.checked)
+        changeFFlag({required: true});
+        updateFieldList({required: true},f.Id)
+
+    },1000)
     useEffect(() => {
-        setF({ ...f, Value: arr });
+        changeFFlag({Value: arr });
     }, [arr])
     return (
         <>
@@ -126,7 +126,7 @@ function EditBox(props) {
                                     type={f.Type}
                                     name={f.Type}
                                     value={x.value}
-                                  
+
 
                                     className={`${"changeAbleLabelName outline-none"} px-1 text-right`} />
                                 {!(inputLabel) ? <InputField
@@ -173,6 +173,7 @@ function EditBox(props) {
                             <InputField name={f.Name}
                                 key={props.index}
                                 type={f.Type}
+                                
                             />
                         </>
 
@@ -188,12 +189,26 @@ function EditBox(props) {
                     onClick={props.editHandle}
 
                 />
-                <Select
-                    id={f.Name}
-                    name={"edit-file-type"}
-                    className={`${f.Name} bg-teal-100 cursor-pointer border-2  border-teal-100`}
-                    onChange={handle}
-                    inputTypes={inputTypes} />
+
+                <div className="flex justify-between">
+                    <Select
+                        id={f.Name}
+                        name={"edit-file-type"}
+                        className={`${f.Name} bg-teal-100 cursor-pointer border-2  border-teal-100`}
+                        onChange={handle}
+                        inputTypes={inputTypes} />
+
+
+
+                    <label className=" inline-flex gap-3 items-center cursor-pointer justify-end">
+                        <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Required</span>
+                        <input type="checkbox" value="required" onClick={requireHandle} className="sr-only peer pl-10" />
+                        <div className="relative w-6 h-1   rounded-full peer dark:bg-purple-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[-6px] after:start-[1px] after:bg-purple-900 after:border-purple-900 after:border after:rounded-full after:h-3 after:w-3 after:transition-all dark:border-purple-900 peer-checked:bg-purple-900"></div>
+                        
+                    </label>
+
+
+                </div>
             </div>
 
 

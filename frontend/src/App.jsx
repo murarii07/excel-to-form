@@ -11,7 +11,8 @@ import './index.css'
 import NotFound from './Organism/NotFound';
 import PrivateRoute from './Organism/PrivateRoute';
 import UserForm from './Organism/userForm';
-import FormDetails from './Organism/FormDetails';;
+import FormDetails from './Organism/FormDetails';import Submit from './Organism/Submit';
+;
 function Tasks(){
   return(
     
@@ -34,6 +35,7 @@ function App() {
         <Route path='formId' element={<FormUpload />} />
         <Route path='public/*'element={<PrivateRoute element={<UserForm />} />} />
         <Route path='*' element={<NotFound />} />
+        <Route path='submit'element={<Submit />} />
        
       </Routes>
 
