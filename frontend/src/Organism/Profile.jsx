@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import Button from '../Atoms/Button'
 import {useNavigate } from "react-router-dom";
 import Nav from "../Molecules/Navbar";
 import useFetchData from "../CustomHooks/fetchData";
 import SkeletonLoading from "../Atoms/SkeletionLoading";
+const ProfileImg=lazy(()=>import("../Atoms/img"))
 const Profile = () => {
+    const nav = useNavigate()
     const [isLoading, setIsLoading] = useState(true)
     const [dropdown, SetDropDown] = useState(false);
-    const nav = useNavigate()
     const [details, setDetails] = useState({ name: "df", storage: 0, forms: [] })
     const { response, error} = useFetchData("http://localhost:5000/user/formlist", {
         method: "GET",
@@ -58,7 +59,10 @@ const Profile = () => {
             <Nav flag={true} />
             <div className="user-dp w-6/12  m-auto mt-5  rounded-md">
                 <div className="userImg font-bold text-center  w-full ">
-                    <img src='/assets/user.png' alt="sdd" />
+                    <Suspense fallback={<span>loading...</span>}>
+                        <ProfileImg img={"/assets/user.png"} />
+                    </Suspense>
+                    {/* <img src='/assets/user.png' alt="sdd" /> */}
                 </div>
                 <div className="userName border-none m-auto  rounded-md    w-full font-bold md:text-2xl flex justify-center items-center">{details.name}</div>
             </div>

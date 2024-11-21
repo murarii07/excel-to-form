@@ -1,7 +1,7 @@
 import UserDp from "../Atoms/userdp";
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import SideBar from "./SideBar";
-
+const ProfileDp=lazy(()=>import("../Atoms/img"))
 function Nav(props) {
     const [drop, setDrop] = useState(false);
     const [sideBarFlag, setSideBarFlag] = useState(false);
@@ -46,11 +46,14 @@ function Nav(props) {
                       </li>
                         <li className="w-2/5 text-xl font-bold text-white">FormX</li>
                         <div className="flex w-2/5 justify-around  items-center h-full">
-                            {/* <li><div>{props.userName}</div></li> */}
+                           
                             <li className="relative"><div className="cursor-pointer text-white" onClick={userHandle} >
                                 <div className="flex items-center justify-center w-6 h-6 overflow-hidden bg-gray-100 dark:bg-gray-600 rounded-full">
-                                    <img className="object-center" src="/assets/user.png" width={"24px"} height={"24px"} alt=""></img>
-                               
+                                    <Suspense fallback={<span>Loading...</span>}>
+                                    <ProfileDp img="/assets/user.png" width={"24px"} height={"24px"}  />
+                                    </Suspense>
+                                   
+                                
                                 </div></div></li>
                             {drop && <UserDp />}
                         </div>
@@ -66,8 +69,14 @@ function Nav(props) {
                 <ul className="flex justify-between items-center h-full">
                     <li className="w-2/4 text-xl font-bold text-center">FormX</li>
                     <div className="flex w-2/4 justify-around items-center h-full">
-                        <li className="hover:bg-teal-100 p-3 rounded-md"><a href="/login" target="_blank">login</a></li>
-                        <li className="hover:bg-teal-100 p-3 rounded-md"><a href="/signup" target="_blank">signup</a></li>
+                    {[{name:"login",href:"/login",className:"hover:bg-teal-100 p-3 rounded-md"},{name:"signup",href:"/signup",className:"hover:bg-teal-100 p-3 rounded-md"}].map((x,index)=>
+                        <a  key={index}
+                        href={x.href} 
+                        className={x.className} target="_blank" >
+                            <li>{x.name}</li>
+                        </a>
+                    )}
+                        
                     </div>
                 </ul>
             </div>

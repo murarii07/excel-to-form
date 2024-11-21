@@ -8,10 +8,10 @@ import Register from './Organism/Register';
 import Home from './Organism/Home';
 import './App.css'
 import './index.css'
-import NotFound from './Organism/NotFound';
+import NotFound from './Atoms/NotFound';
 import PrivateRoute from './Organism/PrivateRoute';
 import UserForm from './Organism/userForm';
-import FormDetails from './Organism/FormDetails';import Submit from './Organism/Submit';
+import FormDetails from './Organism/FormDetails';import Submit from './Atoms/Submit';
 ;
 function Tasks(){
   return(
@@ -22,7 +22,6 @@ function Tasks(){
     </Routes>
   )
 }
-
 function App() {
   return (
     <BrowserRouter>
@@ -32,10 +31,10 @@ function App() {
         <Route path='signup' element={<Register />} />
         <Route path='my-profile' element={<Profile />}  />
         <Route path='tasks/*' element={<Tasks />}/>
-        <Route path='formId' element={<FormUpload />} />
+        <Route path='preview' element={<FormUpload />} />
         <Route path='public/*'element={<PrivateRoute element={<UserForm />} />} />
-        <Route path='*' element={<NotFound />} />
         <Route path='submit'element={<Submit />} />
+        <Route path='*' element={<NotFound />} />
        
       </Routes>
 

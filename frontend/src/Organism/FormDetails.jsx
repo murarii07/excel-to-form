@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import Button from "../Atoms/Button";
 import { useNavigate } from "react-router-dom";
 import Nav from "../Molecules/Navbar";
 import { ReactComponent as CopyIcon } from '../svgs/copy.svg';
 import useFetchData from "../CustomHooks/fetchData";
 import SkeletonLoading from "../Atoms/SkeletionLoading";
+const  FImg=lazy(()=>import("../Atoms/img"))
 const FormDetails = () => {
     const [isLoading, setLoading] = useState(true)
     const [flag, setFlag] = useState(true)
@@ -64,7 +65,11 @@ const FormDetails = () => {
             <>
                 <Nav flag={true} />
                 <div className="form-details   gap-10 mt-12  mx-auto w-11/12 flex flex-col justify-evenly items-center">
-                    <div className="border-2 rounded-md shadow-md w-1/4 min-h-40 text-sm px-1 box-border flex items-center justify-center"><img src="assets/user.png" width="90%" height="90%" alt="s"  /></div>
+                    <div className="border-2 rounded-md shadow-md w-1/4 h-40 text-sm px-1 box-border flex items-center  justify-center bg-white">
+                    <Suspense fallback={<span>loading...</span>} >
+                        <FImg img={"/assets/fo.png" } className="object-fill " width="100%" height="100%" alt="s"  />
+                    </Suspense>
+                   </div>
                     <div className="font-semibold">{form.name}</div>
                     <div className="text-center">{form.description}</div>
 

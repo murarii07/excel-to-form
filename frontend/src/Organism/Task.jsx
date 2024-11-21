@@ -1,11 +1,13 @@
 import Button from "../Atoms/Button";
 import Nav from "../Molecules/Navbar";
 import Input from "../Atoms/Input";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useDebounce from "../CustomHooks/debounce";
 import useFetchData from "../CustomHooks/fetchData";
 import SkeletonLoading from "../Atoms/SkeletionLoading";
+import { lazy } from "react";
+const Img=lazy(()=>import('../Atoms/img'))
 const MyTask = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [formList, setFormList] = useState([]);
@@ -73,7 +75,12 @@ const MyTask = () => {
 
                         {formListFilter.map((x, index) => (
                             <div className=" box-border min-w-20 min-h-28 flex flex-col gap-y-3 items-center " key={index}>
-                                <div className="bg-teal-100 img  border-2 border-teal-100 w-full min-h-24 text-teal-800 box-border text-xl flex items-center justify-center rounded-md shadow-md ">Image</div>
+                                <div className="bg-teal-50 img  border-2 border-teal-50 w-full min-h-24 text-teal-800 box-border text-xl flex items-center justify-center rounded-md shadow-md ">
+                                <Suspense fallback={<div>"loading...</div>}  >
+                                    <Img img="/assets/s.png" width={"90px"} />
+                                </Suspense>
+                                    
+                                </div>
                                 <div className="caption hover:text-blue-500 cursor-pointer hover:underline" onClick={(e) => {
                                     navigate(x)
                                     e.stopPropagation();

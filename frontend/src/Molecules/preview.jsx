@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../Atoms/Button";
-import { changeFieldValue } from "../redux/formElement";
+import { removeSpecificField } from "../redux/formElement";
 import EditBox from "./editBox";
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom";
@@ -12,9 +12,10 @@ function Preview() {
     console.log(fields)
     const dispatch = useDispatch()
     const editHandle = (fieldId) => {
-        const updatedFields = fields.filter((field) => field.Id !== fieldId);
-        console.log("Filtered fields:", updatedFields);
-        dispatch(changeFieldValue(updatedFields));
+        // const updatedFields = fields.filter((field) => field.Id !== fieldId);
+        // console.log("Filtered fields:", updatedFields);
+        // // dispatch(changeFieldValue(updatedFields));
+        dispatch(removeSpecificField(fieldId))
     };
     useEffect(() => {
         console.log(fields)
@@ -41,7 +42,7 @@ function Preview() {
     }
     const handleds = () => {
         try {
-            navigate("/formId")
+            navigate("/preview")
         } catch (e) {
             console.log(e)
         }

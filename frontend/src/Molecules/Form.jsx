@@ -11,9 +11,12 @@ function Form(props) {
                 {field.map(
                     (x, index) => (
                         <div key={x.Id} className="input-preview  flex flex-col bg-purple-100   rounded-xl px-2 shadow-md   border-white  " style={{ borderWidth: "10px" }}>
-                            <Label labelname={x.LabelName} htmlFor={x.Name} />
+                            <Label labelname={x.LabelName} htmlFor={x.Name} required={x.required || false} />
                             {(x.Type === 'radio' || x.Type === 'checkbox') ? (
-                                <Radio radioInputs={x.Value} type={x.Type} name={x.Name} />
+                                <Radio 
+                                radioInputs={x.Value} 
+                                type={x.Type} 
+                                name={x.Name} />
                             )
                                 :
                                 (
