@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Button from './Button'
 import { useDropzone } from 'react-dropzone'
-import {ReactComponent as UploadIcon} from '../svgs/uploadIcon.svg'
+import  UploadIcon   from '../svgs/uploadIcon.svg?react'
 const DragBox = ({ takingFile }) => {
     const [fileName, setFileName] = useState("");
     const [lo,isLo]=useState(100);
@@ -35,7 +35,7 @@ const DragBox = ({ takingFile }) => {
                     className: "pl-70 border-2",
                 })} />
 
-                <p className="text-center text-purple-950">
+                <div className="text-center text-purple-950">
 
                     {isDragActive
                         ?
@@ -50,13 +50,13 @@ const DragBox = ({ takingFile }) => {
                                         Drop files here or select file
 
                                     </div>
-                                    <Button name={"select file"} className="text-purple-600 submit-button border-purple-600 w-2/4 hover:text-white hover:bg-purple-600 hover:font-bold" />
+                                    <Button name={"select file"} className="text-purple-600 submit-button border-purple-600 w-2/4 hover:text-white hover:bg-purple-600 hover:font-bold border-2" />
                                 </div>
                             </>
                     }
 
 
-                </p>
+                </div>
             </div>
             <div className="w-3/4">
                 {fileName &&

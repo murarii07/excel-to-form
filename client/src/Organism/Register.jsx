@@ -56,7 +56,7 @@ const Register = () => {
 
             const form = {
                 "username": username,
-                "password": password,
+                "password": password.psw,
                 "email": email
             }
             setOptions({ method: "POST", headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) })

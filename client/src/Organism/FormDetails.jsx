@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useState } from "react";
 import Button from "../Atoms/Button";
 import { useNavigate } from "react-router-dom";
 import Nav from "../Molecules/Navbar";
-import { ReactComponent as CopyIcon } from '../svgs/copy.svg';
+import CopyIcon  from '../svgs/copy.svg?react';
 import useFetchData from "../CustomHooks/fetchData";
 import SkeletonLoading from "../Atoms/SkeletionLoading";
 const  FImg=lazy(()=>import("../Atoms/img"))
