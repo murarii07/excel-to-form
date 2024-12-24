@@ -65,7 +65,7 @@ function Nav(props) {
     }
     else {
         return (
-            <div className="navbar   mb-10   h-11 mx-auto  rounded-md w-11/12 bg-teal-500 px-5 shadow-md">
+            <div className="navbar   mb-10   h-11 mx-auto  rounded-md w-11/12  px-5 ">
                 <ul className="flex justify-between items-center h-full">
                     <li className="w-2/4 text-xl font-bold text-center">FormX</li>
                     <div className="flex w-2/4 justify-around items-center h-full">

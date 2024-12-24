@@ -1,10 +1,10 @@
 // you can use the jwt and signed cookie together to improve the security to add one more layer of security
 import express from "express";
-import { router } from "./routes/generate.js";
-import { liveFormRouter } from "./routes/liveForm.js";
-import { login } from "./routes/login.js";
-import { formSubmissionRouter } from "./routes/formSubmission.js";
-import { Register } from "./routes/Register.js";
+import { liveFormRouter } from "./routes/SignedUsers/liveForm.js";
+import { login } from "./routes/Authentication/login.js";
+import { Register } from "./routes/Authentication/Register.js";
+import { formSubmissionRouter } from "./routes/AllUsers/formSubmission.js";
+import { router } from "./routes/AllUsers/generate.js";
 import cors from 'cors';
 import { resolve } from 'path'
 import cookieParser from "cookie-parser";
@@ -27,7 +27,7 @@ app.use(cookieParser(process.env.COOKIE_SECRET_KEY))
 // app.use(cookieParser())
 
 
-// #registerd users
+// #Signed users
 app.use("/user", liveFormRouter)
 
 // #for all users
@@ -39,14 +39,6 @@ app.use("/public", formSubmissionRouter);
 app.use("/login", login)
 app.use("/Register", Register)
 
-app.get("/", (req, res) => {
-    res
-        .status(200)
-        .json({
-            success: true,
-            message: "hell..."
-        })
-})
 
 app.listen(port, () => {
     console.log("server started......")

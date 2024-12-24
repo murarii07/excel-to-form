@@ -6,7 +6,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: rgb(234, 238, 243);
-  height: 100vh;
+  min-height: 100vh;
 }
 
 code {
@@ -17,7 +17,7 @@ code {
   box-sizing: border-box;
 }
 #root{
-  min-height: 100%;
+  height: 100%;
 }
 .preview-form{
   border:2px solid black;
@@ -41,8 +41,8 @@ code {
   background-color: aliceblue;
 }
 input{
-  border: none;
-  border-bottom: 2px solid black;
+  /* border: none;
+  border-bottom: 2px solid black; */
 }
 .edit-box input,.form1 input{
   width: 90%;
@@ -52,8 +52,8 @@ input{
   padding-bottom: 0px;
 }
 input:focus{
-  border: none;
-  border-bottom: 2px solid rgb(202, 24, 24);
+  /* border: none; */
+  /* border-bottom: 2px solid rgb(202, 24, 24); */
 }
 button{
   min-height: 35px;
@@ -176,7 +176,7 @@ label{
 }
 .userName{
   height: 50px;
-  border: 2px solid black;
+  /* border: 2px solid black; */
   
 }
 .userform{

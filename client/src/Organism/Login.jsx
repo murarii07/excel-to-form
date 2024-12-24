@@ -6,9 +6,10 @@ import { useDispatch } from "react-redux";
 import { changeIsLoginValue } from "../redux/flag";
 import useDebounce from "../CustomHooks/debounce";
 import useFetchData from "../CustomHooks/fetchData";
+import Nav from "../Molecules/Navbar";
 
 const Login = () => {
-    const [er,setEr]=useState(false)
+    const [er, setEr] = useState(false)
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const { response, error, setOptions } = useFetchData("http://localhost:5000/login");
@@ -29,7 +30,7 @@ const Login = () => {
         }
     }, 500);
     const handle = async () => {
-        if(username && password){
+        if (username && password) {
             const form = {
                 "username": username,
                 "password": password,
@@ -66,32 +67,46 @@ const Login = () => {
     }
     return (
         <>
-            <div className="flex flex-col w-7/12  h-2/4 my-10 mx-auto border-2 gap-y-5 p-5 rounded-md shadow-md bg-white">
+            <div className="flex  w-full h-[100vh]  mx-auto gap-x-5 p-5 rounded-md shadow-md bg-white justify-between bg-gradient-to-r from-indigo-300 via-purple-200 to-purple-100  md:flex-nowrap flex-wrap">
 
-                <Input
-                    type="text"
-                    name="username"
-                    className={"border-2  w-11/12 p-2 bg-transparent"}
-                    onChange={changeUsername}
-                    labelName="Username" />
+                <div className=" w-full md:w-3/5  flex items-center justify-center h-2/4 md:h-full m-0  ">
+                    <div className="w-[47%] "><div className="text-4xl font-extrabold mb-4 ">Sign In to Create Form</div> <div>if you dont have account &nbsp;<a className="text-purple-900 cursor-pointer font-bold" href="/signup">Register here</a></div></div>
+                    <div className="w-[60%] h-[60%] flex items-end justify-end drop-shadow-xl animate-in slide-in-from-top-full duration-700">
 
-                <Input
-                    type="password"
-                    name="password"
-                    className={"border-2 h-full w-11/12  p-2 bg-transparent"}
-                    onChange={changePassoword}
-                    labelName="Password" />
-                <div className="text-sm hover:text-purple-900  cursor-pointer hover:font-medium">forget Password?</div>
-                <Button
-                    name="login"
-                    buttonName={" text-white  font-bold bg-teal-700  border-teal-700 text-center p-0.5 border-2 w-1/4 h-full "}
-                    onClick={handle} />
+                        <img src="assets/image copy 3.png" width={"90%"} height={"90%"} alt=""  />
+                    </div>
 
-                <div className="text-sm hover:text-green-500 cursor-pointer" onClick={() => {
-                    navigate("/signup")
-                }}>Create Account</div>
+                </div>
+                <div className=" w-full md:w-2/6  p-2  h-2/4 md:h-full flex flex-col items-center justify-center gap-y-3 ">
+                    <Input
+                        type="text"
+                        name="username"
+                        className={"bg-sky-50 border-sky-50 border-2 shadow-sm w-11/12  p-2 rounded-md"}
+                        onChange={changeUsername}
+                        labelName="Username" />
+                    <Input
+                        type="password"
+                        name="password"
+                        className={"bg-sky-50 border-sky-50 border-2 shadow-sm w-11/12  p-2 rounded-md"}
+                        onChange={changePassoword}
+                        labelName="Password" />
+                    <div className="text-sm hover:text-purple-900  cursor-pointer hover:font-medium w-11/12  ">forget Password?
+                    </div>
+                    <Button
+                        name="login"
+                        buttonName={" text-white  font-bold bg-purple-700   text-center p-0.5  w-10/12"}
+                        onClick={handle} />
+                        <div className="mt-5 mb-2">or Sign In With</div>
+                    <div className="text-sm hover:text-green-500 cursor-pointer flex w-11/12 justify-evenly gap-10  min-h-10">
+                        <div className="box w-2/5  rounded-md shadow-md text-center bg-white flex items-center justify-center" onClick={(e) => {
+                        navigate("/signup")
+                    }}>
+                            <img src="assets/google.png" alt="" className="" width={"24px"} height={"20px"}/></div>
+                        
+                    </div>
+                    {error && <div className="text-red-500 mx-auto">{error.message}</div>}
+                </div>
             </div>
-            {error && <div className="text-red-500 mx-auto">{error.message}</div>}
         </>
 
     );

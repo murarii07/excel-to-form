@@ -4,7 +4,6 @@ import {useNavigate } from "react-router-dom";
 import Nav from "../Molecules/Navbar";
 import useFetchData from "../CustomHooks/fetchData";
 import SkeletonLoading from "../Atoms/SkeletionLoading";
-import InputField from "../Atoms/inputField";
 const ProfileImg=lazy(()=>import("../Atoms/img"))
 const Profile = () => {
     const nav = useNavigate()
@@ -58,20 +57,19 @@ const Profile = () => {
         <>
         
             <Nav flag={true} />
-            <div className="user-dp w-6/12  m-auto mt-5  rounded-md">
+            <div className="user-dp w-6/12  m-auto mt-5  rounded-md animate-in slide-in-from-left-96 duration-500">
                 <div className="userImg font-bold text-center  w-full ">
                     <Suspense fallback={<span>loading...</span>}>
                         <ProfileImg img={"/assets/user.png"} />
                     </Suspense>
-                    {/* <img src='/assets/user.png' alt="sdd" /> */}
                 </div>
-                <div className="userName  m-auto  rounded-md    w-2/4 font-bold md:text-xl flex justify-center items-center border-2 border-gray-400 bg-gray-400 text-opacity-15">{details.name}</div>
+                <div className="userName  m-auto  rounded-md    w-2/4 md:text-xl flex justify-center items-center   bg-gray-300   text-gray-800">{details.name}</div>
                 
             </div>
 
             {/* tasks */}
 
-            <div className="MyTasks mx-auto mt-10 w-11/12 box-border px-12 py-3 min-h-14 border-2 rounded-lg cursor-pointer     shadow-md relative flex justify-between "> <span>
+            <div className="MyTasks mx-auto mt-10 w-11/12 box-border px-12 py-3 min-h-14 border-2 rounded-lg cursor-pointer     shadow-md relative flex justify-between animate-in slide-in-from-left-96 duration-500 "> <span>
                 <a href="/tasks">
                     My projects</a>
             </span>
@@ -94,7 +92,7 @@ const Profile = () => {
                 </div>)) : ""}
 
             {/* storage bar */}
-            <div className="storage w-11/12 mx-auto mt-10 px-12 py-3  border-2 rounded-lg cursor-pointer shadow-md">
+            <div className="storage w-11/12 mx-auto mt-10 px-12 py-3  border-2 rounded-lg cursor-pointer shadow-md animate-in slide-in-from-left-96 duration-500">
                 {/* <span>
                 storagebar:{`/5gb`}
                     </span>  */}
@@ -110,7 +108,7 @@ const Profile = () => {
 
 
 
-            <div className="w-11/12 mx-auto mt-10 px-12 py-3 min-h-14 flex  gap-5">
+            <div className="w-11/12 mx-auto mt-10 px-12 py-3 min-h-14 flex  gap-5 animate-in slide-in-from-left-96 duration-500">
                 <Button name="logout" buttonName="bg-red-600 border-2 border-red-600 p-1 border-box font-bold text-white " onClick={logout} />
                 <Button name="delete Account" buttonName="bg-red-600 border-2 border-red-600 p-1 border-box font-bold text-white " />
             </div>

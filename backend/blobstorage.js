@@ -26,9 +26,9 @@ async function main() {
   main().catch(console.error);
 
   async function mains() {
-    const containerName = "my-container";
-    const blobName = "sample.txt";
-    const content = "This new added";
+    const containerName = "my-container"; //this will be form name
+    const blobName = "sample.txt";  //this will response name
+    const content = "This new added"; //this will be response content
   
     const containerClient =blobClient.getContainerClient(containerName);
     await containerClient.createIfNotExists();

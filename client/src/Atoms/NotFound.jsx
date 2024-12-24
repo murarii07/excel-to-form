@@ -15,7 +15,7 @@ return(
     </div>
     <div className="flex justify-between absolute  w-full " style={{top:"58%", zIndex:0}}>
 
-    <Img img={"/assets/image copy.png"} width="177" height="264"/>
+    <Img img={"/assets/image copy.png"}  width="177" height="264"/>
     <Img img={"/assets/image copy 2.png"} width="177" height="264"/>
     </div>
     

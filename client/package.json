@@ -16,6 +16,7 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.10",
     "react-redux": "^9.1.2",
+    "tailwindcss-animate": "^1.0.7",
     "web-vitals": "^4.2.4"
   },
   "devDependencies": {

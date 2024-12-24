@@ -49,7 +49,8 @@ const FormDetails = () => {
     }, [res])
 
     const deleteHandle = async () => {
-        if (flag) {
+        const s=confirm("are you sure")
+        if (flag && s) {
             console.log(flag)
             setOptions({
                 method: "DELETE",
@@ -70,12 +71,12 @@ const FormDetails = () => {
                         <FImg img={"/assets/fo.png" } className="object-cover " width="90%" height="90%" alt="s"  />
                     </Suspense>
                    </div>
-                   <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full mx-auto ">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                   <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full mx-auto  ">
+    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 bg-green-200">
 
         <tbody>
-        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+        <tr className="bg-white   dark:border-gray-700 hover:bg-gray-200 ">
+                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                     Form Id
                 </th>
                 <td className="px-6 py-4">
@@ -83,8 +84,8 @@ const FormDetails = () => {
                 </td>
                
             </tr>
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <tr className="bg-white  dark:border-gray-700 hover:bg-gray-200 ">
+                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                     Form name
                 </th>
                 <td className="px-6 py-4">
@@ -92,13 +93,13 @@ const FormDetails = () => {
                 </td>
                
             </tr>
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <tr className="bg-white  dark:border-gray-700 hover:bg-gray-200 ">
+                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                     Url
                 </th>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4 relative">
                    <div
-                        className="  p-1 w-full rounded-lg  overflow-hidden relative shadow-gray-400">
+                        className="  p-1 w-full rounded-lg  overflow-hidden  shadow-gray-400 ">
                         <a
                             href={`http://localhost:3000/public/${form.link}`} target="_blank" rel="noopener noreferrer"
                             className="w-full hover:text-blue-500  overflow-hidden">{`http://localhost:3000/public/${form.link}`}
@@ -112,8 +113,8 @@ const FormDetails = () => {
                 </td>
                
             </tr>
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <tr className="bg-white  dark:border-gray-700 hover:bg-gray-200 ">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                     Form Description
                 </th>
                 <td className="px-6 py-4">
@@ -121,8 +122,8 @@ const FormDetails = () => {
                 </td>
                
             </tr>
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <tr className="bg-white  dark:border-gray-700 hover:bg-gray-200 ">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                     Date of Creation
                 </th>
                 <td className="px-6 py-4">
@@ -130,8 +131,8 @@ const FormDetails = () => {
                 </td>
                
             </tr>
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <tr className="bg-white  dark:border-gray-700 hover:bg-gray-200 ">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                    Responses
                 </th>
                 <td className="px-6 py-4">
@@ -159,7 +160,7 @@ const FormDetails = () => {
                     </div> */}
                     <div className="flex w-3/4  justify-around">
                         <Button name="delete" buttonName="w-1/4 bg-red-500 border-red-500 text-white" onClick={deleteHandle}></Button>
-                        <Button name="Modify" buttonName="w-1/4 bg-teal-500 border-teal-500 text-white" />
+                       
                     </div>
                 </div>
 
