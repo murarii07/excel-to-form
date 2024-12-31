@@ -51,10 +51,10 @@ input{
   border-bottom: 2px solid black;
   padding-bottom: 0px;
 }
-input:focus{
+/* input:focus{
   /* border: none; */
   /* border-bottom: 2px solid rgb(202, 24, 24); */
-}
+/* } */
 button{
   min-height: 35px;
   /* font-family: 'Courier New', Courier, monospace; */

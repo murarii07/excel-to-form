@@ -42,6 +42,20 @@ export class DatabaseInstance{
         const result=await col.insertOne(query);
         return result;
     }
+    static async RemoveData(dbName,collectionName,query){
+        await this.client.connect()
+        const db= this.client.db(dbName)
+        const col=db.collection(collectionName)
+        const result=await col.deleteOne(query);
+        return result;
+    }
+    static async UpdateData(dbName,collectionName,filterQuery,updateData){
+        await this.client.connect()
+        const db= this.client.db(dbName)
+        const col=db.collection(collectionName)
+        const result=await col.updateOne(filterQuery,{"$set":updateData});
+        return result;
+    }
     static async removeCollection(dbName,collectionName,query={}){
         await this.client.connect()
         const db= this.client.db(dbName)

@@ -101,11 +101,11 @@ const FormDetails = () => {
                    <div
                         className="  p-1 w-full rounded-lg  overflow-hidden  shadow-gray-400 ">
                         <a
-                            href={`http://localhost:3000/public/${form.link}`} target="_blank" rel="noopener noreferrer"
-                            className="w-full hover:text-blue-500  overflow-hidden">{`http://localhost:3000/public/${form.link}`}
+                            href={`http://localhost:5173/public/${form.link}`} target="_blank" rel="noopener noreferrer"
+                            className="w-full hover:text-blue-500  overflow-hidden">{`http://localhost:5173/public/${form.link}`}
                         </a>
                         <CopyIcon onClick={() => {
-                            navigator.clipboard.writeText(`http://localhost:3000/public/${form.link}`)
+                            navigator.clipboard.writeText(`http://localhost:5173/public/${form.link}`)
                             alert("copied")
                         }} />
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Input from "../Atoms/Input";
 import Button from "../Atoms/Button";
 import useFetchData from "../CustomHooks/fetchData";
@@ -87,15 +87,16 @@ const Register = () => {
     return (
         <>
             <div className="flex  w-full min-h-full gap-5 p-5  shadow-md bg-white justify-between bg-gradient-to-r from-purple-300 via-purple-200 to-indigo-100  flex-col md:flex-row  border-2">
-                <div className=" w-full md:w-3/5  flex items-center justify-center h-2/5 md:h-full   ">
-                    <div className="w-[47%] "><div className="text-4xl font-extrabold mb-4 ">Sign In to Create Form</div> <div>if you  have account &nbsp;<a className="text-purple-900 cursor-pointer font-bold" href="/login">Login here</a></div></div>
+                <div className=" w-full md:w-3/5  flex items-center justify-center h-2/5 md:h-full    ">
+                    <div className="w-[47%]  "><div className="text-4xl font-extrabold mb-4  ">Sign In to Create Form</div> <div>if you  have account &nbsp;<a className="text-purple-900 cursor-pointer font-bold" href="/login">Login here</a></div></div>
                     <div className="w-[60%] h-[100%] flex items-end justify-end drop-shadow-xl  ">
-
-                        <img src="assets/register.png" className=" w-[90%] h-[90%]" alt="" />
+                        <Suspense fallback={<span>loading....</span>}>
+                            <img src="assets/register.png" className=" w-[90%] h-[90%]" alt="" />
+                        </Suspense>
                     </div>
 
                 </div>
-                <div className=" w-full md:w-2/6  px-3 h-3/5 md:h-[100vh] flex flex-col items-center justify-center gap-y-3  ">
+                <div className=" w-full md:w-2/6  px-3 h-3/5 md:h-[100vh] flex flex-col items-center justify-center gap-y-3 ">
 
                     <Input
                         type="text"

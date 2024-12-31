@@ -7,6 +7,7 @@ import { DatabaseInstance } from "../../Module.js";
 import multer from "multer";
 // // Multer memory storage configuration
 const storage = multer.memoryStorage();
+import blobFunction from "../../blobstorage.js";
 const upload = multer({ storage });
 
 
@@ -23,9 +24,7 @@ const decryptionObj = async (encryptedString) => {
 
     return jsonObj
 }
-
-//for public form
-formSubmissionRouter.get("/:encryptedUrl", async (req, res) => {
+const getForm = async (req, res) => {
     try {
         console.log(req.params.encryptedUrl)
         //decoding the url we get db and formId as col
@@ -33,13 +32,8 @@ formSubmissionRouter.get("/:encryptedUrl", async (req, res) => {
         console.log("f", jsonObj)
         const { user, id } = jsonObj
         console.log(id)
-        /*
-         let db = client.db(user);
-         let col = db.collection(id);
-         in findOne project is as parement in findOne
-         let result = await col.findOne({},{projection:{_id:0,fields:1,title:1,description:1}});
-        */
-        let result = await DatabaseInstance.retriveData(user, id, {}, { projection: { _id: 0, fields: 1, title: 1, description: 1 } })
+        // let result = await DatabaseInstance.retriveData(user, id, {}, { projection: { _id: 0, fields: 1, title: 1, description: 1 } })
+        let result = await DatabaseInstance.retriveData("registeredUsers", user, {}, { projection: { _id: 0, fields: 1, title: 1, description: 1 } })
         console.log(result)
         res.status(200).json({
             data: result,
@@ -54,18 +48,9 @@ formSubmissionRouter.get("/:encryptedUrl", async (req, res) => {
         })
     }
 
-});
-
-//upload.none() for gving that user has not uploaded any file
-formSubmissionRouter.post("/:encryptedUrl", upload.none(), async (req, res) => {
+}
+const formResponse = async (req, res) => {
     try {
-        //decoding the url we get db and formId as col
-        let jsonObj = await decryptionObj(req.params.encryptedUrl)
-        console.log("f", jsonObj)
-        const { user, id } = jsonObj
-        // let db = client.db(user);
-        // let col = db.collection(id);
-        console.log(req.body)
         // !req.body is used to check if req.body is "falsy. means empty or undefined or null"
         if (!req.body || Object.keys(req.body).length == 0) {
             return res.status(400).json({
@@ -73,13 +58,25 @@ formSubmissionRouter.post("/:encryptedUrl", upload.none(), async (req, res) => {
                 message: e.message
             })
         }
+        //decoding the url we get db and formId as col
+        let jsonObj = await decryptionObj(req.params.encryptedUrl)
+        // console.log("f", jsonObj)
+        const { user, id } = jsonObj
+        // let db = client.db(user);
+        // let col = db.collection(id);
+        // console.log(req.body)
+
         // await col.insertOne(req.body)
         await DatabaseInstance.InsertData(user, id, req.body)
+        await DatabaseInstance.UpdateData("registeredUsers", user, { name: id }, { recentResponseTime: new Date().toLocaleString() })
+        await blobFunction(user, id, JSON.stringify([req.body]))
+        // console.log("asasasasasasas")
         res.status(200).json({
             success: true,
             message: "form response submission is successfull...."
         })
     } catch (e) {
+        console.log(e)
         res.status(500).json({
             data: null,
             success: false,
@@ -87,4 +84,8 @@ formSubmissionRouter.post("/:encryptedUrl", upload.none(), async (req, res) => {
         })
     }
 
-});
+}
+//for public form
+formSubmissionRouter.get("/:encryptedUrl", getForm);
+//upload.none() for gving that user has not uploaded any file
+formSubmissionRouter.post("/:encryptedUrl", upload.none(), formResponse);

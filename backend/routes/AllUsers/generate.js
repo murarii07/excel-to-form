@@ -12,14 +12,12 @@ const uploads = multer({ storage });
 
 
 const FormListObj = new Formlist()
-
 async function fieldCreation(path) {
     try {
 
         const workbook = new ExcelJS.Workbook();
         await workbook.xlsx.readFile(path)
         const worksheet = workbook.getWorksheet(1); //
-        // console.log(worksheet)
         // Access the first row
         const firstRow = worksheet.getRow(1);
         // Extract headers from the first row
@@ -30,13 +28,13 @@ async function fieldCreation(path) {
 
     }
 }
-router.post("/generate", uploads.single('excelFile'), async (req, res) => {
+
+const generateFormFields = async (req, res) => {
     let formId = FormListObj.generateUniqueElement()
     try {
         if (!fs.existsSync("./uploads")) {
             fs.mkdirSync("./uploads")
         }
-
         console.log(req.file);
         const path = `./uploads/${formId}.xlsx`
         console.log(path)
@@ -48,7 +46,7 @@ router.post("/generate", uploads.single('excelFile'), async (req, res) => {
             LabelName: element.replace(/\s/g, ""),
             Id: element.replace(/\-/g, '_').replace(/\s/g, ""),
             Name: element.replace(/\-/g, '_').replace(/\s/g, ""),
-            Type:  RegExp(/date/).test(element)?"date":"text"
+            Type: RegExp(/date/).test(element) ? "date" : "text"
         }))
         FormListObj.add(formId) //create a id and push in this
         console.log(FormListObj.formIdList)
@@ -68,8 +66,6 @@ router.post("/generate", uploads.single('excelFile'), async (req, res) => {
                 message: "successfull...."
             })
         // console.log(formId)
-
-
     }
     catch (error) {
         res
@@ -86,8 +82,8 @@ router.post("/generate", uploads.single('excelFile'), async (req, res) => {
             fs.unlinkSync(`./uploads/${formId}.xlsx`) //deleting the xl file
         }
     }
-})
-router.get("/download", (req, res) => {
+}
+const downloadForm = (req, res) => {
     try {
         const formId = req.signedCookies?.formId;
         console.log(formId)
@@ -114,4 +110,6 @@ router.get("/download", (req, res) => {
                 message: e.message
             })
     }
-})
+}
+router.post("/generate", uploads.single('excelFile'), generateFormFields)
+router.get("/download", downloadForm)

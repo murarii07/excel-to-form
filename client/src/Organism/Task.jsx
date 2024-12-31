@@ -62,10 +62,10 @@ const MyTask = () => {
                 {/* <Button buttonName="filter"  name="filter" /> */}
                 <div className=" mx-auto w-11/12 h-14 box-border flex justify-center items-center gap-3.5">
                     <InputField
-                        className="box-border border-2  self-center  h-full px-3 w-7/12 border-black bg-transparent outline-none"
+                        className="box-border border-b-2 border-black  self-center  h-full px-3 w-7/12  bg-transparent outline-none"
                         placeholder="enter form name or id" onChange={debounceHandler}
                     />
-                    <Button buttonName="search font-bold rounded-xl px-3 h-11/12 border-teal-500  text-teal-500 hover:bg-teal-500 hover:text-white " name="search" />
+                    <Button buttonName="search font-bold rounded-xl px-3 h-11/12 border-teal-500  text-teal-500 border-2 hover:bg-teal-500  hover:text-white  " name="search" />
                 </div>
                 <div className="form-container  mx-auto my-4 box-border w-11/12 px-5 py-5 flex gap-10 flex-wrap  bg-purple-100 rounded-md ">
                     <div className="box-border min-w-20 min-h-28 flex flex-col gap-y-3 items-center ">
@@ -93,12 +93,12 @@ const MyTask = () => {
                                 <img src="/assets/dots.png" width={"15px"} onClick={(e) => {
                                     setDropDown(!drop)
                                 }} />
-                                {drop &&<ul className="absolute top-3 left-24 border-2 border-black bg-gradient-to-t bg-gray-700 p-5 flex flex-col items-center justify-evenly ">
-                                    <li className="text-white">share</li> 
+                                {drop && <ul className="absolute top-3 left-24 border-2 border-black bg-gradient-to-t bg-gray-700 p-5 flex flex-col items-center justify-evenly ">
+                                    <li className="text-white">share</li>
                                     <li className="text-white">remove</li>
-                                    </ul>}
-                                </div>
-                            
+                                </ul>}
+                            </div>
+
                         </div>
                     ))}
 

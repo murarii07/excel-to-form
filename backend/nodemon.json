@@ -1,0 +1,5 @@
+{
+    "watch": ["routes", "index.js","blobstorage.js","Module.js"],
+    "ignore": ["logs", "temp", "uploads","data2.json"],
+    "ext": "js,json"
+  }
