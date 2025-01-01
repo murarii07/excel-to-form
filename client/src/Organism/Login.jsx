@@ -12,7 +12,7 @@ const Login = () => {
     const [er, setEr] = useState(false)
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const { response, error, setOptions } = useFetchData("http://localhost:5000/login");
+    const { response, error, setOptions } = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/login`);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 

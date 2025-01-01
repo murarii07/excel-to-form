@@ -48,11 +48,13 @@ const getFormList = async (req, res) => {
         const user = extractDataFromToken(req.cookies?.jwt)
         console.log(user)
         // let collectList = await DatabaseInstance.collectionList(user)
-        let collectList = await DatabaseInstance.retriveDataAll(USERDB, user, {}, { name: 1, _id: 0 })
-        console.log(collectList)
+        // console.log(collectList)
         // const db = client.db(user)
         // const userDbDeatails = await db.stats() //give user db details by using db.stats which returns a promise 
         // console.log(userDbDeatails.storageSize)
+        
+        let collectList = await DatabaseInstance.retriveDataAll(USERDB, user, {}, { name: 1, _id: 0 })
+        //getting user  used storage size 
         let storageSize=await getBlobSize(user)
         console.log("storageSize:",storageSize)
         collectList = collectList.map(x => x.name)

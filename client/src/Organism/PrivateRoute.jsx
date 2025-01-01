@@ -7,7 +7,7 @@ function PrivateRoute({element}) {
     const [data,setData]=useState({fields:[],title:"as",description:"asa"})
     const [url]=useState(window.location.pathname)
     const ext=url.split("/public/")
-    const newUrl = `http://localhost:5000/public/${ext[1]}`
+    const newUrl = `${import.meta.env.VITE_SERVER_API_URL}/public/${ext[1]}`
     const {response,error}=useFetchData(newUrl,{
         method: "GET",  
     })

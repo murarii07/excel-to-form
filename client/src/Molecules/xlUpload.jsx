@@ -12,7 +12,7 @@ function XlUpload() {
     const dispatch = useDispatch();
     const fields = useSelector(s => s.Field.value)
     const [er, setEr] = useState(false);
-    const url = "http://localhost:5000/form/generate"
+    const url = `${import.meta.env.VITE_SERVER_API_URL}/form/generate`
     const { response, error, setOptions } = useFetchData(url)
     const takingFile = (file) => {
         setFile(file)

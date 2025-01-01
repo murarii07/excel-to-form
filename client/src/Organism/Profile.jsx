@@ -10,7 +10,7 @@ const Profile = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [dropdown, SetDropDown] = useState(false);
     const [details, setDetails] = useState({ name: "df", storage: 0, forms: [] })
-    const { response, error} = useFetchData("http://localhost:5000/user/formlist", {
+    const { response, error} = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/formlist`, {
         method: "GET",
         credentials: "include" // Sends cookies with the request
     })
@@ -35,7 +35,7 @@ const Profile = () => {
 
 
     const logout = async () => {
-        const res = await fetch("http://localhost:5000/login", {
+        const res = await fetch(`${import.meta.env.VITE_SERVER_API_URL}/login`, {
             method: "DELETE",
             credentials: "include" // Sends cookies with the request
         });

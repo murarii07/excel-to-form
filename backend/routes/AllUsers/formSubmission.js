@@ -1,15 +1,15 @@
 import express from "express";
 import CryptoJS from "crypto-js";
+import { DatabaseInstance } from "../../src/Module.js";
+import multer from "multer";
+import blobFunction from "../../src/blobstorage.js";
 export const formSubmissionRouter = express.Router();
 import { config } from "dotenv";
 config() //loading the env file
-import { DatabaseInstance } from "../../src/Module.js";
-import multer from "multer";
+const USERDB=process.env.USERDB
 // // Multer memory storage configuration
 const storage = multer.memoryStorage();
-import blobFunction from "../../src/blobstorage.js";
 const upload = multer({ storage });
-const USERDB=process.env.USERDB
 
 const decryptionObj = async (encryptedString) => {
     //this step have to do has we change / and + in _ and - for properly get encrypted url so we have reverse it for decrypt to maintain its format

@@ -16,7 +16,7 @@ const FormUpload = () => {
          description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil officia praesentium adipisci! Neque, facere nisi quaerat cupiditate architecto harum cumque optio fugiat fugit sint possimus. Officia voluptatum, pariatur amet cupiditate fugiat perspiciatis nulla quod, rerum voluptate dolore saepe eos dolor est recusandae reiciendis odio exercitationem?" 
         });
     const fields = useSelector(state => state.Field.value)
-    const { response, error, setOptions } = useFetchData('http://localhost:5000/user/upload')
+    const { response, error, setOptions } = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/upload`)
     const formUpload = () => {
         if (window.localStorage.getItem("isLogged")) {
             setIsEdit(false)

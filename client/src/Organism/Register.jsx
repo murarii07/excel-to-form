@@ -12,7 +12,7 @@ const Register = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState({ psw: "", error: false });
     const [email, setEmail] = useState("");
-    const { response, error, setOptions } = useFetchData("http://localhost:5000/Register");
+    const { response, error, setOptions } = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/Register`);
     const changeUsername = useDebounce((e) => {
         if (e.target.value) {
             console.log(e.target.value)

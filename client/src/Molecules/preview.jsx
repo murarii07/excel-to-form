@@ -22,7 +22,7 @@ function Preview() {
     }, [fields])
     const handled = async () => {
         try {
-            const response = await fetch('http://localhost:5000/form/download', {
+            const response = await fetch( `${import.meta.env.VITE_SERVER_API_URL}/form/download`, {
                 method: 'GET',
                 credentials: 'include',
             });
