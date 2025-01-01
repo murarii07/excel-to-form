@@ -4,12 +4,12 @@ export const liveFormRouter = express.Router();
 import CryptoJS from "crypto-js";
 import { config } from "dotenv";
 import jwt from 'jsonwebtoken'
-import { DatabaseInstance } from "../../Module.js";
-import { deletingBlob } from "../../blobstorage.js";
+import { DatabaseInstance } from "../../src/Module.js";
+import { deletingBlob, getBlobSize } from "../../src/blobstorage.js";
 
 config() //loading the env file
 const client = new MongoClient(process.env.MONGODB_URL);
-
+const USERDB = process.env.USERDB
 //url generator
 function urlGenerator(userName, id) {
     let obj = JSON.stringify({ user: userName, id: id });
@@ -23,8 +23,8 @@ function urlGenerator(userName, id) {
 
 }
 //extract data from token
-function extractDataFromToken(req) {
-    const token = req.cookies?.jwt
+function extractDataFromToken(jwtToken) {
+    const token = jwtToken
     const data = jwt.verify(token, process.env.JWT_SECRET_KEY)
     // this is use for testing purpose only
     // const data={user:"tempData"}
@@ -32,7 +32,7 @@ function extractDataFromToken(req) {
 }
 
 const cookieCheckingMiddleware = (req, res, next) => {
-    console.log("middlware")
+    console.log("This is a middlware")
     if (!req.cookies?.jwt) {
         console.log("errror occurred")
         return res.status(400).json({
@@ -45,21 +45,23 @@ const cookieCheckingMiddleware = (req, res, next) => {
 }
 const getFormList = async (req, res) => {
     try {
-        const user = extractDataFromToken(req)
+        const user = extractDataFromToken(req.cookies?.jwt)
         console.log(user)
         // let collectList = await DatabaseInstance.collectionList(user)
-        let collectList = await DatabaseInstance.retriveDataAll("registeredUsers", user, {}, { name: 1, _id: 0 })
+        let collectList = await DatabaseInstance.retriveDataAll(USERDB, user, {}, { name: 1, _id: 0 })
         console.log(collectList)
-        const db = client.db(user)
-        const userDbDeatails = await db.stats() //give user db details by using db.stats which returns a promise 
-        console.log(userDbDeatails.storageSize)
-        console.log("ASdsad")
+        // const db = client.db(user)
+        // const userDbDeatails = await db.stats() //give user db details by using db.stats which returns a promise 
+        // console.log(userDbDeatails.storageSize)
+        let storageSize=await getBlobSize(user)
+        console.log("storageSize:",storageSize)
         collectList = collectList.map(x => x.name)
         res.status(200).json({
             data: {
                 name: user,
                 formlist: collectList,
-                storageInBytes: userDbDeatails.storageSize
+                // storageInBytes: userDbDeatails.storageSize,
+                storageInBytes:storageSize
             },
             success: true,
             message: "successfull...."
@@ -76,11 +78,19 @@ const getFormList = async (req, res) => {
 const uploadForm = async (req, res) => {
 
     try {
-        const user = extractDataFromToken(req)
+        const user = extractDataFromToken(req.cookies?.jwt)
         //mongo operation
         const url = urlGenerator(user, req.body.formId);
         // const result = await DatabaseInstance.InsertData(user, req.body.formId, { _id: url, fields: req.body.fieldDetails, title: req.body.title, description: req.body.description })
-        const result = await DatabaseInstance.InsertData("registeredUsers", user, { name: req.body.formId, _id: url, fields: req.body.fieldDetails, title: req.body.title, description: req.body.description, timeStamp: new Date().toDateString() })
+        const result = await DatabaseInstance.InsertData(USERDB, user, {
+            _id: url,
+            name: req.body.formId,
+            fields: req.body.fieldDetails,
+            title: req.body.title,
+            description: req.body.description,
+            timeStamp: new Date().toDateString(),
+            response: 0
+        })
         console.log(result)
         //after mongo operation
         res.status(200).json({
@@ -99,7 +109,7 @@ const uploadForm = async (req, res) => {
 }
 const getSpecificFormDetails = async (req, res) => {
     try {
-        const user = extractDataFromToken(req);
+        const user = extractDataFromToken(req.cookies?.jwt);
         // const user="murli"
         // let filterQuery = { name: req.params.formId }
         // let isCollectionExist = await DatabaseInstance.collectionList(user, filterQuery)
@@ -111,14 +121,10 @@ const getSpecificFormDetails = async (req, res) => {
         // }
         // let result = await DatabaseInstance.retriveData(user, req.params.formId, {}, { projection: { _id: 1, title: 1, description: 1 } })
         console.log(req.params.formId)
-        let result = await DatabaseInstance.retriveData("registeredUsers", user, { name: req.params.formId }, { projection: { _id: 1, title: 1, description: 1 } })
-        console.log("ssdsdsd", result)
+        let result = await DatabaseInstance.retriveData(USERDB, user, { name: req.params.formId }, { projection: { _id: 1, title: 1, description: 1, timeStamp: 1 ,response:1,name:1} })
+        console.log("FormDetails", result)
         return res.status(200).json({
-            data: {
-                name: req.params.formId,
-                description: result.description || "kuch nhi hai",
-                link: result._id
-            },
+            data: {...result,link: result._id,},
             success: true,
             message: "successfull...."
         })
@@ -133,12 +139,16 @@ const getSpecificFormDetails = async (req, res) => {
 }
 const removeSpecificForm = async (req, res) => {
     try {
-        const user = extractDataFromToken(req)
+        const user = extractDataFromToken(req.cookies?.jwt)
         // const collectionFilter = { name: req.params.formId };
         // const result = await DatabaseInstance.removeCollection(user, req.params.formId, collectionFilter)
-        const result = await DatabaseInstance.RemoveData("registeredUsers", user, { name: req.params.formId })
-        await deletingBlob(user,req.params.formId)
-        console.log("111111", result)
+        const result = await DatabaseInstance.RemoveData(USERDB, user, { name: req.params.formId })
+
+        //deleting data on cloud
+        deletingBlob(user, req.params.formId)
+            .then(() => console.log("successfull deleted"))
+            .catch((err) => console.error(err))
+        console.log("Result:", result)
         if (result) {
             res.status(200).json({
                 success: true,
@@ -146,7 +156,10 @@ const removeSpecificForm = async (req, res) => {
             })
         }
         else {
-            throw new Error("Form is not available");
+            res.status(500).json({
+                success: false,
+                message: "something went wrong try again later"
+            })
         }
     }
     catch (e) {
@@ -176,7 +189,7 @@ liveFormRouter.get("/formDetails/:formId", getSpecificFormDetails)
 //     try {
 //         await client.connect()
 //         //mongo operation
-//         const user = extractDataFromToken(req);
+//         const user = extractDataFromToken(req.cookies?.jwt);
 //         const databasesList = await client.db().admin().listDatabases();//returns object
 //         console.log(databasesList.databases.some(db => db.name === user))
 

@@ -3,16 +3,15 @@ import CryptoJS from "crypto-js";
 export const formSubmissionRouter = express.Router();
 import { config } from "dotenv";
 config() //loading the env file
-import { DatabaseInstance } from "../../Module.js";
+import { DatabaseInstance } from "../../src/Module.js";
 import multer from "multer";
 // // Multer memory storage configuration
 const storage = multer.memoryStorage();
-import blobFunction from "../../blobstorage.js";
+import blobFunction from "../../src/blobstorage.js";
 const upload = multer({ storage });
-
+const USERDB=process.env.USERDB
 
 const decryptionObj = async (encryptedString) => {
-
     //this step have to do has we change / and + in _ and - for properly get encrypted url so we have reverse it for decrypt to maintain its format
     let encryptedUrl = encryptedString
         .replace(/_/g, "/")
@@ -33,7 +32,7 @@ const getForm = async (req, res) => {
         const { user, id } = jsonObj
         console.log(id)
         // let result = await DatabaseInstance.retriveData(user, id, {}, { projection: { _id: 0, fields: 1, title: 1, description: 1 } })
-        let result = await DatabaseInstance.retriveData("registeredUsers", user, {}, { projection: { _id: 0, fields: 1, title: 1, description: 1 } })
+        let result = await DatabaseInstance.retriveData(USERDB, user, {}, { projection: { _id: 0, fields: 1, title: 1, description: 1 } })
         console.log(result)
         res.status(200).json({
             data: result,
@@ -65,10 +64,15 @@ const formResponse = async (req, res) => {
         // let db = client.db(user);
         // let col = db.collection(id);
         // console.log(req.body)
-
         // await col.insertOne(req.body)
-        await DatabaseInstance.InsertData(user, id, req.body)
-        await DatabaseInstance.UpdateData("registeredUsers", user, { name: id }, { recentResponseTime: new Date().toLocaleString() })
+        // await DatabaseInstance.InsertData(user, id, req.body)
+        //$inc is used to increment the field by one
+        await DatabaseInstance.UpdateData(USERDB, user,
+            { name: id },
+            {
+                "$set": { recentResponseTime: new Date().toLocaleString() },
+                "$inc": { response: 1 }
+            })
         await blobFunction(user, id, JSON.stringify([req.body]))
         // console.log("asasasasasasas")
         res.status(200).json({

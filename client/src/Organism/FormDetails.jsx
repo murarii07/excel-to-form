@@ -75,15 +75,6 @@ const FormDetails = () => {
     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 bg-green-200">
 
         <tbody>
-        <tr className="bg-white   dark:border-gray-700 hover:bg-gray-200 ">
-                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                    Form Id
-                </th>
-                <td className="px-6 py-4">
-                    {form.Id || 0}
-                </td>
-               
-            </tr>
             <tr className="bg-white  dark:border-gray-700 hover:bg-gray-200 ">
                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
                     Form name
@@ -136,7 +127,7 @@ const FormDetails = () => {
                    Responses
                 </th>
                 <td className="px-6 py-4">
-                    {form.responses || 0}
+                    {form.response || 0}
                 </td>
                
             </tr>

@@ -2,7 +2,7 @@ import express from "express";
 import ExcelJS from 'exceljs';
 import multer from "multer";
 import fs from 'fs';
-import { Formlist } from "../../Module.js";
+import { Formlist } from "../../src/Module.js";
 export const router = express.Router();
 import { config } from "dotenv";
 config();
@@ -35,9 +35,9 @@ const generateFormFields = async (req, res) => {
         if (!fs.existsSync("./uploads")) {
             fs.mkdirSync("./uploads")
         }
-        console.log(req.file);
+        console.log("ReqFile",req.file,"\n");
         const path = `./uploads/${formId}.xlsx`
-        console.log(path)
+        console.log("path:",path,"\n")
         fs.writeFileSync(path, req.file.buffer)
         const headers = await fieldCreation(path)
         // Log or process headers
@@ -49,7 +49,7 @@ const generateFormFields = async (req, res) => {
             Type: RegExp(/date/).test(element) ? "date" : "text"
         }))
         FormListObj.add(formId) //create a id and push in this
-        console.log(FormListObj.formIdList)
+        // console.log(FormListObj.formIdList)
         res
             .cookie('formId', formId, {
                 maxAge: 1000 * 60 * 10,  //10minute

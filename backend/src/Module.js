@@ -2,24 +2,8 @@ import { MongoClient } from "mongodb";
 import { config } from "dotenv";
 import { randomBytes } from "crypto";
 config()
-// const client =new MongoClient(mongoUrl);
-
-
-// const d=async ()=>{
-//     await client.connect();
-//     const databasesList = await client.db().admin().listDatabases()
-//     console.log(databasesList.databases.some(d => d.name === "tempData"))
-//     console.log(databasesList)
-// }
-
-// const c=[1,2,3,33,4]
-
-// console.log(c)
-// d();
-
 export class DatabaseInstance{
     static  client=new MongoClient(process.env.MONGODB_URL);
-    
     //class methods
     static async retriveData(dbName,collectionName,query={},projector={projection:{}}){
         await this.client.connect()
@@ -53,7 +37,7 @@ export class DatabaseInstance{
         await this.client.connect()
         const db= this.client.db(dbName)
         const col=db.collection(collectionName)
-        const result=await col.updateOne(filterQuery,{"$set":updateData});
+        const result=await col.updateOne(filterQuery,updateData);
         return result;
     }
     static async removeCollection(dbName,collectionName,query={}){

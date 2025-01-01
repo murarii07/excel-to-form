@@ -10,7 +10,7 @@ mongoose.connect(`${process.env.MONGODB_URL}/ProjectAdmin`)
     .then(() => { console.log("Authentication server connected"); })
     .catch(() => { console.log("Authentication server failed"); })
 
-login.post("/", async (req, res) => {
+const loginUser=async (req, res) => {
     //mongo operation
     try {
         const user = await AuthStructure.findOne({ username: req.body.username })
@@ -58,10 +58,8 @@ login.post("/", async (req, res) => {
             message: e.message
         })
     }
-})
-
-//logout
-login.delete('/', (req, res) => {
+}
+const logoutUser=(req, res) => {
     console.log(req.cookies?.jwt)
     //use end to make request end so  it should not be hanging state
     if(req.cookies?.jwt){
@@ -70,7 +68,10 @@ login.delete('/', (req, res) => {
     else{
         res.status(404).json({
             success: false,
-            message: e.message
+            message: "error"
         })
     }
-})
+}
+login.post("/", loginUser)
+//logout
+login.delete('/', logoutUser)
