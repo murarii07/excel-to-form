@@ -3,18 +3,19 @@ import { compareSync } from "bcrypt";
 import { AuthStructure } from "../../models/AuthSchema.js";
 import mongoose from "mongoose";
 import jwt from 'jsonwebtoken';
-import { config } from "dotenv";
-config() //loading the env file
+import { EnvironmentVariables } from "../../config/config.js";
 export const login = express.Router();
-mongoose.connect(`${process.env.MONGODB_URL}/ProjectAdmin`)
+mongoose.connect(EnvironmentVariables.authDBUrl)
     .then(() => { console.log("Authentication server connected"); })
     .catch(() => { console.log("Authentication server failed"); })
 
-const loginUser=async (req, res) => {
+const loginUser = async (req, res) => {
     //mongo operation
     try {
         const user = await AuthStructure.findOne({ username: req.body.username })
-        console.log("ff", user)
+        console.log("USER", user)
+
+        // if findOne doesnt find value then it return null in mongo
         if (!user) {
             return res.status(400).json({
                 success: false,
@@ -22,7 +23,7 @@ const loginUser=async (req, res) => {
             })
         }
         const psw = compareSync(req.body.password, user.password);
-        console.log(psw)
+        // console.log(psw)
         if (!psw) {
             return res.status(400).json({
                 success: false,
@@ -31,10 +32,9 @@ const loginUser=async (req, res) => {
         }
         //creating jwt 
         const payload = { user: user.username }
-        const secretKey = process.env.JWT_SECRET_KEY
-        const expireAge = 1000 * 60 * 60;
+        const secretKey = EnvironmentVariables.jwtScretKey
+        const expireAge = 1000 * 60 * 60 * 60 * 60;
         let token = jwt.sign(payload, secretKey, { expiresIn: expireAge });
-
         // cookie
         res
             .cookie("jwt", token, {
@@ -59,13 +59,13 @@ const loginUser=async (req, res) => {
         })
     }
 }
-const logoutUser=(req, res) => {
+const logoutUser = (req, res) => {
     console.log(req.cookies?.jwt)
     //use end to make request end so  it should not be hanging state
-    if(req.cookies?.jwt){
+    if (req.cookies?.jwt) {
         return res.status(204).clearCookie('jwt').end()
     }
-    else{
+    else {
         res.status(404).json({
             success: false,
             message: "error"

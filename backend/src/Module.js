@@ -1,9 +1,9 @@
 import { MongoClient } from "mongodb";
-import { config } from "dotenv";
 import { randomBytes } from "crypto";
-config()
+import { EnvironmentVariables } from "../config/config.js";
+
 export class DatabaseInstance{
-    static  client=new MongoClient(process.env.MONGODB_URL);
+    static  client=new MongoClient(EnvironmentVariables.mongoDBUrl);
     //class methods
     static async retriveData(dbName,collectionName,query={},projector={projection:{}}){
         await this.client.connect()
@@ -31,7 +31,7 @@ export class DatabaseInstance{
         const db= this.client.db(dbName)
         const col=db.collection(collectionName)
         const result=await col.deleteOne(query);
-        return result;
+        return result.deletedCount;
     }
     static async UpdateData(dbName,collectionName,filterQuery,updateData){
         await this.client.connect()
@@ -40,26 +40,26 @@ export class DatabaseInstance{
         const result=await col.updateOne(filterQuery,updateData);
         return result;
     }
-    static async removeCollection(dbName,collectionName,query={}){
-        await this.client.connect()
-        const db= this.client.db(dbName)
-        const result =await db.listCollections(query).toArray();
-        if(result.length){
-            await db.dropCollection(collectionName)
-            return true;
-        }
-        return false;
-    }
+    // static async removeCollection(dbName,collectionName,query={}){
+    //     await this.client.connect()
+    //     const db= this.client.db(dbName)
+    //     const result =await db.listCollections(query).toArray();
+    //     if(result.length){
+    //         await db.dropCollection(collectionName)
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
-    static async collectionList(dbName,query={}){
-        await this.client.connect()
-        const db= this.client.db(dbName)
-        const result =await db.listCollections(query).toArray();
-        if(result.length){
-            return result;
-        }
-        return [];
-    }
+    // static async collectionList(dbName,query={}){
+    //     await this.client.connect()
+    //     const db= this.client.db(dbName)
+    //     const result =await db.listCollections(query).toArray();
+    //     if(result.length){
+    //         return result;
+    //     }
+    //     return [];
+    // }
 
 }
 

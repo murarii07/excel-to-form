@@ -67,7 +67,7 @@ const MyTask = () => {
                     />
                     <Button buttonName="search font-bold rounded-xl px-3 h-11/12 border-teal-500  text-teal-500 border-2 hover:bg-teal-500  hover:text-white  " name="search" />
                 </div>
-                <div className="form-container  mx-auto my-4 box-border w-11/12 px-5 py-5 flex gap-10 flex-wrap  bg-purple-100 rounded-md ">
+                <div className="form-container  mx-auto my-4 box-border w-11/12 px-5 py-5 flex gap-10 flex-wrap  rounded-md ">
                     <div className="box-border min-w-20 min-h-28 flex flex-col gap-y-3 items-center ">
                         <div className="bg-teal-100 img  border-teal-100  border-2 w-full min-h-24 text-teal-800 box-border text-3xl flex items-center justify-center rounded-md shadow-md  ">+</div>
                         <div className="caption cursor-pointer" onClick={(e) => {
@@ -93,9 +93,11 @@ const MyTask = () => {
                                 <img src="/assets/dots.png" width={"15px"} onClick={(e) => {
                                     setDropDown(!drop)
                                 }} />
-                                {drop && <ul className="absolute top-3 left-24 border-2 border-black bg-gradient-to-t bg-gray-700 p-5 flex flex-col items-center justify-evenly ">
-                                    <li className="text-white">share</li>
-                                    <li className="text-white">remove</li>
+                                {drop && <ul className="absolute top-3 left-24 bg-violet-500 min-w-24 h-16 flex flex-col items-start rounded-md box-border justify-between">
+                                    <li className="text-white
+                                    hover:bg-violet-400 w-full h-[50%] rounded-md font-bold flex items-center justify-center">share</li>
+                                    <li className="text-white 
+                                    hover:bg-violet-400 w-full h-2/4 rounded-md font-bold flex items-center justify-center" >remove</li>
                                 </ul>}
                             </div>
 

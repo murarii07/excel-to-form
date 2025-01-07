@@ -6,7 +6,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from './Organism/Login';
 import Register from './Organism/Register';
 import Home from './Organism/Home';
-import './App.css'
 import './Working.css'
 import NotFound from './Atoms/NotFound';
 import PrivateRoute from './Organism/PrivateRoute';

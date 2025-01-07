@@ -1,7 +1,7 @@
 import { BlobServiceClient } from "@azure/storage-blob";
-import { config } from "dotenv";
-config()
-const connectionString = process.env.CONNECTION_STRING
+import { EnvironmentVariables } from "../config/config.js";
+
+const connectionString = EnvironmentVariables.blobStorageConnectionString;
 
 const blobClient = BlobServiceClient.fromConnectionString(connectionString);
 export default async function storingOnCloud(containername, blobname, data) {

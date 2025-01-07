@@ -4,8 +4,6 @@ import multer from "multer";
 import fs from 'fs';
 import { Formlist } from "../../src/Module.js";
 export const router = express.Router();
-import { config } from "dotenv";
-config();
 // // Multer memory storage configuration
 const storage = multer.memoryStorage();
 const uploads = multer({ storage });

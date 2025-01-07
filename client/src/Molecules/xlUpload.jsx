@@ -5,6 +5,7 @@ import DragBox from "../Atoms/dragBox";
 import { useEffect, useState } from "react";
 import SkeletonLoading from "../Atoms/SkeletionLoading.jsx";
 import useFetchData from "../CustomHooks/fetchData.jsx";
+import DialogBox from "../Atoms/DialogBox.jsx";
 
 function XlUpload() {
     const [file, setFile] = useState(null)
@@ -14,13 +15,17 @@ function XlUpload() {
     const [er, setEr] = useState(false);
     const url = `${import.meta.env.VITE_SERVER_API_URL}/form/generate`
     const { response, error, setOptions } = useFetchData(url)
+    const [dialog,setDialog]=useState({flag:false,message:"error....."})
     const takingFile = (file) => {
         setFile(file)
     }
     const formHandle = async () => {
         setEr(false)
         if (!file) {
-            alert("please upload file")
+            setDialog({
+                flag:true,
+                message:"please upload file"
+            })
             return
         }
         if (fields.length) {
@@ -32,14 +37,15 @@ function XlUpload() {
         setOptions({ method: "POST", credentials: 'include', body: files })
 
     }
-    useEffect(()=>{
-        if(error){
+    useEffect(() => {
+        if (error) {
             setFile(null)
             setIsLoad(false)
             setEr(true)
-            console.log("OOPS!!! error occurs")
+            console.log()
+            setDialog({flag:true,message:"OOPS!!! error occurs Try again Later"})
         }
-    },[error])
+    }, [error])
 
     useEffect(() => {
         if (response && !error) {
@@ -49,23 +55,26 @@ function XlUpload() {
             dispatch(changeFieldValue(response.data))
             setIsLoad(false)
         }
-       
+
     }, [response]);
     return (
-        <div className="drag-form  w-10/12 m-auto min-h-fit flex flex-col items-center justify-center gap-5">
-            <>
-                <DragBox takingFile={takingFile} />
-                <Button
-                    name={"Generate"}
-                    buttonName={"text-purple-600 submit-button border-purple-600 w-4/12 md:w-2/12 hover:text-white hover:bg-purple-600 hover:font-bold border-2 "}
-                    onClick={formHandle} />
+        <>
+            <div className="drag-form  w-10/12 m-auto min-h-fit flex flex-col items-center justify-center gap-5">
+                <>
+                    <DragBox takingFile={takingFile} />
+                    <Button
+                        name={"Generate"}
+                        buttonName={"text-purple-600 submit-button border-purple-600 w-4/12 md:w-2/12 hover:text-white hover:bg-purple-600 hover:font-bold border-2 "}
+                        onClick={formHandle} />
 
-                {
-                    !er ?
-                        isLoad && <SkeletonLoading /> : <div>error in upload try again later.....</div>}
+                    {
+                        !er ?
+                            isLoad && <SkeletonLoading /> : ""}
 
-            </>
-        </div>
+                </>
+            </div>
+            <DialogBox isOpen={dialog.flag} message={dialog.message} setDialog={setDialog} />
+        </>
 
     );
 }

@@ -4,9 +4,8 @@ import { DatabaseInstance } from "../../src/Module.js";
 import multer from "multer";
 import blobFunction from "../../src/blobstorage.js";
 export const formSubmissionRouter = express.Router();
-import { config } from "dotenv";
-config() //loading the env file
-const USERDB=process.env.USERDB
+import { EnvironmentVariables } from "../../config/config.js";
+const USERDB=EnvironmentVariables.userDB
 // // Multer memory storage configuration
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -17,7 +16,7 @@ const decryptionObj = async (encryptedString) => {
         .replace(/_/g, "/")
         .replace(/-/g, "+")
     console.log(encryptedUrl)
-    const jsonObjBytes = CryptoJS.AES.decrypt(encryptedUrl, process.env.ENCRYPTED_SECRET_KEY);
+    const jsonObjBytes = CryptoJS.AES.decrypt(encryptedUrl, EnvironmentVariables.encryptedSecretKey);
     console.log(jsonObjBytes)
     const jsonObj = await JSON.parse(jsonObjBytes.toString(CryptoJS.enc.Utf8));
 
@@ -28,12 +27,12 @@ const getForm = async (req, res) => {
         console.log(req.params.encryptedUrl)
         //decoding the url we get db and formId as col
         let jsonObj = await decryptionObj(req.params.encryptedUrl)
-        console.log("f", jsonObj)
-        const { user, id } = jsonObj
-        console.log(id)
+        // console.log("f", jsonObj)
+        const {user} = jsonObj
+        // console.log(id)
         // let result = await DatabaseInstance.retriveData(user, id, {}, { projection: { _id: 0, fields: 1, title: 1, description: 1 } })
         let result = await DatabaseInstance.retriveData(USERDB, user, {}, { projection: { _id: 0, fields: 1, title: 1, description: 1 } })
-        console.log(result)
+        console.log("GET FORM",result)
         res.status(200).json({
             data: result,
             success: true,
@@ -59,13 +58,7 @@ const formResponse = async (req, res) => {
         }
         //decoding the url we get db and formId as col
         let jsonObj = await decryptionObj(req.params.encryptedUrl)
-        // console.log("f", jsonObj)
         const { user, id } = jsonObj
-        // let db = client.db(user);
-        // let col = db.collection(id);
-        // console.log(req.body)
-        // await col.insertOne(req.body)
-        // await DatabaseInstance.InsertData(user, id, req.body)
         //$inc is used to increment the field by one
         await DatabaseInstance.UpdateData(USERDB, user,
             { name: id },

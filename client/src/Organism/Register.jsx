@@ -1,11 +1,11 @@
 import { useState, useEffect, Suspense } from "react";
-import Input from "../Atoms/Input";
 import Button from "../Atoms/Button";
 import useFetchData from "../CustomHooks/fetchData";
 import { useNavigate } from "react-router-dom";
 import useDebounce from "../CustomHooks/debounce";
 import Img from "../Atoms/img";
-
+import  Label  from '../Atoms/Label';
+import InputField from "../Atoms/inputField";
 
 const Register = () => {
     const navigate = useNavigate();
@@ -20,7 +20,7 @@ const Register = () => {
         }
     }, 500)
     const changePsw = useDebounce((e) => {
-        console.log(1312)
+        // console.log(1312)
         if (e.target.value) {
             console.log(e.target.value)
             if (!(/^.{8,}$/.test(e.target.value))) {
@@ -98,39 +98,36 @@ const Register = () => {
                 </div>
                 <div className=" w-full md:w-2/6  px-3 h-3/5 md:h-[100vh] flex flex-col items-center justify-center gap-y-3 ">
 
-                    <Input
+                    <Label htmlFor={"username"} labelName="Create a username" />
+                    <InputField
                         type="text"
                         name="username"
                         className={"bg-sky-50 border-sky-50 border-2 shadow-sm w-11/12  p-2 rounded-md"}
                         onChange={changeUsername}
-                        labelName="Create a username" />
+                    />
 
-                    <Input
+                    <Label htmlFor={"Email"} labelName="Email" />
+                    <InputField
                         type="email"
                         name="email"
                         className={"bg-sky-50 border-sky-50 border-2 shadow-sm w-11/12  p-2 rounded-md"}
                         onChange={changeEmail}
-                        labelName="Email" />
-
-
-                    <Input
+                    />
+                    <Label htmlFor={"password"} labelName="Create Password" />
+                    <InputField
                         type="password"
                         name="password"
                         className={"bg-sky-50 border-sky-50 border-2 shadow-sm w-11/12  p-2 rounded-md"}
                         onChange={changePsw}
-                        labelName="Create Password"
-                        element={<div className="text-red-500 text-sm">{password.error}</div>}
+                    // element={<div className="text-red-500 text-sm">{password.error}</div>}
                     />
-                    <Input
+                    <Label htmlFor={"confirmPsw"} labelName="Confirm Password" />
+                    <InputField
                         type="password"
                         name="confirmPsw"
                         className={"bg-sky-50 border-sky-50 border-2 shadow-sm w-11/12  p-2 rounded-md"}
                         onChange={confirmPsw}
-                        labelName="Confirm Password"
-
                     />
-
-
 
                     <Button
                         name="Create Account"

@@ -8,11 +8,10 @@ import { router } from "../routes/AllUsers/generate.js";
 import cors from 'cors';
 import { resolve } from 'path'
 import cookieParser from "cookie-parser";
-import { config } from "dotenv";
-config() //loading the env file
-const port = process.env.PORT || 3000;
+import { EnvironmentVariables } from "../config/config.js";
+const port = EnvironmentVariables.port || 3000;
 const app = express();
-app.use(express.static(resolve(`${process.env.PATH_PUBLIC_DIRECTORY}/public`)))
+app.use(express.static(resolve(`${EnvironmentVariables.publicPathDirectory}/public`)))
 app.use(cors({
     origin: 'http://localhost:5173', // Change to your frontend's URL
     credentials: true
@@ -21,7 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
 //if use signed cookie then i need to add  secret key also
-app.use(cookieParser(process.env.COOKIE_SECRET_KEY))
+app.use(cookieParser(EnvironmentVariables.cookieSecretKey))
 
 // if use cookie then i need to add  below code only
 // app.use(cookieParser())

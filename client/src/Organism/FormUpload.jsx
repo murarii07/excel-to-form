@@ -7,8 +7,10 @@ import Label from "../Atoms/Label";
 import InputField from "../Atoms/inputField";
 import useDebounce from "../CustomHooks/debounce";
 import useFetchData from "../CustomHooks/fetchData";
+import DialogBox from "../Atoms/DialogBox";
 
 const FormUpload = () => {
+    const [dialog,setDialog]=useState({flag:false,message:"error....."})
     const navigate = useNavigate()
     const [isEdit, setIsEdit] = useState({isEditTitle:false,isEditDes:false});
     const [formDetails, setFormDetails] = useState({
@@ -21,6 +23,10 @@ const FormUpload = () => {
         if (window.localStorage.getItem("isLogged")) {
             setIsEdit(false)
             const formId = prompt("enter unique formName")
+            if(!formId){
+                setDialog({flag:true,message:"please enter a formName"})
+                return
+            }
             console.log(fields)
             let ob = { fieldDetails: fields, formId: formId, ...formDetails }
             console.log(ob)
@@ -70,7 +76,8 @@ const FormUpload = () => {
 
     useEffect(() => {
         if(!fields.length){
-            alert("first upload a file ")
+            setDialog({flag:true,message:"first upload a file "})
+
         }
         console.log(fields)
     }, [fields])
@@ -133,6 +140,7 @@ const FormUpload = () => {
                 </ Form >
             </div>
             {/* <footer>footer</footer> */}
+            <DialogBox isOpen={dialog.flag} message={dialog.message} setDialog={setDialog}  />
         </>
     );
 }
