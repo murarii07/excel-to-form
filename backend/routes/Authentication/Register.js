@@ -1,7 +1,8 @@
 import express from "express";
-import { AuthStructure } from "../../models/AuthSchema.js";
+// import { AuthStructure } from "../../models/AuthSchema.js";
 export const Register = express.Router();
 import { hashSync } from "bcrypt";
+import { AuthDB } from "../../config/DBconfig.js";
 const registerUser = async (req, res) => {
     try {
         //this tecnique use for checking object is empty or null
@@ -12,6 +13,7 @@ const registerUser = async (req, res) => {
             })
         }
         // const isUsernameExist = await AuthStructure.findOne({ username: req.body.username })
+
         // const isEmailExist = await AuthStructure.findOne({ email: req.body.email })
 
         // console.log("dfdsf",isEmailExist,isUsernameExist,isUsernameExist && isEmailExist)
@@ -24,6 +26,14 @@ const registerUser = async (req, res) => {
 
         //optimize query
         // or condition
+        // const isEmailOrUserNameExist = await AuthStructure.findOne({
+        //     "$or":
+        //         [
+        //             { email: req.body.email },
+        //             { username: req.body.username }
+        //         ]
+        // })
+        const AuthStructure = AuthDB.model("AuthStructure", structure)
         const isEmailOrUserNameExist = await AuthStructure.findOne({
             "$or":
                 [
@@ -58,7 +68,6 @@ const registerUser = async (req, res) => {
                     message: error
                 })
             })
-
     }
     catch (e) {
         res.status(401).json({

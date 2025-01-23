@@ -11,9 +11,13 @@ import cookieParser from "cookie-parser";
 import { EnvironmentVariables } from "../config/config.js";
 const port = EnvironmentVariables.port || 3000;
 const app = express();
+
+
+
+//MiddleWares
 app.use(express.static(resolve(`${EnvironmentVariables.publicPathDirectory}/public`)))
 app.use(cors({
-    origin: 'http://localhost:5173', // Change to your frontend's URL
+    origin: EnvironmentVariables.clientUrl, // Change to your frontend's URL
     credentials: true
 }))
 app.use(express.json());
@@ -30,8 +34,8 @@ app.use(cookieParser(EnvironmentVariables.cookieSecretKey))
 app.use("/user", liveFormRouter)
 
 // #for all users
-app.use("/form", router)
-app.use("/public", formSubmissionRouter);
+app.use("form", router)
+app.use("public", formSubmissionRouter);
 
 
 // #Authentication
@@ -39,9 +43,7 @@ app.use("/login", login)
 app.use("/Register", Register)
 
 
-app.listen(port, () => {
-    console.log("server started......",port)
-});
+app.listen(port, () => console.log("server started......", port));
 
 
 // #when you are testing then add content type in header section in postwoman

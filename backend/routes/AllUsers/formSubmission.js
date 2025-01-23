@@ -1,11 +1,13 @@
 import express from "express";
 import CryptoJS from "crypto-js";
-import { DatabaseInstance } from "../../src/Module.js";
+// import { DatabaseInstance } from "../../src/Module.js";
 import multer from "multer";
 import blobFunction from "../../src/blobstorage.js";
 export const formSubmissionRouter = express.Router();
 import { EnvironmentVariables } from "../../config/config.js";
-const USERDB=EnvironmentVariables.userDB
+import { formInfo } from "../../models/FormInfoSchema.js";
+import { UserDB } from "../../config/DBconfig.js";
+// const USERDB = EnvironmentVariables.userDB
 // // Multer memory storage configuration
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -28,11 +30,13 @@ const getForm = async (req, res) => {
         //decoding the url we get db and formId as col
         let jsonObj = await decryptionObj(req.params.encryptedUrl)
         // console.log("f", jsonObj)
-        const {user} = jsonObj
+        const { user } = jsonObj
         // console.log(id)
         // let result = await DatabaseInstance.retriveData(user, id, {}, { projection: { _id: 0, fields: 1, title: 1, description: 1 } })
-        let result = await DatabaseInstance.retriveData(USERDB, user, {}, { projection: { _id: 0, fields: 1, title: 1, description: 1 } })
-        console.log("GET FORM",result)
+        // let result = await DatabaseInstance.retriveData(USERDB, user, {}, { projection: { _id: 0, fields: 1, title: 1, description: 1 } })
+        let formModel = UserDB.model(user, formInfo, user)
+        let result = await formModel.findOne({}, { _id: 0, fields: 1, title: 1, description: 1 })
+        console.log("GET FORM", result._doc)
         res.status(200).json({
             data: result,
             success: true,
@@ -60,8 +64,14 @@ const formResponse = async (req, res) => {
         let jsonObj = await decryptionObj(req.params.encryptedUrl)
         const { user, id } = jsonObj
         //$inc is used to increment the field by one
-        await DatabaseInstance.UpdateData(USERDB, user,
-            { name: id },
+        // await DatabaseInstance.UpdateData(USERDB, user,
+        //     { name: id },
+        //     {
+        //         "$set": { recentResponseTime: new Date().toLocaleString() },
+        //         "$inc": { response: 1 }
+        //     })
+        let formModel = UserDB.model(user, formInfo, user)
+        await formModel.updateOne({ name: id },
             {
                 "$set": { recentResponseTime: new Date().toLocaleString() },
                 "$inc": { response: 1 }
@@ -83,6 +93,13 @@ const formResponse = async (req, res) => {
 
 }
 //for public form
-formSubmissionRouter.get("/:encryptedUrl", getForm);
-//upload.none() for gving that user has not uploaded any file
-formSubmissionRouter.post("/:encryptedUrl", upload.none(), formResponse);
+
+formSubmissionRouter.route("/:encryptedUrl")
+    .get(getForm)
+    .post(upload.none(), formResponse)
+
+
+// Use app.route() when you need to handle multiple HTTP methods for the same URL path.
+// formSubmissionRouter.get("/:encryptedUrl", getForm);
+// //upload.none() for gving that user has not uploaded any file
+// formSubmissionRouter.post("/:encryptedUrl", upload.none(), formResponse);

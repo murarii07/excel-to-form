@@ -1,20 +1,18 @@
 import express from "express";
 import { compareSync } from "bcrypt";
-import { AuthStructure } from "../../models/AuthSchema.js";
-import mongoose from "mongoose";
 import jwt from 'jsonwebtoken';
 import { EnvironmentVariables } from "../../config/config.js";
+import { structure } from "../../models/AuthSchema.js";
+import { AuthDB } from "../../config/DBconfig.js";
 export const login = express.Router();
-mongoose.connect(EnvironmentVariables.authDBUrl)
-    .then(() => { console.log("Authentication server connected"); })
-    .catch(() => { console.log("Authentication server failed"); })
-
 const loginUser = async (req, res) => {
     //mongo operation
     try {
+        // const user = await AuthStructure.findOne({ username: req.body.username })
+        const AuthStructure = AuthDB.model("AuthStructure", structure)
         const user = await AuthStructure.findOne({ username: req.body.username })
+        // console.log("USER", user)
         console.log("USER", user)
-
         // if findOne doesnt find value then it return null in mongo
         if (!user) {
             return res.status(400).json({
@@ -72,6 +70,12 @@ const logoutUser = (req, res) => {
         })
     }
 }
-login.post("/", loginUser)
-//logout
-login.delete('/', logoutUser)
+
+login.route("/")
+    .post(loginUser)
+    .delete(logoutUser)
+
+
+// login.post("/", loginUser)
+// //logout
+// login.delete('/', logoutUser)

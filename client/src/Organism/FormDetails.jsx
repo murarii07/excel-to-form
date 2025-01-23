@@ -25,7 +25,7 @@ const FormDetails = () => {
         if (response && !error) {
             setLoading(false)
             setForm(response.data)
-            console.log(response);
+            console.log(response.data);
         }
 
     }, [response])

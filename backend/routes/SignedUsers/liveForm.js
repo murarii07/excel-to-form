@@ -1,27 +1,29 @@
 import express from "express";
 import CryptoJS from "crypto-js";
 import jwt from 'jsonwebtoken'
-import { DatabaseInstance } from "../../src/Module.js";
+// import { DatabaseInstance, MongooseDb } from "../../src/Module.js";
 import { deletingBlob, getBlobSize } from "../../src/blobstorage.js";
 import { EnvironmentVariables } from "../../config/config.js";
+import { formInfo } from "../../models/FormInfoSchema.js";
+// import mongoose, { model } from "mongoose";
 export const liveFormRouter = express.Router();
-
-const USERDB = EnvironmentVariables.userDB
+// const USERDB = EnvironmentVariables.userDB
+import { UserDB } from "../../config/DBconfig.js";
 
 //url generator
-const urlGenerator=(userName, id)=>{
+const urlGenerator = (userName, id) => {
     let obj = JSON.stringify({ user: userName, id: id });
     const encryptedUrl = CryptoJS.AES.encrypt(obj, EnvironmentVariables.encryptedSecretKey).toString();
     // as '/' violates the url logic of us and give error
     const urlSafeEncryptedUrl = encryptedUrl
         .replace(/\+/g, '-')    // Replace + with -
         .replace(/\//g, '_')
-    console.log("URLENCRYPTED URL",urlSafeEncryptedUrl)
+    console.log("URLENCRYPTED URL", urlSafeEncryptedUrl)
     return urlSafeEncryptedUrl;
 
 }
 //extract data from token
-const extractDataFromToken=(jwtToken)=>{
+const extractDataFromToken = (jwtToken) => {
     const data = jwt.verify(jwtToken, EnvironmentVariables.jwtScretKey)
     return data.user
 }
@@ -47,8 +49,12 @@ const getFormList = async (req, res) => {
         // const userDbDeatails = await db.stats() //give user db details by using db.stats which returns a promise 
         // console.log(userDbDeatails.storageSize)
 
-        let collectList = await DatabaseInstance.retriveDataAll(USERDB, user, {}, { name: 1, _id: 0 })
+        // let collectList = await DatabaseInstance.retriveDataAll(USERDB, user, {}, { name: 1, _id: 0 })
+        //bydefault colname is set  by name of modelname if it not given
+        let result = UserDB.model(user, formInfo, user)
+        let collectList = await result.find({}, { name: 1, _id: 0 })
         //getting user  used storage size 
+        console.log("Result:",collectList)
         let storageSize = 0
         try {
             storageSize = await getBlobSize(user)
@@ -89,7 +95,20 @@ const uploadForm = async (req, res) => {
         const url = urlGenerator(user, req.body.formId);
         //mongo operation
         // const result = await DatabaseInstance.InsertData(user, req.body.formId, { _id: url, fields: req.body.fieldDetails, title: req.body.title, description: req.body.description })
-        const result = await DatabaseInstance.InsertData(USERDB, user, {
+        // const result = await DatabaseInstance.InsertData(USERDB, user, {
+        //     _id: url,
+        //     name: req.body.formId,
+        //     fields: req.body.fieldDetails,
+        //     title: req.body.title,
+        //     description: req.body.description,
+        //     timeStamp: new Date().toDateString(),
+        //     response: 0
+        // })
+
+        //creating collection name same as the user
+
+        const col = UserDB.model(user, formInfo)
+        const result2 = await col.create({
             _id: url,
             name: req.body.formId,
             fields: req.body.fieldDetails,
@@ -98,7 +117,8 @@ const uploadForm = async (req, res) => {
             timeStamp: new Date().toDateString(),
             response: 0
         })
-        console.log(result)
+
+        console.log(result2)
         //after mongo operation
         res.status(200).json({
             data: { url: url },
@@ -119,7 +139,7 @@ const getSpecificFormDetails = async (req, res) => {
         const user = extractDataFromToken(req.cookies?.jwt);
 
         //method1
-         // const user="murli"
+        // const user="murli"
         // let filterQuery = { name: req.params.formId }
         // let isCollectionExist = await DatabaseInstance.collectionList(user, filterQuery)
         // if (!isCollectionExist.length) {
@@ -131,13 +151,20 @@ const getSpecificFormDetails = async (req, res) => {
         // let result = await DatabaseInstance.retriveData(user, req.params.formId, {}, { projection: { _id: 1, title: 1, description: 1 } })
         //method2
         console.log("FORMID", req.params.formId)
-        let result = await DatabaseInstance.retriveData(USERDB, user,
-            { name: req.params.formId },
-            { projection: { _id: 1, title: 1, description: 1, timeStamp: 1, response: 1, name: 1 } }
+        // let result = await DatabaseInstance.retriveData(USERDB, user,
+        //     { name: req.params.formId },
+        //     { projection: { _id: 1, title: 1, description: 1, timeStamp: 1, response: 1, name: 1 } }
+        // )
+        let rDBModel = UserDB.model(user, formInfo, user)
+        let result2 = await rDBModel.findOne(
+            { name: req.params.formId }, { _id: 1, title: 1, description: 1, timeStamp: 1, response: 1, name: 1 }
         )
-        console.log("FormDetails", result)
+        
+        //_doc field contain acutal info
+        console.log("FormDetails",result2._doc)
         return res.status(200).json({
-            data: { ...result, link: result._id, },
+            // data: { ...result2, link: result2._id, },
+            data:{ ...result2._doc, link: result2._doc._id, },
             success: true,
             message: "successfull...."
         })
@@ -155,8 +182,13 @@ const removeSpecificForm = async (req, res) => {
         const user = extractDataFromToken(req.cookies?.jwt)
         // const collectionFilter = { name: req.params.formId };
         // const result = await DatabaseInstance.removeCollection(user, req.params.formId, collectionFilter)
-        const result = await DatabaseInstance.RemoveData(USERDB, user, { name: req.params.formId })
-        if (!result) {
+        // const result = await DatabaseInstance.RemoveData(USERDB, user, { name: req.params.formId })
+        let rDBModela = UserDB.model(user, formInfo, user)
+        console.log(req.params.formId)
+        let result = await rDBModela.deleteOne({ name: req.params.formId }
+        )
+        console.log("Remove daata",result,req.params.formId)
+        if (!result.deletedCount) {
             return res.status(500).json({
                 success: false,
                 message: "something went wrong try again later"

@@ -10,5 +10,7 @@ export const EnvironmentVariables = {
     blobStorageConnectionString: process.env.CONNECTION_STRING,
     publicPathDirectory: process.env.PATH_PUBLIC_DIRECTORY,
     cookieSecretKey: process.env.COOKIE_SECRET_KEY,
-    authDBUrl:process.env.AUTH_DB_URL
+    authDBUrl:process.env.AUTH_DB_URL,
+    clientUrl:process.env.CLIENT_URL,
+    userDBUrl:process.env.USER_DB_URL
 }
