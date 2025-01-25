@@ -3,8 +3,7 @@ import Button from "../Atoms/Button";
 import useFetchData from "../CustomHooks/fetchData";
 import { useNavigate } from "react-router-dom";
 import useDebounce from "../CustomHooks/debounce";
-import Img from "../Atoms/img";
-import  Label  from '../Atoms/Label';
+import Label from '../Atoms/Label';
 import InputField from "../Atoms/inputField";
 
 const Register = () => {
@@ -98,7 +97,7 @@ const Register = () => {
                 </div>
                 <div className=" w-full md:w-2/6  px-3 h-3/5 md:h-[100vh] flex flex-col items-center justify-center gap-y-3 ">
 
-                    <Label htmlFor={"username"} labelName="Create a username" />
+                    <Label htmlFor={"username"} labelname="Create a username" />
                     <InputField
                         type="text"
                         name="username"
@@ -106,14 +105,14 @@ const Register = () => {
                         onChange={changeUsername}
                     />
 
-                    <Label htmlFor={"Email"} labelName="Email" />
+                    <Label htmlFor={"Email"} labelname="Email" />
                     <InputField
                         type="email"
                         name="email"
                         className={"bg-sky-50 border-sky-50 border-2 shadow-sm w-11/12  p-2 rounded-md"}
                         onChange={changeEmail}
                     />
-                    <Label htmlFor={"password"} labelName="Create Password" />
+                    <Label htmlFor={"password"} labelname="Create Password" />
                     <InputField
                         type="password"
                         name="password"
@@ -138,7 +137,7 @@ const Register = () => {
                         <div className="box w-2/5  rounded-md shadow-md text-center bg-white flex items-center justify-center" onClick={(e) => {
                             navigate("/signup")
                         }}>
-                            <Img img="assets/google.png" alt="" className="" width={"24px"} height={"20px"} />
+                            <img img="assets/google.png" alt="" className="" width={"24px"} height={"20px"} />
                         </div>
 
                     </div>

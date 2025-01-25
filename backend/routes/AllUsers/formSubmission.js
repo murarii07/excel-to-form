@@ -1,13 +1,11 @@
 import express from "express";
 import CryptoJS from "crypto-js";
-// import { DatabaseInstance } from "../../src/Module.js";
 import multer from "multer";
 import blobFunction from "../../src/blobstorage.js";
 export const formSubmissionRouter = express.Router();
 import { EnvironmentVariables } from "../../config/config.js";
 import { formInfo } from "../../models/FormInfoSchema.js";
 import { UserDB } from "../../config/DBconfig.js";
-// const USERDB = EnvironmentVariables.userDB
 // // Multer memory storage configuration
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -30,13 +28,13 @@ const getForm = async (req, res) => {
         //decoding the url we get db and formId as col
         let jsonObj = await decryptionObj(req.params.encryptedUrl)
         // console.log("f", jsonObj)
-        const { user } = jsonObj
+        const { user, id } = jsonObj
         // console.log(id)
         // let result = await DatabaseInstance.retriveData(user, id, {}, { projection: { _id: 0, fields: 1, title: 1, description: 1 } })
         // let result = await DatabaseInstance.retriveData(USERDB, user, {}, { projection: { _id: 0, fields: 1, title: 1, description: 1 } })
         let formModel = UserDB.model(user, formInfo, user)
-        let result = await formModel.findOne({}, { _id: 0, fields: 1, title: 1, description: 1 })
-        console.log("GET FORM", result._doc)
+        let result = await formModel.findOne({ name: id }, { _id:0,"fields": 1, "title": 1, "description": 1 })
+        console.log("GET FORM", result._doc,)
         res.status(200).json({
             data: result,
             success: true,

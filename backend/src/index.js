@@ -34,8 +34,8 @@ app.use(cookieParser(EnvironmentVariables.cookieSecretKey))
 app.use("/user", liveFormRouter)
 
 // #for all users
-app.use("form", router)
-app.use("public", formSubmissionRouter);
+app.use("/form", router)
+app.use("/public", formSubmissionRouter);
 
 
 // #Authentication

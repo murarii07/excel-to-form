@@ -6,39 +6,19 @@ import { useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { saveAs } from "file-saver";
 import DownloadIcon from '../svgs/download.svg?react'
+import useFetchData from "../CustomHooks/fetchData";
 function Preview() {
     const navigate = useNavigate();
     const fields = useSelector((state) => state.Field.value);
     console.log(fields)
+    const { response, error, setOptions } = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/form/download`)
     const dispatch = useDispatch()
     const editHandle = (fieldId) => {
-        // const updatedFields = fields.filter((field) => field.Id !== fieldId);
-        // console.log("Filtered fields:", updatedFields);
-        // // dispatch(changeFieldValue(updatedFields));
         dispatch(removeSpecificField(fieldId))
     };
-    useEffect(() => {
-        console.log(fields)
-    }, [fields])
+
     const handled = async () => {
-        try {
-            const response = await fetch( `${import.meta.env.VITE_SERVER_API_URL}/form/download`, {
-                method: 'GET',
-                credentials: 'include',
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            //saving the file in users machine
-            response.blob()
-            .then((blob)=>{
-                saveAs(blob,"form.html");
-            });
-
-        } catch (error) {
-            console.error(error.message);
-        }
+        setOptions({ method: 'GET', credentials: 'include', })
     }
     const handleds = () => {
         try {
@@ -47,7 +27,27 @@ function Preview() {
             console.log(e)
         }
     }
+    useEffect(() => {
+        console.log(fields)
+    }, [fields])
+    useEffect(() => {
+        if (response && !error) {
+            response.blob()
+                .then((blob) => {
+                    saveAs(blob, "form.html");
+                });
 
+        }
+    }, [response])
+
+    //error render
+    useEffect(() => {
+        if (error) {
+            alert("something went wrong")
+            console.log(error)
+            // navigate("/error")
+        }
+    }, [error])
     //event delegation approach
     // const editHandleF = (e) => {
     //     let r=e.target.classList
@@ -65,18 +65,18 @@ function Preview() {
                 <>
                     <div className="preview-form rounded-lg bg-purple-200 border-2 border-purple-200 "
                     //  onClick={editHandleF}
-                     >
+                    >
                         {fields.map((x, index) =>
                             <EditBox key={x.Id} index={index} field={x}
-                            editHandle={() => editHandle(x.Id)}  />
+                                editHandle={() => editHandle(x.Id)} />
                         )}
                     </div>
                     <div className="preview-btn">
                         <Button
                             buttonName="download-btn border-teal-700  text-teal-700 hover:bg-teal-700 hover:text-white "
                             name={<DownloadIcon />} onClick={handled}>
-                                
-                            </Button>
+
+                        </Button>
                         <Button
                             name="livePreview" onClick={handleds}
                             buttonName={"save-btn border-teal-700  text-teal-700 hover:bg-teal-700 px-3 hover:text-white "} />

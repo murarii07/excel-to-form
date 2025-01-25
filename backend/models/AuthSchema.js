@@ -1,6 +1,6 @@
-import  { model, Schema } from "mongoose";
+import { Schema } from "mongoose";
 
-export const structure =  Schema({
+export const structure = Schema({
     username: { type: String, required: true },
     password: { type: String, required: true },
     email: { type: String, required: true }

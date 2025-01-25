@@ -57,3 +57,7 @@ To run this project, you will need to add the following environment variables to
 
 
 
+## material-symbols-outlined 
+# this is used as a classname of a tag as i import below link in css file
+import url(https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200);
+## check out this

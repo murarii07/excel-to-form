@@ -17,7 +17,7 @@ const Login = () => {
     const navigate = useNavigate();
 
     const changeUsername = useDebounce((e) => {
-        console.log(e.target.value)
+        // console.log(e.target.value)
         if (e.target.value) {
             setUsername(e.target.value)
         }
@@ -30,6 +30,7 @@ const Login = () => {
         }
     }, 500);
     const handle = async () => {
+        // console.log("s")
         if (username && password) {
             const form = {
                 "username": username,

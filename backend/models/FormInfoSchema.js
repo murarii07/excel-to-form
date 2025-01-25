@@ -1,19 +1,19 @@
-import { model, Schema } from "mongoose";
+import { Schema } from "mongoose";
 
 //timestamps 
 // please read this
 
 export const formInfo = Schema({
-    _id: { type: String, required: true},
+    _id: { type: String, required: true },
     name: { type: String, required: true },
     title: { type: String, required: true, },
     fields: { type: Array, required: true },
     description: { type: String },
     response: { type: Number, required: true, default: 0 },
     recentResponseTime: { type: String },
-    timeStamp:{type:String}
+    timeStamp: { type: String }
 
-}, { timestamps: true,_id:false })
+}, { timestamps: true, _id: false })
 
 //here i specify _id as false to not create by deafult and as i want create 
 // a customise _id 

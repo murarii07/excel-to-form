@@ -4,19 +4,19 @@ import Label from "../Atoms/Label";
 import InputField from "../Atoms/inputField";
 function Form(props) {
     const { field, formHandles } = props
-    console.log(field)
+    console.log("Fields",field)
     return (
         <>
-            <form onSubmit={formHandles} encType="multipart/form-data" className={`w-full  ${props.formClass}`}>
+            <form onSubmit={formHandles} encType="multipart/form-data" className={`w-full  ${props.formClass}  `} >
                 {field.map(
                     (x, index) => (
-                        <div key={x.Id} className="input-preview  flex flex-col bg-purple-100   rounded-xl px-2 shadow-md   border-white  " style={{ borderWidth: "10px" }}>
-                            <Label labelname={x.LabelName} htmlFor={x.Name} required={x.required || false} />
+                        <div key={x.Id} className=" flex flex-col  px-2 shadow-md   border-white  bg-purple-50 rounded-3xl p-6 hover:shadow-xl transform transition-transform hover:-translate-y-1 z-10 " style={{ borderWidth: "10px" }}>
+                            <Label labelname={x.LabelName} htmlFor={x.Name} required={x.required || false} className={"block text-sm font-medium text-neutral-950 mb-2"} />
                             {(x.Type === 'radio' || x.Type === 'checkbox') ? (
-                                <Radio 
-                                radioInputs={x.Value} 
-                                type={x.Type} 
-                                name={x.Name} />
+                                <Radio
+                                    radioInputs={x.Value}
+                                    type={x.Type}
+                                    name={x.Name} />
                             )
                                 :
                                 (
@@ -26,7 +26,7 @@ function Form(props) {
                                         name={x.Name}
                                         key={index}
                                         id={x.Id}
-                                        className={" border-2 border-black bg-purple-100"} />
+                                        className="w-full border border-purple-500 rounded-full h-[48px] px-4 focus:outline-none focus:ring focus:ring-purple-400 transition"/>
                                 )}
 
                         </div>
@@ -34,8 +34,7 @@ function Form(props) {
                     )
                 )}
                 <Button
-                    buttonName="text-purple-600 submit-button border-purple-600 w-1/4 md:min-w-12 hover:text-white hover:bg-purple-600 hover:font-bold hover:shadow-purple-400
-                    "
+                    className="bg-purple-500 text-purple-50 font-medium rounded-2xl h-[48px] px-6 hover:bg-purple-600 focus:outline-none focus:ring focus:ring-purple-400 transition z-20 md:w-1/4"
                     buttonType={props.buttonType}
                     name={props.buttonName}
                 />

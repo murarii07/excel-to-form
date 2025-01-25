@@ -59,12 +59,12 @@ function XlUpload() {
     }, [response]);
     return (
         <>
-            <div className="drag-form  w-10/12 m-auto min-h-fit flex flex-col items-center justify-center gap-5">
+            <div className="drag-form  w-10/12 m-auto min-h-fit flex flex-col items-center justify-center gap-5 mt-8 ">
                 <>
                     <DragBox takingFile={takingFile} />
                     <Button
                         name={"Generate"}
-                        buttonName={"text-purple-600 submit-button border-purple-600 w-4/12 md:w-2/12 hover:text-white hover:bg-purple-600 hover:font-bold border-2 "}
+                        buttonName={"mt-4 bg-purple-600 text-neutral-50 py-2 px-6 rounded-full w-full md:w-auto hover:bg-purple-700"}
                         onClick={formHandle} />
 
                     {

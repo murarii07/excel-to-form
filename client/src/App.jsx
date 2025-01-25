@@ -8,16 +8,16 @@ import Register from './Organism/Register';
 import Home from './Organism/Home';
 import './Working.css'
 import NotFound from './Atoms/NotFound';
-import PrivateRoute from './Organism/PrivateRoute';
+// import PrivateRoute from './Organism/PrivateRoute';
 import UserForm from './Organism/userForm';
-import FormDetails from './Organism/FormDetails';import Submit from './Atoms/Submit';
+import FormDetails from './Organism/FormDetails'; import Submit from './Atoms/Submit';
 ;
-function Tasks(){
-  return(
-    
+function Tasks() {
+  return (
+
     <Routes>
-      <Route path='/'  element={<MyTask />} />
-      <Route path='*'  element={<FormDetails />} />
+      <Route path='/' element={<MyTask />} />
+      <Route path='*' element={<FormDetails />} />
     </Routes>
   )
 }
@@ -25,16 +25,16 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Home />}/>
+        <Route path='/' element={<Home />} />
         <Route path='login' element={<Login />} />
         <Route path='signup' element={<Register />} />
-        <Route path='my-profile' element={<Profile />}  />
-        <Route path='tasks/*' element={<Tasks />}/>
+        <Route path='my-profile' element={<Profile />} />
+        <Route path='tasks/*' element={<Tasks />} />
         <Route path='preview' element={<FormUpload />} />
-        <Route path='public/*'element={<PrivateRoute element={<UserForm />} />} />
-        <Route path='submit'element={<Submit />} />
+        <Route path='public/*' element={<UserForm />} />
+        <Route path='submit' element={<Submit />} />
         <Route path='*' element={<NotFound />} />
-       
+
       </Routes>
 
     </BrowserRouter>

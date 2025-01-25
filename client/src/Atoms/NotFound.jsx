@@ -1,25 +1,34 @@
 import Img from "./img";
 
-const NotFound=()=>{
-return(
-    <>
-    <div className="relative flex items-center flex-col justify-center  gap-5 z-10 w-7/12 mx-auto">
-    <h1 className="text-3xl font-bold  text-purple-600 flex justify-center items-center">404 ERROR</h1>
-    <Img img={"/assets/image.png"} width="304" height="316"/>
-    <div>
+const NotFound = () => {
+    return (
+        <>
 
-    <h1 className="text-[68px] font-bold text-center text-purple-600">No Results Found</h1>
-    <div className="text-xl font-medium  text-gray-400 flex justify-center items-center text-center w-3/4 mx-auto">We couldn’t find what you searched for.
-    Try searching again.</div>
-    </div>
-    </div>
-    <div className="flex justify-between absolute  w-full " style={{top:"58%", zIndex:0}}>
+            <div className="min-h-screen flex items-center justify-center bg-white shadow-lg rounded-lg text-center px-6 sm:px-8 py-8 sm:py-10 mx-auto">
+                <div>
+                    <h1 className="text-lg sm:text-xl font-title font-bold text-purple-600 mb-3 sm:mb-4">404 ERROR</h1>
+                    <div className="relative h-[150px] w-[150px] sm:h-[200px] sm:w-[200px] mx-auto">
+                        <img
+                            src="/assets/error.png"
+                            alt="Illustration"
+                            className="h-full w-full object-contain"
+                        />
+                    </div>
+                    <h2 className="text-xl sm:text-2xl font-title font-bold text-purple-600 mt-4 sm:mt-6">No Results Found</h2>
+                    <p className="text-neutral-500 mt-2 text-sm sm:text-base">We couldn’t find what you searched for. Try searching again.</p>
+                    <div className="mt-6 sm:mt-8">
+                    <a href="/">
+                    <button className="px-6 py-2 sm:px-8 sm:py-3 bg-purple-600 text-white font-medium rounded-2xl hover:bg-purple-700 transition">
+                       Home
+                       
+                    </button>
+                    </a>
+                </div>
+                </div>
+               
+            </div>
 
-    <Img img={"/assets/image copy.png"}  width="177" height="264"/>
-    <Img img={"/assets/image copy 2.png"} width="177" height="264"/>
-    </div>
-    
-    </>
-)
+        </>
+    )
 }
 export default NotFound;

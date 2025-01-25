@@ -8,7 +8,8 @@ import { formInfo } from "../../models/FormInfoSchema.js";
 // import mongoose, { model } from "mongoose";
 export const liveFormRouter = express.Router();
 // const USERDB = EnvironmentVariables.userDB
-import { UserDB } from "../../config/DBconfig.js";
+import { AuthDB, UserDB } from "../../config/DBconfig.js";
+import { structure } from "../../models/AuthSchema.js";
 
 //url generator
 const urlGenerator = (userName, id) => {
@@ -54,21 +55,21 @@ const getFormList = async (req, res) => {
         let result = UserDB.model(user, formInfo, user)
         let collectList = await result.find({}, { name: 1, _id: 0 })
         //getting user  used storage size 
-        console.log("Result:",collectList)
-        let storageSize = 0
-        try {
-            storageSize = await getBlobSize(user)
-        } catch (e) {
-            console.log("Storage size error", e.message)
-        }
-        console.log("storageSize:", storageSize)
+        console.log("Result:", collectList)
+        // let storageSize = 0
+        // try {
+        //     storageSize = await getBlobSize(user)
+        // } catch (e) {
+        //     console.log("Storage size error", e.message)
+        // }
+        // console.log("storageSize:", storageSize)
         collectList = collectList.map(x => x.name)
         res.status(200).json({
             data: {
                 name: user,
                 formlist: collectList,
                 // storageInBytes: userDbDeatails.storageSize,
-                storageInBytes: storageSize
+                // storageInBytes: storageSize
             },
             success: true,
             message: "successfull...."
@@ -159,12 +160,12 @@ const getSpecificFormDetails = async (req, res) => {
         let result2 = await rDBModel.findOne(
             { name: req.params.formId }, { _id: 1, title: 1, description: 1, timeStamp: 1, response: 1, name: 1 }
         )
-        
+
         //_doc field contain acutal info
-        console.log("FormDetails",result2._doc)
+        console.log("FormDetails", result2._doc)
         return res.status(200).json({
             // data: { ...result2, link: result2._id, },
-            data:{ ...result2._doc, link: result2._doc._id, },
+            data: { ...result2._doc, link: result2._doc._id, },
             success: true,
             message: "successfull...."
         })
@@ -187,7 +188,7 @@ const removeSpecificForm = async (req, res) => {
         console.log(req.params.formId)
         let result = await rDBModela.deleteOne({ name: req.params.formId }
         )
-        console.log("Remove daata",result,req.params.formId)
+        console.log("Remove daata", result, req.params.formId)
         if (!result.deletedCount) {
             return res.status(500).json({
                 success: false,
@@ -221,7 +222,41 @@ const removeSpecificForm = async (req, res) => {
     }
 
 }
-
+// const getUserDetails = async (req, res) => {
+//     try {
+//         const user = extractDataFromToken(req.cookies?.jwt)
+//         let result = AuthDB.model("authstructures",structure)
+//         let userDetails = await result.findOne({ name: user }, { _id: 0, email: 1 })
+//         //getting user  used storage size 
+//         let result2 = UserDB.model(user, formInfo, user)
+//         let collectionList = await result2.find({}, { name: 1, _id: 0 })
+//         console.log("Result:", userDetails)
+//         let storageSize = 0
+//         try {
+//             storageSize = await getBlobSize(user)
+//         } catch (e) {
+//             console.log("Storage size error", e.message)
+//         }
+//         collectionList=collectionList.map(x=>x.name)
+//         console.log("storageSize:", storageSize,userDetails)
+//         res.status(200).json({
+//             data: {
+//                 name: user,l,
+//                 formlist: collectionList,
+//                 storageInBytes: storageSize,
+//             },
+//             success: true,
+//             message: "successfull...."
+//         })
+//     }
+//     catch (e) {
+//         res.status(404).json({
+//             data: null,
+//             success: false,
+//             message: e.message
+//         })
+//     }
+// }
 liveFormRouter.use(cookieCheckingMiddleware)
 //form upload of user
 liveFormRouter.post("/upload", uploadForm)
@@ -232,7 +267,7 @@ liveFormRouter.delete("/delete/:formId", removeSpecificForm)
 //formDetails
 liveFormRouter.get("/formDetails/:formId", getSpecificFormDetails)
 
-
+liveFormRouter.get("/details", getUserDetails)
 
 // //this is optional
 // //this  api hit when user want to edit the form after being uploaded
