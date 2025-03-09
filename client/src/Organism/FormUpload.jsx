@@ -6,19 +6,19 @@ import { Navigate, useNavigate } from "react-router-dom";
 import Label from "../Atoms/Label";
 import InputField from "../Atoms/inputField";
 import useDebounce from "../CustomHooks/debounce";
-import useFetchData from "../CustomHooks/fetchData";
+import useFetchData from "../CustomHooks/useFetchData";
 import DialogBox from "../Atoms/DialogBox";
 
 const FormUpload = () => {
     const navigate = useNavigate()
     const fields = useSelector(state => state.Field.value)
-    const [dialog, setDialog] = useState({ flag: false, message:"error....." })
+    const [dialog, setDialog] = useState({ flag: false, message: "error....." })
     const [isEdit, setIsEdit] = useState({ isEditTitle: false, isEditDes: false });
     const [formDetails, setFormDetails] = useState({
         title: "form title",
         description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil officia praesentium adipisci! Neque, facere nisi quaerat cupiditate"
     });
-    const { response, error, setOptions } = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/upload`)
+    const [response, error, setOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/upload`)
 
     //form uploading to the server
     const formUpload = () => {
@@ -33,7 +33,7 @@ const FormUpload = () => {
             setDialog({ flag: true, message: "please enter a formName" })
             return
         }
-        console.log("User Fields",fields,{ fieldDetails: fields, formId: formId, ...formDetails })
+        console.log("User Fields", fields, { fieldDetails: fields, formId: formId, ...formDetails })
         const options = {
             method: 'POST',
             credentials: 'include',
@@ -63,18 +63,15 @@ const FormUpload = () => {
         if (response && !error) {
             console.log(response.data.url)
             // navigate(`/public/${response.data.url}`)
-            console.log("Response",response);
+            console.log("Response", response);
         }
-    }, [response])
-
-    //error render
-    useEffect(() => {
-        if (error) {
+        else if (error) {
             alert("something went wrong")
             console.log(error)
             navigate("/error")
         }
-    }, [error])
+    }, [response, error])
+
 
     useEffect(() => {
         if (!fields.length) {

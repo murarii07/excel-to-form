@@ -1,9 +1,7 @@
 import Button from "../Atoms/Button";
-// import  HomeIcon from '../svgs/home.svg?react'
-// import TasksIcon from '../svgs/tasks.svg?react'
-// import  AccountIcon from '../svgs/myAccount.svg?react'
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState,useEffect } from "react";
+import useFetchData from "../CustomHooks/useFetchData";
 function SideBar({ handle }) {
     const navigate = useNavigate();
     const [ar] = useState([
@@ -11,20 +9,25 @@ function SideBar({ handle }) {
         { name: "Mytasks", link: "tasks", svg: ("task") },
         { name: "Home", link: "", svg: ("Home") }
     ])
+    const [res, er, setLogoutOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/login`)
     const nav = useNavigate();
-    const logout = async () => {
-        const res = await fetch(`${import.meta.env.VITE_SERVER_API_URL}/login`, {
+    const logout = () => {
+        setLogoutOptions({
             method: "DELETE",
             credentials: "include" // Sends cookies with the request
-        });
-        if (!res.ok) {
-            alert("something went wrong try again")
-            return;
-        }
-        console.log("sd")
-        window.localStorage.removeItem("isLogged")
-        nav("/");
+        })
     }
+    useEffect(() => {
+        if (res && !er) {
+            window.localStorage.removeItem("isLogged")
+            nav("/")
+        }
+        else if (er) {
+            alert("something went wrong try again")
+            console.log("something went wrong")
+        }
+    }, [res, er])
+
     return (
         <div className="sidebar p-2 animate-in slide-in-from-left-96 duration-500  overflow-hidden h-[600px] md:h-screen absolute top-1 bg-purple-500 z-10 border-purple-500 hover:w-60 shadow-lg rounded-r-2xl " style={{ width: "240px" }}>
             <div className="flex items-center justify-between px-4 py-2 w-full text-primary-50 border-b border-purple-600 h-[10%]">

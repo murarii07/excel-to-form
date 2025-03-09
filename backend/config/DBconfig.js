@@ -8,7 +8,7 @@ import mongoose from "mongoose"
 
 //auth db
 export const UserDB = mongoose.createConnection(EnvironmentVariables.userDBUrl)
-export const modelObj = {}
+// export const modelObj = {}
 UserDB.on("connected", () => {
     console.log("user DB connected ")
 })

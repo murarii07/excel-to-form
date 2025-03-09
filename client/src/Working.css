@@ -34,23 +34,7 @@ code {
   height: auto;
   background-color: rgb(252, 240, 223);
 }
-/* 
- form{
-  width: 95%;
-  border:2px solid  rgb(252, 248, 242);;
-  height:120px;
-  margin-bottom: 15px;
-  border-radius: 10px;
-  display:  flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  padding: 0px 10px;
-  background-color: aliceblue;
-}  */
-input{
-  /* border: none;
-  border-bottom: 2px solid black; */
-}
+
 .edit-box input,.form1 input{
   width: 90%;
   height: 30%;
@@ -58,10 +42,7 @@ input{
   border-bottom: 2px solid black;
   padding-bottom: 0px;
 }
-/* input:focus{
-  /* border: none; */
-  /* border-bottom: 2px solid rgb(202, 24, 24); */
-/* } */
+
 button{
   min-height: 35px;
   /* font-family: 'Courier New', Courier, monospace; */
@@ -205,7 +186,3 @@ label{
   width: 100%;
   justify-content: space-around;
 }
-/* .formDiv{
-border:2px solid black;
-min-height: 100vh;
-} */

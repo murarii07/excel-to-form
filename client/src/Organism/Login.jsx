@@ -5,14 +5,12 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { changeIsLoginValue } from "../redux/flag";
 import useDebounce from "../CustomHooks/debounce";
-import useFetchData from "../CustomHooks/fetchData";
-import Nav from "../Molecules/Navbar";
+import useFetchData from "../CustomHooks/useFetchData";
 
 const Login = () => {
-    const [er, setEr] = useState(false)
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const { response, error, setOptions } = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/login`);
+    const [response, error, setOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/login`);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -42,25 +40,23 @@ const Login = () => {
         }
     }
 
-    //response render
     useEffect(() => {
         if (response && !error) {
-            console.log(response)
+            console.log(response);
             dispatch(changeIsLoginValue(true));
-            window.localStorage.setItem("isLogged", true)
-            navigate("/")
+            window.localStorage.setItem("isLogged", true);
+            navigate("/");
+        } else if (error) {
+            console.error("Login failed:", error);
+            alert("Login failed. Please try again later.");
         }
-    }, [response])
+    }, [response, error]);
+
 
     //error render
-    useEffect(() => {
-        if (error) {
-            console.log("try again later")
-        }
-    }, [error])
+
 
     if (window.localStorage.getItem("isLogged")) {
-
         return (
             <div>you have already logged in return to<br></br> <a className="hover:text-blue-600 hover:text-underline" href="/">Home</a> </div>
 
@@ -74,7 +70,7 @@ const Login = () => {
                     <div className="w-[47%] "><div className="text-4xl font-extrabold mb-4 ">Sign In to Create Form</div> <div>if you dont have account &nbsp;<a className="text-purple-900 cursor-pointer font-bold" href="/signup">Register here</a></div></div>
                     <div className="w-[60%] h-[60%] flex items-end justify-end drop-shadow-xl animate-in slide-in-from-top-full duration-700">
 
-                        <img src="assets/image copy 3.png" width={"90%"} height={"90%"} alt=""  />
+                        <img src="assets/image copy 3.png" width={"90%"} height={"90%"} alt="" />
                     </div>
 
                 </div>
@@ -97,13 +93,13 @@ const Login = () => {
                         name="login"
                         buttonName={" text-white  font-bold bg-purple-700   text-center p-0.5  w-10/12"}
                         onClick={handle} />
-                        <div className="mt-5 mb-2">or Sign In With</div>
+                    <div className="mt-5 mb-2">or Sign In With</div>
                     <div className="text-sm hover:text-green-500 cursor-pointer flex w-11/12 justify-evenly gap-10  min-h-10">
                         <div className="box w-2/5  rounded-md shadow-md text-center bg-white flex items-center justify-center" onClick={(e) => {
-                        navigate("/signup")
-                    }}>
-                            <img src="assets/google.png" alt="" className="" width={"24px"} height={"20px"}/></div>
-                        
+                            navigate("/signup")
+                        }}>
+                            <img src="assets/google.png" alt="" className="" width={"24px"} height={"20px"} /></div>
+
                     </div>
                     {error && <div className="text-red-500 mx-auto">{error.message}</div>}
                 </div>

@@ -6,12 +6,12 @@ import { useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { saveAs } from "file-saver";
 import DownloadIcon from '../svgs/download.svg?react'
-import useFetchData from "../CustomHooks/fetchData";
+import useFetchData from "../CustomHooks/useFetchData";
 function Preview() {
     const navigate = useNavigate();
     const fields = useSelector((state) => state.Field.value);
     console.log(fields)
-    const { response, error, setOptions } = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/form/download`)
+    const [response, error, setOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/form/download`)
     const dispatch = useDispatch()
     const editHandle = (fieldId) => {
         dispatch(removeSpecificField(fieldId))
@@ -38,16 +38,12 @@ function Preview() {
                 });
 
         }
-    }, [response])
-
-    //error render
-    useEffect(() => {
-        if (error) {
+        else if (error) {
             alert("something went wrong")
             console.log(error)
             // navigate("/error")
         }
-    }, [error])
+    }, [response, error])
     //event delegation approach
     // const editHandleF = (e) => {
     //     let r=e.target.classList

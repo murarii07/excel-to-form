@@ -5,12 +5,12 @@ import jwt from 'jsonwebtoken'
 import { deletingBlob, getBlobSize } from "../../src/blobstorage.js";
 import { EnvironmentVariables } from "../../config/config.js";
 import { formInfo } from "../../models/FormInfoSchema.js";
+import { structure } from "../../models/AuthSchema.js";
+import { AuthDB } from "../../config/DBconfig.js";
 // import mongoose, { model } from "mongoose";
 export const liveFormRouter = express.Router();
 // const USERDB = EnvironmentVariables.userDB
-import { AuthDB, UserDB } from "../../config/DBconfig.js";
-import { structure } from "../../models/AuthSchema.js";
-
+import { UserDB } from "../../config/DBconfig.js";
 //url generator
 const urlGenerator = (userName, id) => {
     let obj = JSON.stringify({ user: userName, id: id });
@@ -95,19 +95,7 @@ const uploadForm = async (req, res) => {
         const user = extractDataFromToken(req.cookies?.jwt)
         const url = urlGenerator(user, req.body.formId);
         //mongo operation
-        // const result = await DatabaseInstance.InsertData(user, req.body.formId, { _id: url, fields: req.body.fieldDetails, title: req.body.title, description: req.body.description })
-        // const result = await DatabaseInstance.InsertData(USERDB, user, {
-        //     _id: url,
-        //     name: req.body.formId,
-        //     fields: req.body.fieldDetails,
-        //     title: req.body.title,
-        //     description: req.body.description,
-        //     timeStamp: new Date().toDateString(),
-        //     response: 0
-        // })
-
         //creating collection name same as the user
-
         const col = UserDB.model(user, formInfo)
         const result2 = await col.create({
             _id: url,
@@ -118,8 +106,7 @@ const uploadForm = async (req, res) => {
             timeStamp: new Date().toDateString(),
             response: 0
         })
-
-        console.log(result2)
+        console.log("FILE SAVED...", result2)
         //after mongo operation
         res.status(200).json({
             data: { url: url },
@@ -140,22 +127,21 @@ const getSpecificFormDetails = async (req, res) => {
         const user = extractDataFromToken(req.cookies?.jwt);
 
         //method1
-        // const user="murli"
-        // let filterQuery = { name: req.params.formId }
-        // let isCollectionExist = await DatabaseInstance.collectionList(user, filterQuery)
-        // if (!isCollectionExist.length) {
-        //     return res.status(500).json({
-        //         success: false,
-        //         message: "try again later"
-        //     })
-        // }
-        // let result = await DatabaseInstance.retriveData(user, req.params.formId, {}, { projection: { _id: 1, title: 1, description: 1 } })
+        //         {
+        //   // const user="murli"
+        //         // let filterQuery = { name: req.params.formId }
+        //         // let isCollectionExist = await DatabaseInstance.collectionList(user, filterQuery)
+        //         // if (!isCollectionExist.length) {
+        //         //     return res.status(500).json({
+        //         //         success: false,
+        //         //         message: "try again later"
+        //         //     })
+        //         // }
+        //         // let result = await DatabaseInstance.retriveData(user, req.params.formId, {}, { projection: { _id: 1, title: 1, description: 1 } })
+
+        //         }
         //method2
-        console.log("FORMID", req.params.formId)
-        // let result = await DatabaseInstance.retriveData(USERDB, user,
-        //     { name: req.params.formId },
-        //     { projection: { _id: 1, title: 1, description: 1, timeStamp: 1, response: 1, name: 1 } }
-        // )
+        console.log("USER FORMID", req.params.formId)
         let rDBModel = UserDB.model(user, formInfo, user)
         let result2 = await rDBModel.findOne(
             { name: req.params.formId }, { _id: 1, title: 1, description: 1, timeStamp: 1, response: 1, name: 1 }
@@ -172,7 +158,7 @@ const getSpecificFormDetails = async (req, res) => {
 
     }
     catch (e) {
-        res.status(404).json({
+        res.status(500).json({
             success: false,
             message: e.message
         })
@@ -222,41 +208,45 @@ const removeSpecificForm = async (req, res) => {
     }
 
 }
-// const getUserDetails = async (req, res) => {
-//     try {
-//         const user = extractDataFromToken(req.cookies?.jwt)
-//         let result = AuthDB.model("authstructures",structure)
-//         let userDetails = await result.findOne({ name: user }, { _id: 0, email: 1 })
-//         //getting user  used storage size 
-//         let result2 = UserDB.model(user, formInfo, user)
-//         let collectionList = await result2.find({}, { name: 1, _id: 0 })
-//         console.log("Result:", userDetails)
-//         let storageSize = 0
-//         try {
-//             storageSize = await getBlobSize(user)
-//         } catch (e) {
-//             console.log("Storage size error", e.message)
-//         }
-//         collectionList=collectionList.map(x=>x.name)
-//         console.log("storageSize:", storageSize,userDetails)
-//         res.status(200).json({
-//             data: {
-//                 name: user,l,
-//                 formlist: collectionList,
-//                 storageInBytes: storageSize,
-//             },
-//             success: true,
-//             message: "successfull...."
-//         })
-//     }
-//     catch (e) {
-//         res.status(404).json({
-//             data: null,
-//             success: false,
-//             message: e.message
-//         })
-//     }
-// }
+const getUserDetails = async (req, res) => {
+    try {
+        const user = extractDataFromToken(req.cookies?.jwt)
+        let result = AuthDB.model("authstructures", structure)
+        let userDetails = await result.findOne({ username: user }, { _id: 0, email: 1 })
+        //getting user  used storage size 
+        let result2 = UserDB.model(user, formInfo, user)
+        let collectionList = await result2.find({}, { username: 1, _id: 0 })
+        if(collectionList.length>0){
+            collectionList = collectionList.map(x => x.name)
+        }
+        console.log("Result:", userDetails,collectionList)
+        let storageSize = 0
+        try {
+            storageSize = await getBlobSize(user)
+        } catch (e) {
+            console.log("Storage size error", e.message)
+        }
+        
+        console.log("storageSize:", storageSize, userDetails)
+        res.status(200).json({
+            data: {
+                email: userDetails.email,
+                name: user,
+                formlist: collectionList,
+                storageInBytes: storageSize,
+            },
+            success: true,
+            message: "successfull...."
+        })
+    }
+    catch (e) {
+        res.status(404).json({
+            data: null,
+            success: false,
+            message: e.message
+        })
+    }
+}
 liveFormRouter.use(cookieCheckingMiddleware)
 //form upload of user
 liveFormRouter.post("/upload", uploadForm)

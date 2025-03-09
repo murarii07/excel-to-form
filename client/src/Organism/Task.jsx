@@ -3,14 +3,14 @@ import Nav from "../Molecules/Navbar";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useDebounce from "../CustomHooks/debounce";
-import useFetchData from "../CustomHooks/fetchData";
+import useFetchData from "../CustomHooks/useFetchData";
 import SkeletonLoading from "../Atoms/SkeletionLoading";
 import InputField from "../Atoms/inputField";
 const MyTask = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [formList, setFormList] = useState([]);
     const navigate = useNavigate();
-    const { response, error } = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/formlist`, {
+    const [response, error] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/formlist`, {
         method: "GET",
         credentials: "include" // Sends cookies with the request
     })
@@ -37,17 +37,14 @@ const MyTask = () => {
             console.log(response);
             setIsLoading(false)
         }
-    }, [response])
-
-    //error render
-    useEffect(() => {
-        if (error) {
+        else if (error) {
             setIsLoading(false)
             console.log("Error fetching form list:", error);
             window.localStorage.removeItem("isLogged")
             navigate("/login")
         }
-    }, [error])
+    }, [response, error])
+
 
 
     return (

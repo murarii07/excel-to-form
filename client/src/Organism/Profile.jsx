@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useState } from "react";
 import Button from '../Atoms/Button'
 import { useNavigate } from "react-router-dom";
 import Nav from "../Molecules/Navbar";
-import useFetchData from "../CustomHooks/fetchData";
+import useFetchData from "../CustomHooks/useFetchData";
 import SkeletonLoading from "../Atoms/SkeletionLoading";
 // import Label from '../Atoms/Label.jsx';
 // import InputField from '../Atoms/inputField.jsx';
@@ -12,11 +12,12 @@ const Profile = () => {
     const nav = useNavigate()
     const [isLoading, setIsLoading] = useState(true)
     // const [dropdown, SetDropDown] = useState(false);
-    const [details, setDetails] = useState({ name: "df", storage: 0, forms: [],email:"" })
-    const { response, error } = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/details`, {
+    const [details, setDetails] = useState({ name: "df", storage: 0, forms: [], email: "" })
+    const [response, error] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/details`, {
         method: "GET",
         credentials: "include" // Sends cookies with the request
     })
+    const [res, er, setLogoutOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/login`)
     function UnitConverstion(sbyte) {
         //if 1024 then it counts in KB other wise in mb
         let pow = sbyte >= 1024 * 1024 ? 2 : 1
@@ -31,37 +32,35 @@ const Profile = () => {
                 forms: response.data.formlist,
                 name: response.data.name,
                 storage: response.data.storageInBytes,
-                email:response.data.email
+                email: response.data.email
             })
             console.log(response.data)
             console.log(response);
             setIsLoading(false)
         }
-    }, [response])
-
-    //error render
-    useEffect(() => {
-        if (error) {
+        else if (error) {
             console.log(error)
             window.localStorage.removeItem("isLogged")
             nav("/login")
         }
-    }, [error])
-
+    }, [response, error])
     const logout = async () => {
-        const res = await fetch(`${import.meta.env.VITE_SERVER_API_URL}/login`, {
+        setLogoutOptions({
             method: "DELETE",
             credentials: "include" // Sends cookies with the request
-        });
-        if (!res.ok) {
-            alert("something went wrong try again")
-            return
-        }
+        })
         // console.log("sd")
-        window.localStorage.removeItem("isLogged")
-        nav("/")
     }
 
+    useEffect(() => {
+        if (res && !er) {
+            window.localStorage.removeItem("isLogged")
+            nav("/")
+        }
+        else if (er) {
+            console.log("something went wrong")
+        }
+    }, [res, er])
 
     return (
         isLoading ? <SkeletonLoading />
@@ -178,7 +177,7 @@ const Profile = () => {
                                         Email:
                                     </p>
                                     <div className="bg-neutral-200 px-3 py-2 rounded-md shadow-md text-neutral-900 flex-grow">
-                                       {details.email}
+                                        {details.email}
                                     </div>
                                 </div>
                                 <div className="flex flex-col md:flex-row gap-2 md:gap-4 w-full">

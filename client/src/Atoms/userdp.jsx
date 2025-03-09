@@ -1,22 +1,29 @@
 import { useNavigate } from "react-router-dom";
 import Button from "./Button"
-
+import useFetchData from "../CustomHooks/useFetchData";
+import { useEffect } from "react";
 const UserDp = () => {
     const nav = useNavigate();
-    const logout = async () => {
-        const res = await fetch(`${import.meta.env.VITE_SERVER_API_URL}/login`, {
+    const [res, er, setLogoutOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/login`)
+    const logout = () => {
+        setLogoutOptions({
             method: "DELETE",
             credentials: "include" // Sends cookies with the request
-        });
-        if (!res.ok) {
-            alert("something went wrong try again")
-            return
-        }
-        console.log("sd")
-        window.localStorage.removeItem("isLogged")
-        nav("/")
-
+        })
     }
+    useEffect(() => {
+        if (res && !er) {
+            window.localStorage.removeItem("isLogged")
+            nav("/")
+        }
+    }, [res])
+    //error render
+    useEffect(() => {
+        if (er) {
+            alert("something went wrong try again")
+            console.log("something went wrong")
+        }
+    }, [er])
 
     return (
         <div className="border-2 border-neutral-200 rounded-xl w-60 flex flex-col justify-center      box-border min-h-32  shadow-md absolute top-10 right-2 bg-purple-50 shadow-purple-100 px-3 ">

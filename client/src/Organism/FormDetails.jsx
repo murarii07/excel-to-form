@@ -3,7 +3,7 @@ import Button from "../Atoms/Button";
 import { useNavigate } from "react-router-dom";
 import Nav from "../Molecules/Navbar";
 // import CopyIcon from '../svgs/copy.svg?react';
-import useFetchData from "../CustomHooks/fetchData";
+import useFetchData from "../CustomHooks/useFetchData";
 import SkeletonLoading from "../Atoms/SkeletionLoading";
 const FImg = lazy(() => import("../Atoms/img"))
 const FormDetails = () => {
@@ -11,13 +11,13 @@ const FormDetails = () => {
     const [flag, setFlag] = useState(true)
     const navigate = useNavigate()
     const [formName] = useState(window.location.pathname.split("/").pop());
-    const { response, error } = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/formDetails/${formName}`, {
+    const [response, error] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/formDetails/${formName}`, {
         method: "GET",
         credentials: "include" // Sends cookies with the request
     })
     const [form, setForm] = useState({ name: "temp", link: "adsd", description: "this is form detials ", response: 0, timeStamp: "21th November 2024" })
     // response:res will help to deconstruct and change response to res
-    const { response: res, error: er, setOptions } = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/delete/${form.name}`)
+    const [res, er, setOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/delete/${form.name}`)
     //response render
 
 
@@ -27,26 +27,23 @@ const FormDetails = () => {
             setForm(response.data)
             console.log(response.data);
         }
-
-    }, [response])
-
-    //error render
-    useEffect(() => {
-        if (error) {
+        else if (error) {
             navigate("/error")
         }
-        if (er) {
-            console.log(er.message)
-            alert("deletion failed")
-        }
-    }, [error, er])
+
+    }, [response, error])
+
     useEffect(() => {
         if (res && !er) {
             console.log(res)
             alert("successfully deleted")
             navigate("/tasks")
         }
-    }, [res])
+        else if (er) {
+            console.log(er.message)
+            alert("deletion failed")
+        }
+    }, [res,er])
 
     const deleteHandle = async () => {
         const s = confirm("are you sure")

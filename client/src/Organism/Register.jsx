@@ -1,17 +1,16 @@
 import { useState, useEffect, Suspense } from "react";
 import Button from "../Atoms/Button";
-import useFetchData from "../CustomHooks/fetchData";
 import { useNavigate } from "react-router-dom";
 import useDebounce from "../CustomHooks/debounce";
 import Label from '../Atoms/Label';
 import InputField from "../Atoms/inputField";
-
+import useFetchData from "../CustomHooks/useFetchData";
 const Register = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState({ psw: "", error: false });
     const [email, setEmail] = useState("");
-    const { response, error, setOptions } = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/Register`);
+    const [response, error, setOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/Register`);
     const changeUsername = useDebounce((e) => {
         if (e.target.value) {
             console.log(e.target.value)
@@ -19,7 +18,6 @@ const Register = () => {
         }
     }, 500)
     const changePsw = useDebounce((e) => {
-        // console.log(1312)
         if (e.target.value) {
             console.log(e.target.value)
             if (!(/^.{8,}$/.test(e.target.value))) {
@@ -53,7 +51,6 @@ const Register = () => {
     const handle = async () => {
         console.log(1)
         if (username && password && email) {
-
             const form = {
                 "username": username,
                 "password": password.psw,
@@ -70,18 +67,11 @@ const Register = () => {
         if (response && !error) {
             navigate("/login")
         }
-    }, [response])
-
-    //error render
-    useEffect(() => {
-        if (error) {
-            console.log("try again later")
+        else if (error) {
+            console.log(error)
         }
-    }, [error])
+    }, [response, error])
 
-    useEffect(() => {
-
-    })
 
     return (
         <>
@@ -120,7 +110,7 @@ const Register = () => {
                         onChange={changePsw}
                     // element={<div className="text-red-500 text-sm">{password.error}</div>}
                     />
-                    <Label htmlFor={"confirmPsw"} labelName="Confirm Password" />
+                    <Label htmlFor={"confirmPsw"} labelname="Confirm Password" />
                     <InputField
                         type="password"
                         name="confirmPsw"

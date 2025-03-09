@@ -3,8 +3,10 @@ import express from "express";
 export const Register = express.Router();
 import { hashSync } from "bcrypt";
 import { AuthDB } from "../../config/DBconfig.js";
+import { structure } from "../../models/AuthSchema.js";
 const registerUser = async (req, res) => {
     try {
+        console.log(req.body)
         //this tecnique use for checking object is empty or null
         if (!req.body || !(Object.keys(req.body).length)) {
             return res.status(400).json({
@@ -12,27 +14,29 @@ const registerUser = async (req, res) => {
                 message: "bad request"
             })
         }
-        // const isUsernameExist = await AuthStructure.findOne({ username: req.body.username })
+    //   {
+    //       // const isUsernameExist = await AuthStructure.findOne({ username: req.body.username })
 
-        // const isEmailExist = await AuthStructure.findOne({ email: req.body.email })
+    //     // const isEmailExist = await AuthStructure.findOne({ email: req.body.email })
 
-        // console.log("dfdsf",isEmailExist,isUsernameExist,isUsernameExist && isEmailExist)
-        // if (isUsernameExist || isEmailExist) {
-        //     return res.status(400).json({
-        //         success: false,
-        //         message: "invalid fields value...."
-        //     })
-        // }
+    //     // console.log("dfdsf",isEmailExist,isUsernameExist,isUsernameExist && isEmailExist)
+    //     // if (isUsernameExist || isEmailExist) {
+    //     //     return res.status(400).json({
+    //     //         success: false,
+    //     //         message: "invalid fields value...."
+    //     //     })
+    //     // }
 
-        //optimize query
-        // or condition
-        // const isEmailOrUserNameExist = await AuthStructure.findOne({
-        //     "$or":
-        //         [
-        //             { email: req.body.email },
-        //             { username: req.body.username }
-        //         ]
-        // })
+    //     //optimize query
+    //     // or condition
+    //     // const isEmailOrUserNameExist = await AuthStructure.findOne({
+    //     //     "$or":
+    //     //         [
+    //     //             { email: req.body.email },
+    //     //             { username: req.body.username }
+    //     //         ]
+    //     // })
+    //   }
         const AuthStructure = AuthDB.model("AuthStructure", structure)
         const isEmailOrUserNameExist = await AuthStructure.findOne({
             "$or":
