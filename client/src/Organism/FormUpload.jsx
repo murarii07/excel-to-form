@@ -8,44 +8,34 @@ import InputField from "../Atoms/inputField";
 import useDebounce from "../CustomHooks/debounce";
 import useFetchData from "../CustomHooks/useFetchData";
 import DialogBox from "../Atoms/DialogBox";
+import ConfirmBox from "../Atoms/ConfimBox";
 
 const FormUpload = () => {
     const navigate = useNavigate()
     const fields = useSelector(state => state.Field.value)
     const [dialog, setDialog] = useState({ flag: false, message: "error....." })
     const [isEdit, setIsEdit] = useState({ isEditTitle: false, isEditDes: false });
+    const [isInput, setInput] = useState({ flag: false, message: "error....." })
+    const [response, error, setOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/upload`)
+    const [formName, setFormName] = useState("")
     const [formDetails, setFormDetails] = useState({
         title: "form title",
         description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil officia praesentium adipisci! Neque, facere nisi quaerat cupiditate"
     });
-    const [response, error, setOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/upload`)
 
     //form uploading to the server
-    const formUpload = () => {
+    const formNameOperation = () => {
         if (!window.localStorage.getItem("isLogged")) {
             alert("to upload  first login")
             navigate("/login")
             return
         }
         setIsEdit(false)
-        const formId = prompt("enter unique formName")
-        if (!formId) {
-            setDialog({ flag: true, message: "please enter a formName" })
-            return
-        }
-        console.log("User Fields", fields, { fieldDetails: fields, formId: formId, ...formDetails })
-        const options = {
-            method: 'POST',
-            credentials: 'include',
-            headers: { 'Content-Type': "application/json" },
-            body: JSON.stringify({ fieldDetails: fields, formId: formId, ...formDetails })
-        }
-        setOptions(options)
+        setInput({ flag: true, message: "please enter a formName" })
     }
     const formDetailsUpdation = (obj) => {
         setFormDetails({ ...formDetails, ...obj })
     }
-
     //useDebounce hook
     const handleTitle = useDebounce((e) => {
         console.log(e.target.value)
@@ -57,30 +47,46 @@ const FormUpload = () => {
 
     }, 200)
 
-
+    const FormUpload = () => {
+        console.log("User Fields", fields, { fieldDetails: fields, formId: formName, ...formDetails })
+        const options = {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': "application/json" },
+            body: JSON.stringify({ fieldDetails: fields, formId: formName, ...formDetails })
+        }
+        setOptions(options)
+    }
     //response render
     useEffect(() => {
         if (response && !error) {
             console.log(response.data.url)
             // navigate(`/public/${response.data.url}`)
             console.log("Response", response);
+            setDialog({ flag: true, message: response.message })
         }
         else if (error) {
             alert("something went wrong")
             console.log(error)
             navigate("/error")
         }
+
     }, [response, error])
 
 
     useEffect(() => {
         if (!fields.length) {
             setDialog({ flag: true, message: "first upload a file " })
-
         }
         console.log(fields)
     }, [fields])
 
+    useEffect(() => {
+        if (formName) {
+            FormUpload()
+        }
+
+    }, [formName])
     useEffect(() => {
         const handleClickOutsidee = (e) => {
             if (e.target.classList.contains("changeAbleLabelName")) {
@@ -109,7 +115,7 @@ const FormUpload = () => {
             <>
                 {/* <Nav flag={true} />? */}
                 <div className="upload-button  w-full  mt-5 flex justify-center mb-5 ">
-                    <Button name={"upload"} buttonName={`p-1   flex justify-center bg-purple-600 border-purple-600 text-white font-bold s`} onClick={formUpload} />
+                    <Button name={"upload"} buttonName={`p-1   flex justify-center bg-purple-600 border-purple-600 text-white font-bold s`} onClick={formNameOperation} />
                 </div>
                 <div className="MainForm min-h-screen bg-gradient-to-b from-purple-100 to-purple-200 shadow-lg rounded-lg p-8 md:p-10
              mx-auto pl-2 pr-2 w-11/12 box-border flex flex-col">
@@ -140,6 +146,7 @@ const FormUpload = () => {
                 </div>
                 {/* <footer>footer</footer> */}
                 <DialogBox isOpen={dialog.flag} message={dialog.message} setDialog={setDialog} />
+                <ConfirmBox isOpen={isInput.flag} message={isInput.message} setDialog={setInput} setFormName={setFormName} />
             </>
     );
 }

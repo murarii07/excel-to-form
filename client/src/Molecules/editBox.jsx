@@ -8,7 +8,7 @@ import { changeSpecificFieldValue } from "../redux/formElement";
 import useDebounce from "../CustomHooks/debounce";
 function EditBox(props) {
     const { field } = props
-    const fields = useSelector(state => state.Field.value)
+    // const fields = useSelector(state => state.Field.value)
     const [f, setF] = useState(field)
     const [input, setInput] = useState(true)
     const dispatch = useDispatch();
@@ -18,22 +18,14 @@ function EditBox(props) {
         "text", "password", "email", "url", "number", "checkbox",
         "radio", "file", "date"
     ]
-    function changeFFlag(obj) {
+    const changeFFlag = (obj) => {
         setF((prevField) => ({
             ...prevField,
             ...obj // Update the type with the 
         }));
     }
-    function updateFieldList(obj, q2) {
-        // const updatelist = fields.map((x) => {
-        //     if (x.Id === q2) {
-        //         return { ...x, ...obj }
-        //     }
-        //     return x;
-        // })
-        // dispatch(changeFieldValue(updatelist))
-        dispatch(changeSpecificFieldValue([q2,obj]))
-    
+    const updateFieldList = (obj, q2) => {
+        dispatch(changeSpecificFieldValue([q2, obj]))
     }
     const handle = (e) => {
         console.log(e.target.id)
@@ -50,39 +42,22 @@ function EditBox(props) {
         updateFieldList({ LabelName: e.target.value }, e.target.id)
     }, 1000)
 
-    // useEffect(() => {
-    //     if (["radio","checkbox"].includes(f.Type)) {
-    //         // console.log(["radio","checkbox"].includes(f.Type))
-    //         // const updatelist = fields.map((x) => {
-    //         //     if ((x.Type === "radio") || (x.Type === "checkbox")) {
-    //         //         return { ...x, Value: arr }
-    //         //     }
-    //         //     return x;
-    //         // })
-    //         // console.log(fields)
-    //         // dispatch(changeFieldValue(updatelist))
-            
-    //     }
-    // }, [f])
-
-    useEffect(() => {
-        const handleClickOutsidee = (e) => {
-            if (e.target.classList.contains("changeAbleLabelName")) {
-                // console.log(e.target.classList.contains("changeAbleLabelName"))
-                if (e.key === "Enter") {
-                    setInput(true)
-                    setInputLabel(true)
-                }
+    const handleClickOutsidee = (e) => {
+        if (e.target.classList.contains("changeAbleLabelName")) {
+            // console.log(e.target.classList.contains("changeAbleLabelName"))
+            if (e.key === "Enter") {
+                setInput(true)
+                setInputLabel(true)
             }
-
-        };
-
+        }
+    };
+    useEffect(() => {
         document.querySelector("body").addEventListener("keypress", handleClickOutsidee);
-
         return () => {
             document.querySelector("body").removeEventListener("key", handleClickOutsidee);
         };
     }, [input]);
+
     const handleChangeOption = useDebounce((e) => {
         const d = e.target.getAttribute("data-field-id")
         if (d) {
@@ -104,9 +79,9 @@ function EditBox(props) {
     }, 500)
     useEffect(() => {
         changeFFlag({ Value: arr });
-        updateFieldList({Value:arr},f.Id)
+        updateFieldList({ Value: arr }, f.Id)
     }, [arr])
-  
+
     return (
         <>
             <div className="edit-box flex gap-2">
@@ -125,12 +100,12 @@ function EditBox(props) {
                         }
                         {arr.map((x, index) => (
                             <div className="w-11/12 flex bottom-2 items-center justify-around " key={index}>
-                                 <Button
-                                 name="X"  
-                                 className="bg-red-500 text-white border-none w-1/6  "
-                                  onClick={()=>{
-                                    setArr(arr.filter(y=>y.value!==x.value))
-                                 }} />
+                                <Button
+                                    name="X"
+                                    className="bg-red-500 text-white border-none w-1/6  "
+                                    onClick={() => {
+                                        setArr(arr.filter(y => y.value !== x.value))
+                                    }} />
                                 <InputField
                                     data-field-id={f.Id}
                                     type={f.Type}
@@ -154,7 +129,7 @@ function EditBox(props) {
                                     onDoubleClick={() => {
                                         setInputLabel(false)
                                     }} />}
-                                   
+
                             </div>
                         ))}
                         <Button name="+" className="bg-green-500 text-white border-none w-1/6" onClick={
@@ -162,31 +137,31 @@ function EditBox(props) {
                                 console.log("As", f)
                                 let r = arr.length + 1;
                                 setArr([...arr, { optionLabel: `options${r}`, value: `options${r}` }]);
-                                console.log("sdsd",arr)
+                                console.log("sdsd", arr)
                                 e.stopPropagation()
                             }}
                         />
                     </>
 
-                    : 
-                        <>
-                            {input ? <Label labelname={f.LabelName} htmlFor={f.Name} onDoubleClick={handleInput} />
-                                : <InputField name={f.Name}
-                                    id={f.Id}
-                                    type={"text"}
-                                    onChange={handleChange}
-                                    placeholder={f.LabelName}
-                                    className="changeAbleLabelName outline-none"
+                    :
+                    <>
+                        {input ? <Label labelname={f.LabelName} htmlFor={f.Name} onDoubleClick={handleInput} />
+                            : <InputField name={f.Name}
+                                id={f.Id}
+                                type={"text"}
+                                onChange={handleChange}
+                                placeholder={f.LabelName}
+                                className="changeAbleLabelName outline-none"
 
-                                />}
-                            <InputField name={f.Name}
-                                key={props.index}
-                                type={f.Type}
+                            />}
+                        <InputField name={f.Name}
+                            key={props.index}
+                            type={f.Type}
 
-                            />
-                        </>
+                        />
+                    </>
 
-                    
+
                 }
 
 
@@ -209,15 +184,15 @@ function EditBox(props) {
 
 
                     {/* using default checked as f.required  so if server give required is true then it indicate in togglr */}
-                    <Label 
-                    labelname={<>
-                        <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Required</span>
-                        <InputField  type="checkbox" value="required" defaultChecked={f.required || false} onClick={requireHandle} className="sr-only peer pl-10" />
-                        <div className="relative w-7 h-2   rounded-full peer dark:bg-purple-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[-5px] after:start-[1px] after:bg-purple-900 after:border-purple-900 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-purple-900 peer-checked:bg-purple-900"></div> 
-                        </>} 
-                    className=" inline-flex gap-3 items-center cursor-pointer justify-end"/>
-                  
-                       
+                    <Label
+                        labelname={<>
+                            <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Required</span>
+                            <InputField type="checkbox" value="required" defaultChecked={f.required || false} onClick={requireHandle} className="sr-only peer pl-10" />
+                            <div className="relative w-7 h-2   rounded-full peer dark:bg-purple-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[-5px] after:start-[1px] after:bg-purple-900 after:border-purple-900 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-purple-900 peer-checked:bg-purple-900"></div>
+                        </>}
+                        className=" inline-flex gap-3 items-center cursor-pointer justify-end" />
+
+
 
 
 

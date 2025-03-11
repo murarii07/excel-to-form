@@ -19,9 +19,8 @@ const MyTask = () => {
         console.log(e.target.value)
         if (formList.length) {
             if (e.target.value != null) {
-                let arr = formList.filter(x => x.includes(e.target.value));
+                let arr = formList.filter(x => x.name.includes(e.target.value));
                 setFormListFilter(arr);
-                // fetchw()
             }
             else {
                 setFormListFilter(formList)
@@ -34,7 +33,7 @@ const MyTask = () => {
         if (response && !error) {
             setFormListFilter(response.data.formlist);
             setFormList(response.data.formlist);
-            console.log(response);
+            console.log(response.data);
             setIsLoading(false)
         }
         else if (error) {
@@ -138,10 +137,10 @@ const MyTask = () => {
                                     </details>
                                 </div>
                                 <p className="mt-4 font-semibold text-lg hover:text-purple-900" onClick={(e) => {
-                                    navigate(x)
-                                    e.stopPropagation();
-                                }}>{x}</p>
-                                <p className="text-sm text-neutral-500 mt-1">Created on: 2023-10-01</p>
+                                    navigate(x.name)
+                                    // e.stopPropagation();
+                                }}>{x.name}</p>
+                                <p className="text-sm text-neutral-500 mt-1">Created on:{x.timeStamp} </p>
                             </div>
                         ))}
 

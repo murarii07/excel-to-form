@@ -68,12 +68,13 @@ const formResponse = async (req, res) => {
         //         "$set": { recentResponseTime: new Date().toLocaleString() },
         //         "$inc": { response: 1 }
         //     })
-        let formModel = UserDB.model(user, formInfo, user)
+        let formModel = UserDB.model(user, formInfo)
         await formModel.updateOne({ name: id },
             {
                 "$set": { recentResponseTime: new Date().toLocaleString() },
                 "$inc": { response: 1 }
             })
+            console.log(user,id)
         await blobFunction(user, id, JSON.stringify([req.body]))
         // console.log("asasasasasasas")
         res.status(200).json({

@@ -36,7 +36,6 @@ function Preview() {
                 .then((blob) => {
                     saveAs(blob, "form.html");
                 });
-
         }
         else if (error) {
             alert("something went wrong")

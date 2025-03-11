@@ -3,9 +3,11 @@ import { EnvironmentVariables } from "../config/config.js";
 
 const connectionString = EnvironmentVariables.blobStorageConnectionString;
 
+
+//the container name should be in lowecase only ,it does not allow uppercase
 const blobClient = BlobServiceClient.fromConnectionString(connectionString);
 export default async function storingOnCloud(containername, blobname, data) {
-  const containerName = containername;
+  const containerName = containername.toLowerCase();
   const blobName = `${blobname}.json`;
   let content = data;
 
@@ -20,7 +22,8 @@ export default async function storingOnCloud(containername, blobname, data) {
   if (r) {
     // console.log("ohhhh yes")
     const res = await blockBlobClient.download()
-    const downloaded = (await streamToBuffer(res.readableStreamBody)).toString();
+    const result = await streamToBuffer(res.readableStreamBody)
+    const downloaded = result.toString();
     // console.log("Downloaded blob content:", downloaded);
     const obj = JSON.parse(data);
     const s = JSON.parse(downloaded)
@@ -50,7 +53,7 @@ async function streamToBuffer(readableStream) {
 }
 
 export async function deletingBlob(containername, blobname) {
-  const containerName = containername;
+  const containerName = containername.toLowerCase();
   const blobName = `${blobname}.json`;
   const containerClient = blobClient.getContainerClient(containerName);
   const blockBlobClient = containerClient.getBlockBlobClient(blobName);
@@ -59,7 +62,7 @@ export async function deletingBlob(containername, blobname) {
 
 }
 export async function getBlobSize(containername) {
-  const containerName = containername;
+  const containerName = containername.toLowerCase();
   const containerClient = blobClient.getContainerClient(containerName);
   let size = 0
   for await (const blob of containerClient.listBlobsFlat()) {

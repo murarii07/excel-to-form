@@ -44,32 +44,18 @@ const getFormList = async (req, res) => {
     try {
         const user = extractDataFromToken(req.cookies?.jwt)
         console.log("Registered User", user)
-        // let collectList = await DatabaseInstance.collectionList(user)
-        // console.log(collectList)
-        // const db = client.db(user)
-        // const userDbDeatails = await db.stats() //give user db details by using db.stats which returns a promise 
-        // console.log(userDbDeatails.storageSize)
-
-        // let collectList = await DatabaseInstance.retriveDataAll(USERDB, user, {}, { name: 1, _id: 0 })
         //bydefault colname is set  by name of modelname if it not given
         let result = UserDB.model(user, formInfo, user)
-        let collectList = await result.find({}, { name: 1, _id: 0 })
+        let collectList = await result.find({}, { name: 1, _id: 0,timeStamp:1 }).sort({createdAt:-1}) //for descending
         //getting user  used storage size 
         console.log("Result:", collectList)
-        // let storageSize = 0
-        // try {
-        //     storageSize = await getBlobSize(user)
-        // } catch (e) {
-        //     console.log("Storage size error", e.message)
+        // if (collectList.length > 0) {
+        //     collectList = collectList.map(x => x.name)
         // }
-        // console.log("storageSize:", storageSize)
-        collectList = collectList.map(x => x.name)
         res.status(200).json({
             data: {
                 name: user,
                 formlist: collectList,
-                // storageInBytes: userDbDeatails.storageSize,
-                // storageInBytes: storageSize
             },
             success: true,
             message: "successfull...."
@@ -125,26 +111,11 @@ const uploadForm = async (req, res) => {
 const getSpecificFormDetails = async (req, res) => {
     try {
         const user = extractDataFromToken(req.cookies?.jwt);
-
-        //method1
-        //         {
-        //   // const user="murli"
-        //         // let filterQuery = { name: req.params.formId }
-        //         // let isCollectionExist = await DatabaseInstance.collectionList(user, filterQuery)
-        //         // if (!isCollectionExist.length) {
-        //         //     return res.status(500).json({
-        //         //         success: false,
-        //         //         message: "try again later"
-        //         //     })
-        //         // }
-        //         // let result = await DatabaseInstance.retriveData(user, req.params.formId, {}, { projection: { _id: 1, title: 1, description: 1 } })
-
-        //         }
         //method2
-        console.log("USER FORMID", req.params.formId)
+        console.log("USER FORMID", req.params.formName)
         let rDBModel = UserDB.model(user, formInfo, user)
         let result2 = await rDBModel.findOne(
-            { name: req.params.formId }, { _id: 1, title: 1, description: 1, timeStamp: 1, response: 1, name: 1 }
+            { name: req.params.formName }, { _id: 1, title: 1, description: 1, timeStamp: 1, response: 1, name: 1 }
         )
 
         //_doc field contain acutal info
@@ -167,37 +138,48 @@ const getSpecificFormDetails = async (req, res) => {
 const removeSpecificForm = async (req, res) => {
     try {
         const user = extractDataFromToken(req.cookies?.jwt)
-        // const collectionFilter = { name: req.params.formId };
-        // const result = await DatabaseInstance.removeCollection(user, req.params.formId, collectionFilter)
-        // const result = await DatabaseInstance.RemoveData(USERDB, user, { name: req.params.formId })
-        let rDBModela = UserDB.model(user, formInfo, user)
-        console.log(req.params.formId)
-        let result = await rDBModela.deleteOne({ name: req.params.formId }
-        )
-        console.log("Remove daata", result, req.params.formId)
-        if (!result.deletedCount) {
+        let rDBModela = UserDB.model(user, formInfo)
+        console.log(req.params.formName, rDBModela)
+        // Returns the deleted document.
+        // Deletes the document in a single operation
+        let result = await rDBModela.findOneAndDelete({ name: req.params.formName })
+        // let result = await rDBModela.deleteOne({ name: req.params.formName })
+        // if (!result.deletedCount) {
+        //     return res.status(500).json({
+        //         success: false,
+        //         message: "something went wrong try again later"
+        //     })
+        // }
+        console.log("Remove daata", result, req.params.formName)
+        if (!result) {
             return res.status(500).json({
                 success: false,
                 message: "something went wrong try again later"
             })
         }
-        //deleting data on cloud
-        deletingBlob(user, req.params.formId)
-            .then(() => {
-                console.log("successfull deleted")
-                res.status(200).json({
-                    success: true,
-                    message: "successfully deleted form"
+        //deleting data on cloud when responses is there
+        if (result.response) {
+            deletingBlob(user, req.params.formName)
+                .then(() => {
+                    console.log("successfull deleted")
+                    res.status(200).json({
+                        success: true,
+                        message: "successfully deleted form"
+                    })
                 })
-
-            })
-            .catch((err) => {
-                console.error(err)
-                res.status(500).json({
-                    success: false,
-                    message: "something went wrong try again later"
+                .catch((err) => {
+                    console.error(err)
+                    res.status(500).json({
+                        success: false,
+                        message: "something went wrong try again later"
+                    })
                 })
-            })
+        }
+        console.log("successfull deleted")
+        res.status(200).json({
+            success: true,
+            message: "successfully deleted form"
+        })
         console.log("Result:", result)
     }
     catch (e) {
@@ -215,18 +197,18 @@ const getUserDetails = async (req, res) => {
         let userDetails = await result.findOne({ username: user }, { _id: 0, email: 1 })
         //getting user  used storage size 
         let result2 = UserDB.model(user, formInfo, user)
-        let collectionList = await result2.find({}, { username: 1, _id: 0 })
-        if(collectionList.length>0){
+        let collectionList = await result2.find({}, { name: 1, _id: 0 })
+        if (collectionList.length > 0) {
             collectionList = collectionList.map(x => x.name)
         }
-        console.log("Result:", userDetails,collectionList)
+        console.log("Result:", userDetails, collectionList)
         let storageSize = 0
         try {
             storageSize = await getBlobSize(user)
         } catch (e) {
             console.log("Storage size error", e.message)
         }
-        
+
         console.log("storageSize:", storageSize, userDetails)
         res.status(200).json({
             data: {
@@ -253,9 +235,9 @@ liveFormRouter.post("/upload", uploadForm)
 //list
 liveFormRouter.get('/formlist', getFormList)
 //formDelete
-liveFormRouter.delete("/delete/:formId", removeSpecificForm)
+liveFormRouter.delete("/delete/:formName", removeSpecificForm)
 //formDetails
-liveFormRouter.get("/formDetails/:formId", getSpecificFormDetails)
+liveFormRouter.get("/formDetails/:formName", getSpecificFormDetails)
 
 liveFormRouter.get("/details", getUserDetails)
 
