@@ -3,6 +3,7 @@ import ExcelJS from 'exceljs';
 import multer from "multer";
 import fs from 'fs';
 import { Formlist } from "../../src/Module.js";
+import { excelToCSVConversion, responseGeneration } from "../../formGenerateAPi.js";
 export const router = express.Router();
 // // Multer memory storage configuration
 const storage = multer.memoryStorage();
@@ -10,22 +11,67 @@ const uploads = multer({ storage });
 
 
 const FormListObj = new Formlist()
-async function fieldCreation(path) {
-    try {
+// async function fieldCreation(path) {
+//     try {
 
-        const workbook = new ExcelJS.Workbook();
-        await workbook.xlsx.readFile(path)
-        const worksheet = workbook.getWorksheet(1); //
+//         const workbook = new ExcelJS.Workbook();
+//         await workbook.xlsx.readFile(path)
+//         const worksheet = workbook.getWorksheet(1); //
+//         // Access the first row
+//         const firstRow = worksheet.getRow(1);
+//         // Extract headers from the first row
+//         const headers = firstRow.values.slice(1);
+//         return headers;
+//     } catch (e) {
+//         throw new Error(e.message);
+
+//     }
+// }
+
+// const ExtractingHeaders = async (path) => {
+//     const headers = await fieldCreation(path)
+//     // Log or process headers
+//     console.log('Headers:', headers);
+//     const obj = headers.map(element => ({
+//         LabelName: element.replace(/\s/g, ""),
+//         Id: element.replace(/\-/g, '_').replace(/\s/g, ""),
+//         Name: element.replace(/\-/g, '_').replace(/\s/g, ""),
+//         Type: RegExp(/date/).test(element) ? "date" : "text"
+//     }))
+//     return (obj)
+// }
+// const ExtractingFields = async (path) => {
+//     const csvContent = await excelToCSVConversion(path);
+//     const respo = await responseGeneration(csvContent)
+//     return (respo)
+// }
+
+
+const extractingFields = async (path) => {
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.readFile(path)
+    const worksheet = workbook.getWorksheet(1); //
+    let obj
+    if (worksheet.actualRowCount == 1) { //it will count row which is not empty
         // Access the first row
         const firstRow = worksheet.getRow(1);
         // Extract headers from the first row
         const headers = firstRow.values.slice(1);
-        return headers;
-    } catch (e) {
-        throw new Error(e.message);
-
+        obj = headers.map(element => ({
+            LabelName: element.replace(/\s/g, ""),
+            Id: element.replace(/\-/g, '_').replace(/\s/g, ""),
+            Name: element.replace(/\-/g, '_').replace(/\s/g, ""),
+            Type: RegExp(/date/).test(element) ? "date" : "text"
+        }))
     }
+    else if (worksheet.actualRowCount > 1) {
+        // const csvContent = await excelToCSVConversion(path);
+        const csvContent = await excelToCSVConversion(worksheet);
+        obj = await responseGeneration(csvContent)
+    }
+    return (obj)
 }
+
 
 const generateFormFields = async (req, res) => {
     let formId = FormListObj.generateUniqueElement()
@@ -33,19 +79,18 @@ const generateFormFields = async (req, res) => {
         if (!fs.existsSync("./uploads")) {
             fs.mkdirSync("./uploads")
         }
-        console.log("ReqFile",req.file,"\n");
+        console.log("ReqFile", req.file, "\n");
         const path = `./uploads/${formId}.xlsx`
-        console.log("path:",path,"\n")
+        console.log("path:", path, "\n")
         fs.writeFileSync(path, req.file.buffer)
-        const headers = await fieldCreation(path)
-        // Log or process headers
-        console.log('Headers:', headers);
-        const obj = headers.map(element => ({
-            LabelName: element.replace(/\s/g, ""),
-            Id: element.replace(/\-/g, '_').replace(/\s/g, ""),
-            Name: element.replace(/\-/g, '_').replace(/\s/g, ""),
-            Type: RegExp(/date/).test(element) ? "date" : "text"
-        }))
+
+        // //when excel file contains only 1 row which is header
+        // const obj = await ExtractingHeaders(path)
+
+        // //when excel file contains more than 5 row or it contains data
+        // const obj2 = await ExtractingFields(path)
+        const obj = await extractingFields(path)
+
         FormListObj.add(formId) //create a id and push in this
         // console.log(FormListObj.formIdList)
         res
@@ -111,3 +156,17 @@ const downloadForm = (req, res) => {
 }
 router.post("/generate", uploads.single('excelFile'), generateFormFields)
 router.get("/download", downloadForm)
+router.post("/generatee", uploads.single('excelFile'), async (req, res) => {
+    let formId = FormListObj.generateUniqueElement()
+    const path = `./uploads/${formId}.xlsx`
+    console.log("path:", path, "\n")
+    fs.writeFileSync(path, req.file.buffer)
+    // await excelToCSVConversion(path, formId);
+    const csvContent = await excelToCSVConversion(path);
+
+    // const ee = fs.readFileSync(`./uploads/${formId}.csv`);
+    const respo = await responseGeneration(csvContent)
+    console.log(typeof (respo))
+    // res.json(JSON.parse(respo))
+    res.json(respo)
+})

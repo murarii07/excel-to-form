@@ -1,13 +1,12 @@
 
-
 ### **Prompt:**  
 - Analyze the provided CSV data thoroughly.  
 - Identify which columns should be **input fields** and which should be **select (dropdown) fields** based on data patterns and repetition.  
 - Ensure all form fields include the following attributes:  
-  - **labelName**: A user-friendly name for the field.  
-  - **placeholder**: A brief example or hint for input.  
-  - **id**: A unique identifier for the field.  
-  - **name**: The field name, typically matching the column name.  
+  - **LabelName**: A user-friendly name for the field.  
+  - **Placeholder**: A brief example or hint for input.  
+  - **Id**: A unique identifier for the field.  
+  - **Name**: The field name, typically matching the column name.  
 - If a field is a dropdown (select), provide an array of unique values under `"options"`.  
 - For required fields, apply appropriate **regex validation** (e.g., numbers for age, formatted text for names).  
 - Return a **JSON object** where each field is structured correctly for use in a form.  
@@ -17,32 +16,34 @@
 ```json
 [
   {
-    "labelName": "Full Name",
-    "placeholder": "Enter your full name",
-    "id": "full_name",
-    "name": "full_name",
-    "regex": "^[A-Za-z ]+$"
+    "LabelName": "Full Name",
+    "Placeholder": "Enter your full name",
+    "Id": "full_name",
+    "Name": "full_name",
+    "Type":"text"
+    "Regex": "^[A-Za-z ]+$"
+  }
+  {
+    "LabelName": "Gender",
+    "Id": "gender",
+    "Name": "gender",
+    "Type": "select",
+    "Options": ["MALE", "FEMALE"]
   },
   {
-    "labelName": "Gender",
-    "id": "gender",
-    "name": "gender",
-    "type": "select",
-    "options": ["MALE", "FEMALE"]
-  },
-  {
-    "labelName": "Age",
+    "LabelName": "Age",
     "placeholder": "Enter your age",
-    "id": "age",
-    "name": "age",
-    "regex": "^[0-9]{1,2}$"
-  },
+    "Id": "age",
+    "Name": "age",
+    "Type":"text"
+    "Regex": "^[0-9]{1,2}$"
+  }
   ...
 ]
 ```  
 
 ### **What NOT to Do:**  
-- Do **not** add extra fields that are not present in the CSV.  
+- Do **not** add extra fields that are not present in the CSV .  
 - Do **not** modify existing CSV data values.  
 - Do **not** create unnecessary regex for optional fields.  
 - Do **not** assume missing values; only infer field types based on existing data.  

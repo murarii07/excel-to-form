@@ -33,7 +33,7 @@ const getForm = async (req, res) => {
         // let result = await DatabaseInstance.retriveData(user, id, {}, { projection: { _id: 0, fields: 1, title: 1, description: 1 } })
         // let result = await DatabaseInstance.retriveData(USERDB, user, {}, { projection: { _id: 0, fields: 1, title: 1, description: 1 } })
         let formModel = UserDB.model(user, formInfo, user)
-        let result = await formModel.findOne({ name: id }, { _id:0,"fields": 1, "title": 1, "description": 1 })
+        let result = await formModel.findOne({ name: id }, { _id: 0, "fields": 1, "title": 1, "description": 1 })
         console.log("GET FORM", result._doc,)
         res.status(200).json({
             data: result,
@@ -74,7 +74,7 @@ const formResponse = async (req, res) => {
                 "$set": { recentResponseTime: new Date().toLocaleString() },
                 "$inc": { response: 1 }
             })
-            console.log(user,id)
+        console.log(user, id)
         await blobFunction(user, id, JSON.stringify([req.body]))
         // console.log("asasasasasasas")
         res.status(200).json({
@@ -95,7 +95,7 @@ const formResponse = async (req, res) => {
 
 formSubmissionRouter.route("/:encryptedUrl")
     .get(getForm)
-    .post(upload.none(), formResponse)
+    .post(upload.fields(), formResponse)
 
 
 // Use app.route() when you need to handle multiple HTTP methods for the same URL path.

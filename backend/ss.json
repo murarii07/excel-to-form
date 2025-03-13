@@ -1,0 +1,45 @@
+[
+  {
+    "LabelName": "Full name","Placeholder": "Enter your full name",
+    "Id":"full_name",
+    "Name": "full_name",
+    "Type": "text",
+    "Regex": "^[A-Za-z ]+$"
+  },
+  {
+    "LabelName": "Gender",
+    "Placeholder": "Select your gender","Id": "gender",
+    "Name": "gender",
+    "Type": "select",
+    "Options": ["MALE", "FEMALE"]
+  },
+  {
+    "LabelName": "Age",
+    "Placeholder": "Enter your age",
+    "Id": "age",
+    "Name": "age",
+    "Type": "number",
+    "Regex": "^[0-9]{1,2}$" 
+  },
+  {
+    "LabelName": "PNR No",
+    "Placeholder": "Enter your PNR number",
+    "Id": "pnr_no",
+    "Name": "pnr_no",
+    "Type": "text"},
+  {
+    "LabelName": "Coach No",
+    "Placeholder": "Enter your coach number",
+    "Id": "coach_no",
+    "Name": "coach_no",
+    "Type": "text"
+  },
+  {
+    "LabelName": "Seat No",
+    "Placeholder": "Enter your seat number",
+    "Id": "seat_no",
+    "Name": "seat_no",
+    "Type": "number",
+    "Regex": "^[0-9]+$"
+  }
+]
