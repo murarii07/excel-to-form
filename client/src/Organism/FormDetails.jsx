@@ -5,10 +5,16 @@ import Nav from "../Molecules/Navbar";
 // import CopyIcon from '../svgs/copy.svg?react';
 import useFetchData from "../CustomHooks/useFetchData";
 import SkeletonLoading from "../Atoms/SkeletionLoading";
+
+import ConfirmationBox from "../Atoms/ConfirmationBox";
+import DialogBox from "../Atoms/DialogBox";
 const FImg = lazy(() => import("../Atoms/img"))
 const FormDetails = () => {
+    const [confirm, setConfirm] = useState(false)
+    const [dialog, setDialog] = useState({ flag: false, message: "error....." })
+    // const [dialog1, setDialog1] = useState({ flag: false, message: "error....." })
     const [isLoading, setLoading] = useState(true)
-    const [flag, setFlag] = useState(true)
+    // const [flag, setFlag] = useState(true)
     const navigate = useNavigate()
     const [formName] = useState(window.location.pathname.split("/").pop());
     const [response, error] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/formDetails/${formName}`, {
@@ -36,28 +42,40 @@ const FormDetails = () => {
     useEffect(() => {
         if (res && !er) {
             console.log(res)
-            alert("successfully deleted")
+            alert("successfully delted")
             navigate("/tasks")
         }
         else if (er) {
             console.log(er.message)
             alert("deletion failed")
         }
-    }, [res,er])
+    }, [res, er])
 
     const deleteHandle = async () => {
-        const s = confirm("are you sure")
-        if (flag && s) {
-            console.log(flag)
+        setDialog({
+            flag: true,
+            message: "are your sure ,you want to delete??"
+        })
+        // if (flag && s) {
+        //     console.log(flag)
+        //     setOptions({
+        //         method: "DELETE",
+        //         credentials: "include" // Sends cookies with the request
+        //     })
+        //     setFlag(false)
+        // }
+
+    }
+    useEffect(() => {
+        if (confirm) {
+            // console.log(flag)
             setOptions({
                 method: "DELETE",
                 credentials: "include" // Sends cookies with the request
             })
-            setFlag(false)
+            // setFlag(false)
         }
-
-    }
-
+    }, [confirm])
     return (
         isLoading ? <SkeletonLoading /> :
             <>
@@ -205,7 +223,8 @@ const FormDetails = () => {
                         </div>
                     </div>
                 </div>
-
+                <ConfirmationBox isOpen={dialog.flag} setDialog={setDialog} message={dialog.message} setConfirm={setConfirm} />
+                {/* <DialogBox isOpen={dialog1.flag} message={dialog1.message} setDialog={setDialog1} /> */}
             </>
     )
 }

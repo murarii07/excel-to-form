@@ -54,7 +54,7 @@ const DragBox = ({ takingFile }) => {
                                     </p>
                                     <Button name={"Select File"} className="mt-2 px-5 py-2 bg-white border border-purple-600 text-purple-600 rounded-full hover:bg-purple-600 hover:text-white" />
                                     <p className=" text-sm text-neutral-500 text-center">
-                                        Supported formats: xlsx, odt, csv
+                                        Supported format: xlsx
                                     </p>
                                 </div>
                             </>

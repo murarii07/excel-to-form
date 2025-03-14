@@ -4,7 +4,7 @@ import Label from "../Atoms/Label";
 import InputField from "../Atoms/inputField";
 function Form(props) {
     const { field, formHandles } = props
-    console.log("Fields",field)
+    console.log("Fields", field)
     return (
         <>
             <form onSubmit={formHandles} encType="multipart/form-data" className={`w-full  ${props.formClass}  `} >
@@ -26,7 +26,9 @@ function Form(props) {
                                         name={x.Name}
                                         key={index}
                                         id={x.Id}
-                                        className="w-full border border-purple-500 rounded-full h-[48px] px-4 focus:outline-none focus:ring focus:ring-purple-400 transition"/>
+                                        placeholder={x.Placeholder}
+
+                                        className="w-full border border-purple-500 rounded-full h-[48px] px-4 focus:outline-none focus:ring focus:ring-purple-400 transition" />
                                 )}
 
                         </div>

@@ -1,14 +1,15 @@
 [
   {
-    "LabelName": "Full name","Placeholder": "Enter your full name",
-    "Id":"full_name",
+    "LabelName": "Full name ofthe student",
+    "Placeholder": "Enter your full name","Id": "full_name",
     "Name": "full_name",
     "Type": "text",
     "Regex": "^[A-Za-z ]+$"
   },
   {
     "LabelName": "Gender",
-    "Placeholder": "Select your gender","Id": "gender",
+    "Placeholder": "Select yourgender",
+    "Id": "gender",
     "Name": "gender",
     "Type": "select",
     "Options": ["MALE", "FEMALE"]
@@ -18,28 +19,28 @@
     "Placeholder": "Enter your age",
     "Id": "age",
     "Name": "age",
-    "Type": "number",
-    "Regex": "^[0-9]{1,2}$" 
+    "Type": "text",
+    "Regex": "^[0-9]{1,2}$"
   },
   {
     "LabelName": "PNR No",
     "Placeholder": "Enter your PNR number",
     "Id": "pnr_no",
     "Name": "pnr_no",
-    "Type": "text"},
+    "Type": "text"
+  },
   {
-    "LabelName": "Coach No",
+    "LabelName": "Coach NO",
     "Placeholder": "Enter your coach number",
     "Id": "coach_no",
     "Name": "coach_no",
     "Type": "text"
   },
-  {
-    "LabelName": "Seat No",
+  {"LabelName": "Seat No",
     "Placeholder": "Enter your seat number",
     "Id": "seat_no",
     "Name": "seat_no",
-    "Type": "number",
+    "Type": "text",
     "Regex": "^[0-9]+$"
   }
 ]

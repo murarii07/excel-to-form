@@ -8,7 +8,7 @@ import InputField from "../Atoms/inputField";
 import useDebounce from "../CustomHooks/debounce";
 import useFetchData from "../CustomHooks/useFetchData";
 import DialogBox from "../Atoms/DialogBox";
-import ConfirmBox from "../Atoms/ConfimBox";
+import PromptBox from "../Atoms/PromptBox";
 
 const FormUpload = () => {
     const navigate = useNavigate()
@@ -146,7 +146,7 @@ const FormUpload = () => {
                 </div>
                 {/* <footer>footer</footer> */}
                 <DialogBox isOpen={dialog.flag} message={dialog.message} setDialog={setDialog} />
-                <ConfirmBox isOpen={isInput.flag} message={isInput.message} setDialog={setInput} setFormName={setFormName} />
+                <PromptBox isOpen={isInput.flag} message={isInput.message} setDialog={setInput} setFormName={setFormName} />
             </>
     );
 }

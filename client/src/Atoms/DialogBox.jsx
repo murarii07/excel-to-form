@@ -25,13 +25,14 @@ export default function DialogBox({ isOpen, message, setDialog }) {
             <p className="mt-2 text-xl text-center text-white">
               {message}
             </p>
-            <div className="mt-4 flex items-center justify-center">
+            <div className="mt-4 flex items-center justify-center gap-2">
               <Button
                 className="inline-flex items-center gap-2 rounded-md bg-[#8A2BE2] py-2 px-4 text-sm font-semibold text-white shadow-inner shadow-white/10 transition-all duration-200 hover:bg-[#6F1BBF] focus:outline-none focus:ring-2 focus:ring-white/50"
                 onClick={close}
               >
                 OK
               </Button>
+              
             </div>
           </DialogPanel>
         </div>

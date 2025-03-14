@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { useEffect, useState } from 'react'
 
-export default function ConfirmBox({ isOpen, message, setDialog, setFormName }) {
+export default function PromptBox({ isOpen, message, setDialog, setFormName }) {
   useEffect(() => {
     console.log("Dialog state changed:", isOpen);
   }, [isOpen]);

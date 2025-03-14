@@ -82,7 +82,8 @@ const uploadForm = async (req, res) => {
         const url = urlGenerator(user, req.body.formId);
         //mongo operation
         //creating collection name same as the user
-        const col = UserDB.model(user, formInfo)
+        const col = UserDB.model(user, formInfo,user)
+        console.log(col)
         const result2 = await col.create({
             _id: url,
             name: req.body.formId,
