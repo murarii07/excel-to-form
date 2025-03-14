@@ -139,7 +139,7 @@ const getSpecificFormDetails = async (req, res) => {
 const removeSpecificForm = async (req, res) => {
     try {
         const user = extractDataFromToken(req.cookies?.jwt)
-        let rDBModela = UserDB.model(user, formInfo)
+        let rDBModela = UserDB.model(user, formInfo,user)
         console.log(req.params.formName, rDBModela)
         // Returns the deleted document.
         // Deletes the document in a single operation
