@@ -1,7 +1,8 @@
 import Button from "../Atoms/Button";
 import { useNavigate } from "react-router-dom";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import useFetchData from "../CustomHooks/useFetchData";
+import { ToastContainer, toast } from 'react-toastify';
 function SideBar({ handle }) {
     const navigate = useNavigate();
     const [ar] = useState([
@@ -9,24 +10,38 @@ function SideBar({ handle }) {
         { name: "Mytasks", link: "tasks", svg: ("task") },
         { name: "Home", link: "", svg: ("Home") }
     ])
-    const [res, er, setLogoutOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/login`)
-    const nav = useNavigate();
-    const logout = () => {
-        setLogoutOptions({
-            method: "DELETE",
-            credentials: "include" // Sends cookies with the request
-        })
-    }
-    useEffect(() => {
-        if (res && !er) {
-            window.localStorage.removeItem("isLogged")
-            nav("/")
-        }
-        else if (er) {
+    const notify = () => toast("something went wrong")
+    const logout = async () => {
+        try {
+
+            const options = {
+                method: "DELETE",
+                credentials: "include" // Sends cookies with the request
+            }
+            const res = await fetch(`${import.meta.env.VITE_SERVER_API_URL}/login`, options)
+            const response = await res.json();
+            if (response.success) {
+                window.localStorage.removeItem("isLogged")
+                console.log(window.location.pathname)
+                if (window.location.pathname === "/") {
+                    window.location.reload();
+                }
+                else {
+                    nav("/", { replace: true });
+                }
+                return;
+            }
             alert("something went wrong try again")
             console.log("something went wrong")
+        } catch (e) {
+            alert("something went wrong try again")
+            console.log("something went wrong")
+
         }
-    }, [res, er])
+
+
+    }
+
 
     return (
         <div className="sidebar p-2 animate-in slide-in-from-left-96 duration-500  overflow-hidden h-[600px] md:h-screen absolute top-1 bg-purple-500 z-10 border-purple-500 hover:w-60 shadow-lg rounded-r-2xl " style={{ width: "240px" }}>
@@ -53,7 +68,6 @@ function SideBar({ handle }) {
                     name="Log Out" onClick={logout} />
 
             </div>
-
         </div>
     )
 }

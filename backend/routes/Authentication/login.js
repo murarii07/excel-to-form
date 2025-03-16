@@ -58,10 +58,15 @@ const loginUser = async (req, res) => {
     }
 }
 const logoutUser = (req, res) => {
-    console.log("fsd",req.cookies?.jwt)
+    console.log("fsd", req.cookies?.jwt)
     //use end to make request end so  it should not be hanging state
+    console.log("sd")
     if (req.cookies?.jwt) {
-        return res.status(204).clearCookie('jwt').end()
+        res.clearCookie('jwt')
+        return res.status(200).json({
+            success: true,
+            message: "succesfully logout...."
+        })
     }
     else {
         res.status(404).json({

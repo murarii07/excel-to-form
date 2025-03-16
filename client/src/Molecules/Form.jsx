@@ -14,7 +14,7 @@ function Form(props) {
                             <Label labelname={x.LabelName} htmlFor={x.Name} required={x.required || false} className={"block text-sm font-medium text-neutral-950 mb-2"} />
                             {(x.Type === 'radio' || x.Type === 'checkbox') ? (
                                 <Radio
-                                    radioInputs={x.Value}
+                                    radioInputs={x.Value || []}
                                     type={x.Type}
                                     name={x.Name} />
                             )

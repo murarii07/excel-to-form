@@ -27,7 +27,7 @@ const DragBox = ({ takingFile }) => {
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
     return (
         <>
-            <div {...getRootProps()} className="dragBox    hover:border-purple-900 min-h-56 w-full m-auto   justify-center  font-bold cursor-pointer bg-purple-50 py-6 px-4 rounded-lg flex flex-col items-center md:py-8 md:px-6  md:mx-auto space-y-4 border border-dashed border-purple-500 shadow-sm hover:shadow-lg transition-shadow duration-300 ">
+            <div {...getRootProps()} className="dragBox    hover:border-purple-900 min-h-11 w-full m-auto   justify-center  font-bold cursor-pointer bg-purple-50 py-6 px-4 rounded-lg flex flex-col items-center md:py-8 md:px-6  md:mx-auto space-y-4 border border-dashed border-purple-500 shadow-sm hover:shadow-lg transition-shadow duration-300 ">
                 <input {...getInputProps({
                     name: "files",
                     type: "file",
@@ -86,36 +86,7 @@ const DragBox = ({ takingFile }) => {
                                 name={<span className="material-symbols-outlined">close</span>}
                             />
                         </div >}
-
-
-
-
                     </>)}
-
-            {/* <div className="w-3/4">
-                {fileName &&
-                    <>
-                        <div className="flex justify-center w-full items-center gap-4">
-
-                            <span className="text-center">
-                                {fileName.name}
-                            </span>
-                            {!(lo === 100) && <div className="w-2/4 bg-gray-200 rounded-full h-2.5 dark:bg-purple-300">
-                                <div className="bg-purple-800 h-2.5 rounded-full" style={{ width: `${lo}%` }}></div>
-                            </div>}
-                            <div>
-                                {(fileName.size / (1024)).toFixed(2)}KB
-                            </div>
-
-
-                            <Button name={"X"} className="text-gray-400 submit-button border-gray-400 w-1/12 hover:text-white hover:bg-gray-400 hover:font-bold" onClick={() => {
-                                setFileName(null)
-                                takingFile(null)
-                            }} />
-
-                        </div>
-                    </>}
-            </div> */}
         </>
     )
 }

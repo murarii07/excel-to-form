@@ -9,6 +9,7 @@ import DialogBox from "../Atoms/DialogBox.jsx";
 
 function XlUpload() {
     const dispatch = useDispatch();
+    const data = useSelector((s) => s.Field.value)
     const [file, setFile] = useState(null)
     const [isLoad, setIsLoad] = useState(false)
     const fields = useSelector(s => s.Field.value)
@@ -18,6 +19,9 @@ function XlUpload() {
     const takingFile = (file) => {
         setFile(file)
     }
+    const changingValue = ((value) => {
+        dispatch((changeFieldValue(value)))
+    })
     const formHandle = async () => {
         setEr(false)
         if (!file) {
@@ -41,7 +45,7 @@ function XlUpload() {
             // Stop loader when request completes
             //here  logic will be added for preview
             console.log(response.data)
-            dispatch(changeFieldValue(response.data))
+            changingValue(response.data)
             setIsLoad(false)
         }
         else if (error) {
@@ -50,24 +54,43 @@ function XlUpload() {
             setEr(true)
             console.log()
             setDialog({ flag: true, message: "OOPS!!! error occurs Try again Later" })
+            setTimeout(() => window.location.reload(), 2000)
+
         }
 
     }, [response, error]);
+    useEffect(() => {
+        console.log("sd")
+    }, [data])
     return (
         <>
             <div className="drag-form  w-10/12 m-auto min-h-fit flex flex-col items-center justify-center gap-5 mt-8 ">
-                <>
-                    <DragBox takingFile={takingFile} />
+                {data.length ?
                     <Button
-                        name={"Generate"}
+                        name={"New Upload"}
                         buttonName={"mt-4 bg-purple-600 text-neutral-50 py-2 px-6 rounded-full w-full md:w-auto hover:bg-purple-700"}
-                        onClick={formHandle} />
+                        // Wrapping it inside a function (() => dispatch(changeFieldValue([]))) ensures that the function is only executed when the button is clicked.
+                        onClick={() => changingValue([])}
+                    /> :
+                    <>
+                        <DragBox takingFile={takingFile} />
 
-                    {
-                        !er ?
-                            isLoad && <SkeletonLoading /> : ""}
 
-                </>
+                        {/* {
+                            !er ?
+                                isLoad && <SkeletonLoading /> : ""} */}
+                        <Button
+                            name={"Generate"}
+                            buttonName={"mt-4 bg-purple-600 text-neutral-50 py-2 px-6 rounded-full w-full md:w-auto hover:bg-purple-700"}
+                            onClick={formHandle} />
+
+                        {
+                            !er ?
+                                isLoad && <SkeletonLoading /> : ""}
+
+                    </>
+                }
+
             </div>
             <DialogBox isOpen={dialog.flag} message={dialog.message} setDialog={setDialog} />
         </>

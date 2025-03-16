@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Form from "../Molecules/Form";
 import { useEffect, useState } from "react";
 import Button from "../Atoms/Button";
@@ -9,6 +9,7 @@ import useDebounce from "../CustomHooks/debounce";
 import useFetchData from "../CustomHooks/useFetchData";
 import DialogBox from "../Atoms/DialogBox";
 import PromptBox from "../Atoms/PromptBox";
+import { changeSpecificFieldValue } from "../redux/formElement";
 
 const FormUpload = () => {
     const navigate = useNavigate()
@@ -22,7 +23,8 @@ const FormUpload = () => {
         title: "form title",
         description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil officia praesentium adipisci! Neque, facere nisi quaerat cupiditate"
     });
-
+    const nav=useNavigate()
+    const dispatch=useDispatch()
     //form uploading to the server
     const formNameOperation = () => {
         if (!window.localStorage.getItem("isLogged")) {
@@ -49,6 +51,7 @@ const FormUpload = () => {
 
     const FormUpload = () => {
         console.log("User Fields", fields, { fieldDetails: fields, formId: formName, ...formDetails })
+       
         const options = {
             method: 'POST',
             credentials: 'include',
@@ -64,6 +67,8 @@ const FormUpload = () => {
             // navigate(`/public/${response.data.url}`)
             console.log("Response", response);
             setDialog({ flag: true, message: response.message })
+            nav(response.data.url)
+            
         }
         else if (error) {
             alert("something went wrong")
@@ -114,7 +119,7 @@ const FormUpload = () => {
         !fields.length ? <Navigate to="/" /> :
             <>
                 {/* <Nav flag={true} />? */}
-                <div className="upload-button  w-full  mt-5 flex justify-center mb-5 ">
+                <div className="upload-button  w-full  mt-5 flex justify-center mb-5  ">
                     <Button name={"upload"} buttonName={`p-1   flex justify-center bg-purple-600 border-purple-600 text-white font-bold s`} onClick={formNameOperation} />
                 </div>
                 <div className="MainForm min-h-screen bg-gradient-to-b from-purple-100 to-purple-200 shadow-lg rounded-lg p-8 md:p-10

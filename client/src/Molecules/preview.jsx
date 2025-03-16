@@ -58,7 +58,7 @@ function Preview() {
         <>
             {fields.length ? (
                 <>
-                    <div className="preview-form rounded-lg bg-purple-200 border-2 border-purple-200 "
+                    <div className="preview-form rounded-lg flex flex-col items-center justify-center "
                     //  onClick={editHandleF}
                     >
                         {fields.map((x, index) =>
@@ -67,11 +67,11 @@ function Preview() {
                         )}
                     </div>
                     <div className="preview-btn">
-                        <Button
+                        {/* <Button
                             buttonName="download-btn border-teal-700  text-teal-700 hover:bg-teal-700 hover:text-white "
                             name={<DownloadIcon />} onClick={handled}>
 
-                        </Button>
+                        </Button> */}
                         <Button
                             name="livePreview" onClick={handleds}
                             buttonName={"save-btn border-teal-700  text-teal-700 hover:bg-teal-700 px-3 hover:text-white "} />

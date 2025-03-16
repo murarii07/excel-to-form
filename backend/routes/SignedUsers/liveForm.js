@@ -144,13 +144,6 @@ const removeSpecificForm = async (req, res) => {
         // Returns the deleted document.
         // Deletes the document in a single operation
         let result = await rDBModela.findOneAndDelete({ name: req.params.formName })
-        // let result = await rDBModela.deleteOne({ name: req.params.formName })
-        // if (!result.deletedCount) {
-        //     return res.status(500).json({
-        //         success: false,
-        //         message: "something went wrong try again later"
-        //     })
-        // }
         console.log("Remove daata", result, req.params.formName)
         if (!result) {
             return res.status(500).json({
