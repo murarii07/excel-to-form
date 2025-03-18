@@ -1,46 +1,41 @@
 import Button from "../Atoms/Button";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import useFetchData from "../CustomHooks/useFetchData";
 import { ToastContainer, toast } from 'react-toastify';
 function SideBar({ handle }) {
     const navigate = useNavigate();
     const [ar] = useState([
-        { name: "MyAccount", link: "my-profile", svg: ("person") },
-        { name: "Mytasks", link: "tasks", svg: ("task") },
-        { name: "Home", link: "", svg: ("Home") }
+        { name: "MyAccount", link: "my-profile", iconName: "person" },
+        { name: "Mytasks", link: "tasks", iconName: "task" },
+        { name: "Home", link: "", iconName: "Home" }
     ])
-    const notify = () => toast("something went wrong")
     const logout = async () => {
         try {
-
-            const options = {
+            const res = await fetch(`${import.meta.env.VITE_SERVER_API_URL}/login`, {
                 method: "DELETE",
-                credentials: "include" // Sends cookies with the request
-            }
-            const res = await fetch(`${import.meta.env.VITE_SERVER_API_URL}/login`, options)
+                credentials: "include"
+            });
+
             const response = await res.json();
             if (response.success) {
-                window.localStorage.removeItem("isLogged")
-                console.log(window.location.pathname)
+                window.localStorage.removeItem("isLogged");
+                toast.success("Logged out successfully!");
+
                 if (window.location.pathname === "/") {
                     window.location.reload();
-                }
-                else {
-                    nav("/", { replace: true });
+                } else {
+                    navigate("/", { replace: true });
                 }
                 return;
             }
-            alert("something went wrong try again")
-            console.log("something went wrong")
+
+            toast.error("Something went wrong. Try again.");
         } catch (e) {
-            alert("something went wrong try again")
-            console.log("something went wrong")
-
+            toast.error("Something went wrong. Try again.");
+            console.error("Logout Error:", e);
         }
+    };
 
-
-    }
 
 
     return (
@@ -56,7 +51,7 @@ function SideBar({ handle }) {
                         <li key={index} className="  flex rounded-2xl hover:bg-purple-600 md:hover:bg-purple-600 p-4 text-white text-lg hover:text-neutral-50 cursor-pointer " onClick={() => {
                             navigate(`/${x.link}`)
                         }}>
-                            <span className="material-symbols-outlined">{x.svg}</span>
+                            <span className="material-symbols-outlined">{x.iconName}</span>
                             <span >{x.name}</span>
                         </li>
 

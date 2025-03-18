@@ -5,33 +5,60 @@ import useDebounce from "../CustomHooks/debounce";
 import Label from '../Atoms/Label';
 import InputField from "../Atoms/inputField";
 import useFetchData from "../CustomHooks/useFetchData";
+import { object, string, ref } from 'yup'
+
 const Register = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
-    const [password, setPassword] = useState({ psw: "", error: false });
-    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState({ psw: "", error: "" });
+    const [email, setEmail] = useState({ email: "", error: "" });
     const [response, error, setOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/Register`);
+
+    // const registerSchema = object().shape({
+    //     username: string().min(3, "Too short!").required("Username is required"),
+    //     email: string().email("Invalid email").required("Email is required"),
+    //     password: string()
+    //         .min(8, "Must be at least 8 characters")
+    //         .matches(/[a-z]/, "Must contain a lowercase letter")
+    //         .matches(/[A-Z]/, "Must contain an uppercase letter")
+    //         .matches(/\d/, "Must contain a number")
+    //         .matches(/[@$!%*?&_]/, "Must contain a special character")
+    //         .required("Password is required"),
+    //     confirmPassword: string()
+    //         .oneOf([ref("password"), null], "Passwords must match")
+    //         .required("Confirm Password is required"),
+    // });
+
+    const passwordSchema = string()
+        .min(8, "Password must be at least 8 characters long")
+        .matches(/[a-z]/, "Must contain at least one lowercase letter")
+        .matches(/[A-Z]/, "Must contain at least one uppercase letter")
+        .matches(/\d/, "Must contain at least one number")
+        .matches(/[@$!%*?&_]/, "Must contain at least one special character (@$!%*?&_)")
+        .required("Password is required");
+
+
+    const emailSchema = string()
+        .email("Invalid email")
+        .required("Email is required")
+
+
     const changeUsername = useDebounce((e) => {
         if (e.target.value) {
             console.log(e.target.value)
             setUsername(e.target.value)
         }
     }, 500)
-    const changePsw = useDebounce((e) => {
+    const changePsw = useDebounce(async (e) => {
         if (e.target.value) {
             console.log(e.target.value)
-            if (!(/^.{8,}$/.test(e.target.value))) {
-                console.log()
-                setPassword({ ...password, psw: e.target.value, error: "least upto 8 charcter" })
-                return
+            try {
+                await passwordSchema.validate(e.target.value);
+                setPassword({ psw: e.target.value, error: "" }); // No errors
+            } catch (err) {
+                setPassword({ psw: e.target.value, error: err.message }); // Set error message from Yup
             }
-            const r = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_]).{8,}$/.test(e.target.value)
-            if (!r) {
-                console.log("pattern must contain uppercase,lowercase,digits,special characters")
-                setPassword({ ...password, psw: e.target.value, error: "pattern must contain uppercase,lowercase,digits,special characters " })
-                return
-            }
-            setPassword({ ...password, psw: e.target.value, error: false })
+
         }
     }, 500)
 
@@ -42,23 +69,28 @@ const Register = () => {
             }
         }
     }, 500)
-    const changeEmail = useDebounce((e) => {
+    const changeEmail = useDebounce(async (e) => {
         if (e.target.value) {
-            console.log(e.target.value)
-            setEmail(e.target.value)
+            try {
+                await emailSchema.validate(e.target.value)
+                setEmail({ email: e.target.value, error: "" })
+            }
+            catch (err) {
+                setEmail({ email: e.target.value, error: err.message })
+            }
         }
     }, 500)
     const handle = async () => {
         console.log(1)
-        if (username && password && email) {
+        if (username && password.psw && email.email) {
             const form = {
                 "username": username,
                 "password": password.psw,
                 "email": email
             }
             setOptions({ method: "POST", headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) })
-            setEmail("")
-            setPassword({ psw: "", error: false })
+            setEmail({ email: "", error: "" })
+            setPassword({ psw: "", error: "" })
             setUsername("")
         }
     }
@@ -80,7 +112,7 @@ const Register = () => {
                     <div className="w-[47%]  "><div className="text-4xl font-extrabold mb-4  ">Sign In to Create Form</div> <div>if you  have account &nbsp;<a className="text-purple-900 cursor-pointer font-bold" href="/login">Login here</a></div></div>
                     <div className="w-[60%] h-[100%] flex items-end justify-end drop-shadow-xl  ">
                         <Suspense fallback={<span>loading....</span>}>
-                            <img src="assets/register.png" className=" w-[90%] h-[90%]" alt="" />
+                            <img src="assets/register.png" className=" w-[60%] h-[50%]" alt="" />
                         </Suspense>
                     </div>
 
@@ -102,14 +134,15 @@ const Register = () => {
                         className={"bg-sky-50 border-sky-50 border-2 shadow-sm w-11/12  p-2 rounded-md"}
                         onChange={changeEmail}
                     />
+                    {email.error ? <span className="text-red-500">{email.error}</span> : ""}
                     <Label htmlFor={"password"} labelname="Create Password" />
                     <InputField
                         type="password"
                         name="password"
                         className={"bg-sky-50 border-sky-50 border-2 shadow-sm w-11/12  p-2 rounded-md"}
                         onChange={changePsw}
-                    // element={<div className="text-red-500 text-sm">{password.error}</div>}
                     />
+                    {password.error ? <span className="text-red-500">{password.error}</span> : ""}
                     <Label htmlFor={"confirmPsw"} labelname="Confirm Password" />
                     <InputField
                         type="password"

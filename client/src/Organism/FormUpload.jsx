@@ -1,18 +1,16 @@
 import { useDispatch, useSelector } from "react-redux";
 import Form from "../Molecules/Form";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Button from "../Atoms/Button";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Label from "../Atoms/Label";
 import InputField from "../Atoms/inputField";
 import useDebounce from "../CustomHooks/debounce";
 import useFetchData from "../CustomHooks/useFetchData";
 import DialogBox from "../Atoms/DialogBox";
 import PromptBox from "../Atoms/PromptBox";
-import { changeSpecificFieldValue } from "../redux/formElement";
-
 const FormUpload = () => {
-    const navigate = useNavigate()
+    const nav = useNavigate()
     const fields = useSelector(state => state.Field.value)
     const [dialog, setDialog] = useState({ flag: false, message: "error....." })
     const [isEdit, setIsEdit] = useState({ isEditTitle: false, isEditDes: false });
@@ -23,18 +21,17 @@ const FormUpload = () => {
         title: "form title",
         description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil officia praesentium adipisci! Neque, facere nisi quaerat cupiditate"
     });
-    const nav=useNavigate()
-    const dispatch=useDispatch()
+    const dispatch = useDispatch()
     //form uploading to the server
-    const formNameOperation = () => {
+    const formNameOperation = useCallback(() => {
         if (!window.localStorage.getItem("isLogged")) {
             alert("to upload  first login")
-            navigate("/login")
+            nav("/login")
             return
         }
         setIsEdit(false)
         setInput({ flag: true, message: "please enter a formName" })
-    }
+    }, [nav])
     const formDetailsUpdation = (obj) => {
         setFormDetails({ ...formDetails, ...obj })
     }
@@ -51,7 +48,7 @@ const FormUpload = () => {
 
     const FormUpload = () => {
         console.log("User Fields", fields, { fieldDetails: fields, formId: formName, ...formDetails })
-       
+
         const options = {
             method: 'POST',
             credentials: 'include',
@@ -68,12 +65,12 @@ const FormUpload = () => {
             console.log("Response", response);
             setDialog({ flag: true, message: response.message })
             nav(response.data.url)
-            
+
         }
         else if (error) {
             alert("something went wrong")
             console.log(error)
-            navigate("/error")
+            nav("/error")
         }
 
     }, [response, error])
@@ -87,7 +84,7 @@ const FormUpload = () => {
     }, [fields])
 
     useEffect(() => {
-        if (formName) {
+        if (formName.trim()) {
             FormUpload()
         }
 
@@ -110,49 +107,49 @@ const FormUpload = () => {
         document.querySelector("body").addEventListener("keypress", handleClickOutsidee);
 
         return () => {
-            document.querySelector("body").removeEventListener("key", handleClickOutsidee);
+            document.querySelector("body").removeEventListener("keypress", handleClickOutsidee);
         };
     }, [isEdit]);
 
-
+    if (!fields.length)
+        return nav("/")
     return (
-        !fields.length ? <Navigate to="/" /> :
-            <>
-                {/* <Nav flag={true} />? */}
-                <div className="upload-button  w-full  mt-5 flex justify-center mb-5  ">
-                    <Button name={"upload"} buttonName={`p-1   flex justify-center bg-purple-600 border-purple-600 text-white font-bold s`} onClick={formNameOperation} />
-                </div>
-                <div className="MainForm min-h-screen bg-gradient-to-b from-purple-100 to-purple-200 shadow-lg rounded-lg p-8 md:p-10
+        <>
+            {/* <Nav flag={true} />? */}
+            <div className="upload-button  w-full  mt-5 flex justify-center mb-5  ">
+                <Button name={"upload"} buttonName={`p-1   flex justify-center bg-purple-600 border-purple-600 text-white font-bold s`} onClick={formNameOperation} />
+            </div>
+            <div className="MainForm min-h-screen bg-gradient-to-b from-purple-100 to-purple-200 shadow-lg rounded-lg p-8 md:p-10
              mx-auto pl-2 pr-2 w-11/12 box-border flex flex-col">
-                    <h1 className="text-2xl md:text-3xl font-title text-neutral-950 mb-6 ">
-                        {isEdit.isEditTitle ?
-                            <InputField placeholder={formDetails.title} className="outline-none bg-transparent changeAbleLabelName" onChange={handleTitle} />
-                            :
-                            <Label labelname={formDetails.title} onDoubleClick={
-                                () => {
-                                    setIsEdit({ ...isEdit, isEditTitle: true })
-                                }
-                            } />}</h1>
+                <h1 className="text-2xl md:text-3xl font-title text-neutral-950 mb-6 ">
+                    {isEdit.isEditTitle ?
+                        <InputField placeholder={formDetails.title} className="outline-none bg-transparent changeAbleLabelName" onChange={handleTitle} />
+                        :
+                        <Label labelname={formDetails.title} onDoubleClick={
+                            () => {
+                                setIsEdit({ ...isEdit, isEditTitle: true })
+                            }
+                        } />}</h1>
 
-                    <div className="formDescription  text-sm md:text-base text-neutral-700 mb-8 leading-relaxed "   >
-                        {isEdit.isEditDes ?
-                            <InputField placeholder={formDetails.description} type="text-area" className="outline-none bg-transparent changeAbleLabelNamePara" onChange={handleDescription} />
-                            :
-                            <Label labelname={formDetails.description} onDoubleClick={
-                                () => {
-                                    console.log("Sd")
-                                    setIsEdit({ ...isEdit, isEditDes: true })
-                                }
-                            } />}
-                    </div>
-                    <Form field={fields} Name={"form1"} buttonName={"Submit"} formClass="flex flex-col gap-6" >
-
-                    </ Form >
+                <div className="formDescription  text-sm md:text-base text-neutral-700 mb-8 leading-relaxed "   >
+                    {isEdit.isEditDes ?
+                        <InputField placeholder={formDetails.description} type="text-area" className="outline-none bg-transparent changeAbleLabelNamePara" onChange={handleDescription} />
+                        :
+                        <Label labelname={formDetails.description} onDoubleClick={
+                            () => {
+                                console.log("Sd")
+                                setIsEdit({ ...isEdit, isEditDes: true })
+                            }
+                        } />}
                 </div>
-                {/* <footer>footer</footer> */}
-                <DialogBox isOpen={dialog.flag} message={dialog.message} setDialog={setDialog} />
-                <PromptBox isOpen={isInput.flag} message={isInput.message} setDialog={setInput} setFormName={setFormName} />
-            </>
+                <Form field={fields} Name={"form1"} buttonName={"Submit"} formClass="flex flex-col gap-6" >
+
+                </ Form >
+            </div>
+            {/* <footer>footer</footer> */}
+            <DialogBox isOpen={dialog.flag} message={dialog.message} setDialog={setDialog} />
+            <PromptBox isOpen={isInput.flag} message={isInput.message} setDialog={setInput} setFormName={setFormName} />
+        </>
     );
 }
 export default FormUpload;

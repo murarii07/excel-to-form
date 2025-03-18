@@ -1,7 +1,7 @@
 import UserDp from "../Atoms/userdp";
 import { lazy, Suspense, useEffect, useState } from "react";
 import SideBar from "./SideBar";
-const ProfileDp = lazy(() => import("../Atoms/img"))
+// const ProfileDp = lazy(() => import("../Atoms/img"))
 function Nav(props) {
     const [drop, setDrop] = useState(false);
     const [sideBarFlag, setSideBarFlag] = useState(false);
@@ -47,13 +47,7 @@ function Nav(props) {
 
                             <li className="relative"><div className="cursor-pointer text-white" onClick={userHandle} >
                                 <div className="material-symbols-outlined flex items-center justify-center w-6 h-6 overflow-hidden  rounded-full">
-                                    {/* <Suspense fallback={<span>Loading...</span>}>
-                                    <ProfileDp img="/assets/user.png" width={"24px"} height={"24px"}  />
-                                    </Suspense> */}
                                     account_circle
-
-
-
                                 </div>
 
                             </div></li>

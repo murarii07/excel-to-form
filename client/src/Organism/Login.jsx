@@ -70,7 +70,7 @@ const Login = () => {
                     <div className="w-[47%] "><div className="text-4xl font-extrabold mb-4 ">Sign In to Create Form</div> <div>if you dont have account &nbsp;<a className="text-purple-900 cursor-pointer font-bold" href="/signup">Register here</a></div></div>
                     <div className="w-[60%] h-[60%] flex items-end justify-end drop-shadow-xl animate-in slide-in-from-top-full duration-700">
 
-                        <img src="assets/image copy 3.png" width={"90%"} height={"90%"} alt="" />
+                        <img src="assets/imagecopy3.png" width={"90%"} height={"90%"} alt="" />
                     </div>
 
                 </div>

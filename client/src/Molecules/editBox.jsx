@@ -3,7 +3,7 @@ import Button from "../Atoms/Button"
 import Select from "../Atoms/SelectField"
 import InputField from "../Atoms/inputField";
 import Label from "../Atoms/Label";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, } from "react-redux";
 import { changeSpecificFieldValue } from "../redux/formElement";
 import useDebounce from "../CustomHooks/debounce";
 import '../Working.css'
@@ -33,9 +33,6 @@ function EditBox(props) {
             changeFieldState({ Type: e.target.value })
             updateFieldList({ Type: e.target.value }, e.target.id)
         }
-    }
-    const handleInput = () => {
-        setInput(false)
     }
     const handleLabelChange = useDebounce((e) => {
         changeFieldState({ LabelName: e.target.value })
@@ -91,7 +88,7 @@ function EditBox(props) {
             <div className="edit-box flex gap-2 relative">
                 {
                     input ?
-                        <Label labelname={f.LabelName} htmlFor={f.Name} onDoubleClick={handleInput} />
+                        <Label labelname={f.LabelName} htmlFor={f.Name} onDoubleClick={() => setInput(false)} />
                         :
                         <InputField name={f.Name}
                             className="changeAbleLabelName  outline-none"
@@ -190,7 +187,7 @@ function EditBox(props) {
     else if (f.Type === "select") {
         return (
             <div className="edit-box flex gap-2">
-                {input ? <Label labelname={f.LabelName} htmlFor={f.Name} onDoubleClick={handleInput} />
+                {input ? <Label labelname={f.LabelName} htmlFor={f.Name} onDoubleClick={() => setInput(false)} />
                     : <InputField name={f.Name}
                         id={f.Id}
                         type={"tex"}
@@ -246,7 +243,7 @@ function EditBox(props) {
     return (
         <>
             <div className="edit-box flex gap-2 relative">
-                {input ? <Label labelname={f.LabelName} htmlFor={f.Name} onDoubleClick={handleInput} />
+                {input ? <Label labelname={f.LabelName} htmlFor={f.Name} onDoubleClick={() => setInput(false)} />
                     : <InputField name={f.Name}
                         id={f.Id}
                         type={"text"}

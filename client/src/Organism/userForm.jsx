@@ -5,7 +5,7 @@ import useFetchData from "../CustomHooks/useFetchData";
 import SkeletonLoading from "../Atoms/SkeletionLoading";
 // import "../form.css"
 const UserForm = () => {
-    const navigatee = useNavigate();
+    const navigate = useNavigate();
     const [details, setDetails] = useState({ title: "", description: "", fields: [] })
     const [url] = useState(window.location.pathname)
     const ext = url.split("/public/")
@@ -16,9 +16,13 @@ const UserForm = () => {
     const [res, err, setSubmitOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/public/${ext[1]}`)
     async function dataSubmission(e) {
         e.preventDefault();
-        const form = new FormData(e.target);
-        console.log("Form Entries", form.entries())
-        setSubmitOptions({ method: "POST", body: form })
+        try {
+            const form = new FormData(e.target);
+            console.log("Form Entries", [...form.entries()]);
+            setSubmitOptions({ method: "POST", body: form });
+        } catch (error) {
+            console.error("Submission Error:", error);
+        }
     }
     useEffect(() => {
         if (response && !error) {
@@ -27,17 +31,17 @@ const UserForm = () => {
 
         }
         else if (error) {
-            navigatee("/error");
+            navigate("/error");
 
         }
     }, [response, error])
 
     useEffect(() => {
         if (res && !err) {
-            navigatee("/submit");
+            navigate("/submit");
         }
         else if (err) {
-            navigatee("/error");
+            navigate("/error");
 
         }
     }, [res, err])
