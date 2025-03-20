@@ -7,7 +7,8 @@ function SideBar({ handle }) {
     const [ar] = useState([
         { name: "MyAccount", link: "my-profile", iconName: "person" },
         { name: "Mytasks", link: "tasks", iconName: "task" },
-        { name: "Home", link: "", iconName: "Home" }
+        { name: "Home", link: "", iconName: "Home" },
+        { name: "Create Form", link: "edit", iconName: "edit" }
     ])
     const logout = async () => {
         try {

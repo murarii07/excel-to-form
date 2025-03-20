@@ -19,12 +19,16 @@ export const Field = createSlice({
     },
     removeSpecificField:(state,action)=>{
       state.value=state.value.filter((x)=>x.Id!==action.payload)
+    },
+    addSpecificField:(state,action)=>{
+      state.value = [ {...action.payload},...state.value,]
+
     }
   }
 })
  //reducres functions take single parameter which is action to get multiple parameter 
 //  wrap them in a object or array check editbox component
 // Action creators are generated for each case reducer function
-export const { changeFieldValue,changeSpecificFieldValue,removeSpecificField } = Field.actions
+export const { changeFieldValue,changeSpecificFieldValue,removeSpecificField,addSpecificField } = Field.actions
 
 export default Field.reducer

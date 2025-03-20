@@ -8,12 +8,12 @@ const UserForm = () => {
     const navigate = useNavigate();
     const [details, setDetails] = useState({ title: "", description: "", fields: [] })
     const [url] = useState(window.location.pathname)
-    const ext = url.split("/public/")
-    const newUrl = `${import.meta.env.VITE_SERVER_API_URL}/public/${ext[1]}`;
+    const ext = url.split("/formhost/")
+    const newUrl = `${import.meta.env.VITE_SERVER_API_URL}/public/v1/${ext[1]}`;
     const [response, error] = useFetchData(newUrl, {
         method: "GET",
     })
-    const [res, err, setSubmitOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/public/${ext[1]}`)
+    const [res, err, setSubmitOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/public/v1/${ext[1]}`)
     async function dataSubmission(e) {
         e.preventDefault();
         try {

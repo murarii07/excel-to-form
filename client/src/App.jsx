@@ -11,7 +11,8 @@ import NotFound from './Atoms/NotFound';
 // import PrivateRoute from './Organism/PrivateRoute';
 import UserForm from './Organism/userForm';
 import FormDetails from './Organism/FormDetails'; import Submit from './Atoms/Submit';
-;
+import EditForm from './Organism/EditForm';
+import { useEffect } from 'react';
 function Tasks() {
   return (
 
@@ -22,6 +23,10 @@ function Tasks() {
   )
 }
 function App() {
+  useEffect(()=>{
+    let r =document.querySelector("body")
+    r.setAttribute("class","bg-gradient-to-br from-indigo-50 to-purple-50")
+  },[])
   return (
     <BrowserRouter>
       <Routes>
@@ -31,9 +36,10 @@ function App() {
         <Route path='my-profile' element={<Profile />} />
         <Route path='tasks/*' element={<Tasks />} />
         <Route path='preview' element={<FormUpload />} />
-        <Route path='public/*' element={<UserForm />} />
+        <Route path='formhost/*' element={<UserForm />} />
         <Route path='submit' element={<Submit />} />
         <Route path='*' element={<NotFound />} />
+        <Route path='edit' element={<EditForm />} />
 
       </Routes>
 

@@ -8,7 +8,7 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 // console.log(prompts)
 
 const responseGeneration = async (csvContent) => {
-    const prompts = fs.readFileSync("/home/murarii/codeBase/collegeCodebase/excel-to-form/backend/src/prompt.txt", "utf-8")
+    const prompts = fs.readFileSync("/home/murarii/codeBase/collegeCodebase/excel-to-form/backend/src/ModifyPrompt.txt", "utf-8")
     const result = await model.generateContentStream(csvContent + prompts);
     const rr = fs.createWriteStream("./ss.json")
     for await (const chunk of result.stream) {

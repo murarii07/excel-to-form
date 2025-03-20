@@ -1,0 +1,97 @@
+
+### **Prompt:**  
+You are given a CSV dataset . Your task is to analyze its structure and generate a **JSON schema** for a form with appropriate field types.  
+
+#### **Instructions:**  
+
+1. **Analyze the CSV Data:**  
+   - Identify column patterns, unique values, and repetition to determine the best input type for each column.  
+   - Do **not** modify the data values from the CSV; only structure them into form fields.  
+
+2. **Determine the Appropriate Field Types:**  
+   - **Text Input (`text`)** → For free-text fields (e.g., names, addresses).  
+   - **Dropdown (`select`)** → If a column has a limited set of repeating values (e.g., country, department).  
+   - **Radio Buttons (`radio`)** → For mutually exclusive options (e.g., gender, payment methods).  
+   - **Checkboxes (`checkbox`)** → For multiple-choice selections (e.g., preferences, subscriptions).  
+
+3. **Include the Following Attributes for Each Field:**  
+   - **`LabelName`** → A user-friendly label for the field.  
+   - **`Placeholder`** → A short example or hint for input fields.  
+   - **`Id`** → A unique identifier (converted from column names).  
+   - **`Name`** → The field name, typically matching the column name.  
+   - **`Type`** → The determined field type (`text`, `select`, `radio`, `checkbox`).  
+   - **`Required`** → Boolean flag indicating if the field is mandatory.  
+   - **`Regex`** → Applicable validation pattern (e.g., numbers for age, formatted text for names).  
+   - **`Options`** (for dropdowns only) → An array of unique values.  
+   - **For radio buttons and checkboxes**, only use the **`Value`** key, with its pair being an array of values.  
+
+4. **Validation Rules:**  
+   - If a field is **required**, ensure proper regex validation (e.g., numbers for age, formatted text for names).  
+   - Do **not** assume missing values; infer field types only from available data.  
+   - Avoid unnecessary regex for optional fields.  
+
+5. **Output Format:**  
+   - Return a **JSON object** structured as follows:  
+
+   ```json
+   [
+      {
+         "LabelName": "Full Name",
+         "Placeholder": "Enter your full name",
+         "Id": "full_name",
+         "Name": "full_name",
+         "Type": "text",
+         "Required": true,
+         "Regex": "^[A-Za-z ]+$"
+      },
+      {
+         "LabelName": "Country",
+         "Id": "country",
+         "Name": "country",
+         "Type": "select",
+         "Options": ["India", "USA", "UK", "Canada"],
+         "Required": true
+      },
+      {
+         "LabelName": "Age",
+         "Placeholder": "Enter your age",
+         "Id": "age",
+         "Name": "age",
+         "Type": "text",
+         "Required": true,
+         "Regex": "^[0-9]{1,2}$"
+      },
+      {
+         "LabelName": "Gender",
+         "Id": "gender",
+         "Name": "gender",
+         "Type": "radio",
+         "Value": ["Male", "Female", "Other"],
+         "Required": true
+      },
+      {
+         "LabelName": "Preferences",
+         "Id": "preferences",
+         "Name": "preferences",
+         "Type": "checkbox",
+         "Value": ["newsletter", "updates", "offers"],
+         "Required": false
+      },
+      {
+         "LabelName": "Payment Method",
+         "Id": "payment_method",
+         "Name": "payment_method",
+         "Type": "radio",
+         "Value": ["Credit Card", "PayPal", "Bank Transfer"],
+         "Required": true
+      }
+   ]
+   ```
+
+### **What to Avoid:**  
+❌ **Do not** add extra fields that are not present in the CSV.  
+❌ **Do not** modify existing data values.  
+❌ **Do not** create unnecessary regex for optional fields.  
+❌ **Do not** assume missing values; infer field types only from available data.  
+
+---

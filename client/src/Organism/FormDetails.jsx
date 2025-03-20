@@ -7,13 +7,14 @@ import SkeletonLoading from "../Atoms/SkeletionLoading";
 import ConfirmationBox from "../Atoms/ConfirmationBox";
 import DialogBox from "../Atoms/DialogBox";
 const FImg = lazy(() => import("../Atoms/img"))
+
 const FormDetails = () => {
     const [confirm, setConfirm] = useState(false)
     const [dialog, setDialog] = useState({ flag: false, message: "error....." })
     const [isLoading, setLoading] = useState(true)
     const navigate = useNavigate()
     const [formName] = useState(window.location.pathname.split("/").pop());
-    const [response, error] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/formDetails/${formName}`, {
+    const [response, error] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/v1/formDetails/${formName}`, {
         method: "GET",
         credentials: "include" // Sends cookies with the request
     })
@@ -25,9 +26,8 @@ const FormDetails = () => {
         timeStamp: ""
     })
     // response:res will help to deconstruct and change response to res
-    const [res, er, setOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/delete/${formName}`)
+    const [res, er, setOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/v1/delete/${formName}`)
     //response render
-
 
     useEffect(() => {
         if (response && !error) {
@@ -38,7 +38,6 @@ const FormDetails = () => {
         else if (error) {
             navigate("/error")
         }
-
     }, [response, error])
 
     useEffect(() => {
@@ -56,9 +55,10 @@ const FormDetails = () => {
     const deleteHandle = async () => {
         setDialog({
             flag: true,
-            message: "are your sure ,you want to delete??"
+            message: "Are you sure you want to delete this form?"
         })
     }
+
     useEffect(() => {
         if (confirm) {
             // console.log(flag)
@@ -69,148 +69,126 @@ const FormDetails = () => {
             // setFlag(false)
         }
     }, [confirm])
+
     return (
         isLoading ? <SkeletonLoading /> :
             <>
                 <Nav flag={true} />
-                {/* <div className="form-details   gap-x-7 mt-12  mx-auto w-11/12 flex  justify-evenly items-center h-full animate-in slide-in-from-top-14 duration-500">
-                    <div className="border-2 rounded-md shadow-md w-1/5 min-h-44 text-sm px-1 box-border flex items-center  justify-center bg-white">
-                        <Suspense fallback={<span>loading...</span>} >
-                            <FImg img={"/assets/fo.png"} className="object-cover " width="90%" height="90%" alt="s" />
-                        </Suspense>
-                    </div>
-                    <div className="w-4/5 flex flex-col gap-y-4">
-                        <div className="relative overflow-x-auto  sm:rounded-lg w-full mx-auto h-full">
-                            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 bg-green-200 ">
 
-                                <tbody>
-                                    <tr className="bg-white  dark:border-gray-700 hover:bg-gray-200 ">
-                                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                                            Form name
-                                        </th>
-                                        <td className="px-6 py-4">
-                                            {form.name}
-                                        </td>
-
-                                    </tr>
-                                    <tr className="bg-white  dark:border-gray-700 hover:bg-gray-200 ">
-                                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                                            Url
-                                        </th>
-                                        <td className="px-6 py-4 relative">
-                                            <div
-                                                className="  p-1 w-full rounded-lg  overflow-hidden  shadow-gray-400 ">
-                                                <a
-                                                    href={`http://localhost:5173/public/${form.link}`} target="_blank" rel="noopener noreferrer"
-                                                    className="w-full hover:text-blue-500  overflow-hidden">{`http://localhost:5173/public/${form.link}`}
-                                                </a>
-                                                <CopyIcon onClick={() => {
-                                                    navigator.clipboard.writeText(`http://localhost:5173/public/${form.link}`)
-                                                    alert("copied")
-                                                }} />
-
-                                            </div>
-                                        </td>
-
-                                    </tr>
-                                    <tr className="bg-white  dark:border-gray-700 hover:bg-gray-200 ">
-                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                                            Form Description
-                                        </th>
-                                        <td className="px-6 py-4">
-                                            {form.description}
-                                        </td>
-
-                                    </tr>
-                                    <tr className="bg-white  dark:border-gray-700 hover:bg-gray-200 ">
-                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                                            Date of Creation
-                                        </th>
-                                        <td className="px-6 py-4">
-                                            {form.timeStamp || "21th November 2024"}
-                                        </td>
-
-                                    </tr>
-                                    <tr className="bg-white  dark:border-gray-700 hover:bg-gray-200 ">
-                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">
-                                            Responses
-                                        </th>
-                                        <td className="px-6 py-4">
-                                            {form.response || 0}
-                                        </td>
-
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                            <div className="flex w-3/4  justify-around ">
-                                <Button name="delete" buttonName="w-1/4 bg-red-500 border-red-500 text-white" onClick={deleteHandle}></Button>
-
-                                {/* //form Setting */}
-                {/* <Button name="Settings" buttonName="w-1/4 bg-slate-500 border-red-500 text-white" ></Button>
-
-
-                            </div>
-                    </div>
-                </div>  */}
-
-
-
-                <div id="webcrumbs">
-                    <div className="h-full w-full bg-neutral-50 flex flex-col items-center justify-start rounded-lg shadow-lg  ">
-                        <div className="w-full flex flex-col md:flex-row items-start gap-6 p-6 ">
+                <div className="container mx-auto px-4 py-6">
+                    <div className="h-full w-full bg-gradient-to-b from-white to-purple-50 flex flex-col items-center justify-start rounded-xl shadow-lg overflow-hidden">
+                        <div className="w-full flex flex-col md:flex-row items-start gap-6 p-6">
                             <div
-                                className="bg-white rounded-lg shadow-md p-4 flex justify-center items-center border border-purple-200 flex-shrink-0 md:basis-1/4 md:max-w-[30%] hover:shadow-lg transition-shadow animate-in slide-in-from-left-14 duration-500"
+                                className="bg-gradient-to-br from-purple-600/10 to-indigo-600/10 rounded-xl shadow-md p-6 flex justify-center items-center border border-purple-200 flex-shrink-0 md:basis-1/4 md:max-w-[30%] hover:shadow-lg transition-all duration-300 backdrop-blur-sm"
                                 style={{ minWidth: '100px', minHeight: '100px' }}
                             >
-                                <span
-                                    className="material-symbols-outlined text-purple-600 text-[80px] md:text-[70px] lg:text-[80px]"
-                                    style={{ zIndex: '1' }}
-                                >
-                                    assignment
-                                </span>
+                                <div className="relative flex items-center justify-center">
+                                    <div className="absolute w-16 h-16 bg-purple-400/20 rounded-full animate-ping opacity-75"></div>
+                                    <span
+                                        className="material-symbols-outlined text-purple-600 text-[80px] md:text-[70px] lg:text-[80px] relative z-10"
+                                    >
+                                        assignment
+                                    </span>
+                                </div>
                             </div>
 
-                            <div className="flex flex-col flex-grow bg-white rounded-lg shadow-md p-6 md:basis-3/4 space-y-6 animate-in slide-in-from-right-14 duration-500 border-t">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 md:gap-x-6 text-neutral-900">
-                                    <div className="font-semibold text-neutral-700">Project Name</div>
-                                    <div className="truncate text-neutral-600 overflow-hidden">
-                                        {form.name}
-                                    </div>
-                                    <div className="font-semibold text-neutral-700">Shareable Link</div>
-                                    <div className="flex gap-2 items-center">
-                                        <p className="truncate text-sm text-neutral-600 bg-neutral-100 px-2 py-1 rounded-md">
-                                            <a
-                                                href={`http://localhost:5173/public/${form.link}`} target="_blank" rel="noopener noreferrer"
-                                                className="w-full hover:text-blue-500  overflow-hidden">{`http://localhost:5173/public/${form.link}`}
-                                            </a>
-                                        </p>
-                                        <Button className="material-symbols-outlined text-neutral-500 hover:text-purple-600" onClick={() => {
-                                            navigator.clipboard.writeText(`http://localhost:5173/public/${form.link}`)
-                                            alert("copied")
-                                        }}
-                                            name="content_copy" />
+                            <div className="flex flex-col flex-grow bg-white rounded-xl shadow-md p-6 md:basis-3/4 space-y-6 animate-in slide-in-from-right-14 duration-500 border border-purple-100">
+                                <h2 className="text-2xl font-bold text-purple-800 mb-4">Form Details</h2>
 
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 md:gap-x-8 text-neutral-900">
+                                    <div className="space-y-2">
+                                        <div className="font-semibold text-purple-700 flex items-center gap-2">
+                                            <span className="material-symbols-outlined text-sm">drive_file_rename_outline</span>
+                                            Project Name
+                                        </div>
+                                        <div className="truncate text-neutral-700 bg-purple-50 p-3 rounded-lg shadow-inner border border-purple-100 ">
+                                            {form.name}
+                                        </div>
                                     </div>
-                                    <div className="font-semibold text-neutral-700">Project Overview</div>
-                                    <div className="text-sm text-neutral-600">
-                                        {form.description}
+
+                                    <div className="space-y-2">
+                                        <div className="font-semibold text-purple-700 flex items-center gap-2">
+                                            <span className="material-symbols-outlined text-sm">link</span>
+                                            Shareable Link
+                                        </div>
+                                        <div className="flex gap-2 items-center bg-purple-50 p-2 rounded-lg shadow-inner border border-purple-100">
+                                            <p className="truncate text-sm text-neutral-700 px-2 py-1 rounded-md flex-grow">
+                                                <a
+                                                    href= {`http://localhost:5173/formhost/${form.link}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="w-full hover:text-indigo-600 transition-colors duration-200 overflow-hidden"
+                                                >
+                                                    {`http://localhost:5173/formhost/${form.link}`}
+                                                </a>
+                                            </p>
+                                            <Button
+                                                className="material-symbols-outlined text-neutral-500 hover:text-purple-600 bg-white p-2 rounded-full shadow-inner hover:shadow-md transition-all duration-200"
+                                                onClick={() => {
+                                                    navigator.clipboard.writeText(`http://localhost:5173/formhost/${form.link}`)
+                                                    alert("Link copied to clipboard!")
+                                                }}
+                                                name="content_copy"
+                                            />
+                                        </div>
                                     </div>
-                                    <div className="font-semibold text-neutral-700">Created On</div>
-                                    <div className="text-neutral-600"> {form.timeStamp}</div>
-                                    <div className="font-semibold text-neutral-700">Submission Count</div>
-                                    <div className="text-neutral-600">{form.response}</div>
+
+                                    <div className="space-y-2 md:col-span-2">
+                                        <div className="font-semibold text-purple-700 flex items-center gap-2">
+                                            <span className="material-symbols-outlined text-sm">description</span>
+                                            Project Overview
+                                        </div>
+                                        <div className="text-neutral-700 bg-purple-50 p-3 rounded-lg shadow-sm border border-purple-200 min-h-24">
+                                            {form.description}
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <div className="font-semibold text-purple-700 flex items-center gap-2">
+                                            <span className="material-symbols-outlined text-sm">calendar_today</span>
+                                            Created On
+                                        </div>
+                                        <div className="text-neutral-700 bg-purple-50 p-3 rounded-lg shadow-sm border border-purple-200">
+                                            {form.timeStamp}
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <div className="font-semibold text-purple-700 flex items-center gap-2">
+                                            <span className="material-symbols-outlined text-sm">analytics</span>
+                                            Submission Count
+                                        </div>
+                                        <div className="text-neutral-700 bg-purple-50 p-3 rounded-lg shadow-sm border border-purple-200">
+                                            <span className="text-xl font-bold text-indigo-600">{form.response}</span> responses
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+                                <div className="flex flex-wrap gap-4 justify-center md:justify-start mt-6 pt-4 border-t border-purple-100">
                                     <Button
-                                        className="px-6 py-3 bg-red-500 text-white rounded-full font-semibold hover:bg-red-600 transition shadow-sm"
-                                        name="Delete" onClick={deleteHandle}
+                                        className="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
+                                        name={<>
+                                            <span className="material-symbols-outlined text-sm">download</span>
+                                            download
+                                        </>}
                                     />
 
-                                    <Button className="px-6 py-3 bg-gray-500 text-white rounded-full font-semibold hover:bg-gray-600 transition shadow-sm" name="Settings" />
+                                    <Button
+                                        className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-lg font-semibold hover:from-indigo-700 hover:to-blue-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
+                                        name={<>
+                                            <span className="material-symbols-outlined text-sm">settings</span>
+                                            Settings
+                                        </>}
+                                    />
 
-
+                                    <Button
+                                        className="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg font-semibold hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
+                                        name={<>
+                                            <span className="material-symbols-outlined text-sm">delete</span>
+                                            Delete
+                                        </>}
+                                        onClick={deleteHandle}
+                                    />
                                 </div>
                             </div>
                         </div>

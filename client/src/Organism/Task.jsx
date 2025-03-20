@@ -10,7 +10,7 @@ const MyTask = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [formList, setFormList] = useState([]);
     const navigate = useNavigate();
-    const [response, error] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/formlist`, {
+    const [response, error] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/v1/formlist`, {
         method: "GET",
         credentials: "include" // Sends cookies with the request
     })
@@ -51,7 +51,7 @@ const MyTask = () => {
         isLoading ? (<SkeletonLoading />) : (
             <>
                 <Nav flag={true} />
-                <div className="min-h-screen   bg-neutral-50 flex flex-col items-center justify-start rounded-lg shadow-lg px-4 md:px-8 pt-4">
+                <div className="min-h-screen  bg-gradient-to-br from-indigo-50 to-purple-50 flex flex-col items-center justify-start rounded-lg shadow-lg px-4 md:px-8 pt-4">
                     <div className="w-full flex flex-col md:flex-row items-center gap-4 mt-8">
                         <InputField
                             type="text"

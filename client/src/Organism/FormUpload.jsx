@@ -15,9 +15,9 @@ const FormUpload = () => {
     const [dialog, setDialog] = useState({ flag: false, message: "error....." })
     const [isEdit, setIsEdit] = useState({ isEditTitle: false, isEditDes: false });
     const [isInput, setInput] = useState({ flag: false, message: "error....." })
-    const [response, error, setOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/upload`)
-    const [formName, setFormName] = useState("")
+    const [response, error, setOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/v1/upload`)
     const [formDetails, setFormDetails] = useState({
+        formName: "",
         title: "form title",
         description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil officia praesentium adipisci! Neque, facere nisi quaerat cupiditate"
     });
@@ -35,25 +35,25 @@ const FormUpload = () => {
     const formDetailsUpdation = (obj) => {
         setFormDetails({ ...formDetails, ...obj })
     }
-    //useDebounce hook
-    const handleTitle = useDebounce((e) => {
-        console.log(e.target.value)
-        formDetailsUpdation({ title: e.target.value })
-    }, 200)
-    const handleDescription = useDebounce((e) => {
-        console.log(e.target.value)
-        formDetailsUpdation({ description: e.target.value })
+    // //useDebounce hook
+    // const handleTitle = useDebounce((e) => {
+    //     console.log(e.target.value)
+    //     formDetailsUpdation({ title: e.target.value })
+    // }, 200)
+    // const handleDescription = useDebounce((e) => {
+    //     console.log(e.target.value)
+    //     formDetailsUpdation({ description: e.target.value })
 
-    }, 200)
+    // }, 200)
 
     const FormUpload = () => {
-        console.log("User Fields", fields, { fieldDetails: fields, formId: formName, ...formDetails })
+        console.log("User Fields", fields, { fieldDetails: fields, formId: formDetails.formName, title: formDetails.title, description: formDetails.description })
 
         const options = {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': "application/json" },
-            body: JSON.stringify({ fieldDetails: fields, formId: formName, ...formDetails })
+            body: JSON.stringify({ fieldDetails: fields, formId: formDetails.formName, title: formDetails.title, description: formDetails.description })
         }
         setOptions(options)
     }
@@ -64,7 +64,7 @@ const FormUpload = () => {
             // navigate(`/public/${response.data.url}`)
             console.log("Response", response);
             setDialog({ flag: true, message: response.message })
-            nav(response.data.url)
+            nav(`/formhost/${response.data.url}`)
 
         }
         else if (error) {
@@ -84,11 +84,10 @@ const FormUpload = () => {
     }, [fields])
 
     useEffect(() => {
-        if (formName.trim()) {
+        if (formDetails.formName.trim()) {
             FormUpload()
         }
-
-    }, [formName])
+    }, [formDetails])
     useEffect(() => {
         const handleClickOutsidee = (e) => {
             if (e.target.classList.contains("changeAbleLabelName")) {
@@ -114,6 +113,7 @@ const FormUpload = () => {
     if (!fields.length)
         return nav("/")
     return (
+
         <>
             {/* <Nav flag={true} />? */}
             <div className="upload-button  w-full  mt-5 flex justify-center mb-5  ">
@@ -122,17 +122,13 @@ const FormUpload = () => {
             <div className="MainForm min-h-screen bg-gradient-to-b from-purple-100 to-purple-200 shadow-lg rounded-lg p-8 md:p-10
              mx-auto pl-2 pr-2 w-11/12 box-border flex flex-col">
                 <h1 className="text-2xl md:text-3xl font-title text-neutral-950 mb-6 ">
-                    {isEdit.isEditTitle ?
-                        <InputField placeholder={formDetails.title} className="outline-none bg-transparent changeAbleLabelName" onChange={handleTitle} />
-                        :
-                        <Label labelname={formDetails.title} onDoubleClick={
-                            () => {
-                                setIsEdit({ ...isEdit, isEditTitle: true })
-                            }
-                        } />}</h1>
+                    {formDetails.title}
+                </h1>
+
 
                 <div className="formDescription  text-sm md:text-base text-neutral-700 mb-8 leading-relaxed "   >
-                    {isEdit.isEditDes ?
+                    {formDetails.description}
+                    {/* {isEdit.isEditDes ?
                         <InputField placeholder={formDetails.description} type="text-area" className="outline-none bg-transparent changeAbleLabelNamePara" onChange={handleDescription} />
                         :
                         <Label labelname={formDetails.description} onDoubleClick={
@@ -140,7 +136,7 @@ const FormUpload = () => {
                                 console.log("Sd")
                                 setIsEdit({ ...isEdit, isEditDes: true })
                             }
-                        } />}
+                        } />} */}
                 </div>
                 <Form field={fields} Name={"form1"} buttonName={"Submit"} formClass="flex flex-col gap-6" >
 
@@ -148,7 +144,7 @@ const FormUpload = () => {
             </div>
             {/* <footer>footer</footer> */}
             <DialogBox isOpen={dialog.flag} message={dialog.message} setDialog={setDialog} />
-            <PromptBox isOpen={isInput.flag} message={isInput.message} setDialog={setInput} setFormName={setFormName} />
+            <PromptBox isOpen={isInput.flag} message={isInput.message} setDialog={setInput} setFormDetails={formDetailsUpdation} />
         </>
     );
 }

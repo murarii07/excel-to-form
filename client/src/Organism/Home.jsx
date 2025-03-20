@@ -14,7 +14,7 @@ const Home = () => {
         <>
             <Nav flag={flag} />
             <XlUpload />
-            <Preview />
+            {/* <Preview /> */}
         </>
     )
 }

@@ -4,14 +4,15 @@
     "Id":"full_name",
     "Name": "full_name",
     "Type": "text",
-    "Regex": "^[A-Za-z ]+$"
+    "Required": true,"Regex": "^[A-Za-z ]+$"
   },
   {
     "LabelName": "Gender",
-    "Placeholder": "Select your gender","Id": "gender",
+    "Id": "gender",
     "Name": "gender",
-    "Type": "select",
-    "Options": ["MALE", "FEMALE"]
+    "Type": "radio",
+    "Value": ["MALE", "FEMALE"],
+    "Required": true
   },
   {
     "LabelName": "Age",
@@ -19,27 +20,32 @@
     "Id": "age",
     "Name": "age",
     "Type": "text",
+    "Required": true,
     "Regex": "^[0-9]{1,2}$"
   },
   {
     "LabelName": "PNR No",
-    "Placeholder": "Enter your PNR number",
+    "Placeholder": "Enter your PNR No",
     "Id": "pnr_no",
-    "Name": "pnr_no",
-    "Type": "text"},
+    "Name": "pnr_no","Type": "text",
+    "Required": false
+  },
   {
     "LabelName": "Coach No",
-    "Placeholder": "Enter your coach number",
+    "Placeholder": "Enter your Coach No",
     "Id": "coach_no",
     "Name": "coach_no",
-    "Type": "text"
+    "Type": "text",
+    "Required": true,
+    "Regex": "^[A-Z][0-9]+$"
   },
   {
     "LabelName": "Seat No",
-    "Placeholder": "Enter your seat number",
+    "Placeholder": "Enter your Seat No",
     "Id": "seat_no",
     "Name": "seat_no",
     "Type": "text",
-    "Regex": "^[0-9]+$" 
+    "Required": true,
+    "Regex": "^[0-9]+$"
   }
 ]

@@ -2,14 +2,14 @@ import express from "express";
 import { compareSync } from "bcrypt";
 import jwt from 'jsonwebtoken';
 import { EnvironmentVariables } from "../../config/config.js";
-import { structure } from "../../models/AuthSchema.js";
+import { AuthStructure } from "../../models/AuthSchema.js";
 import { AuthDB } from "../../config/DBconfig.js";
 export const login = express.Router();
 const loginUser = async (req, res) => {
     //mongo operation
     try {
         // const user = await AuthStructure.findOne({ username: req.body.username })
-        const AuthStructure = AuthDB.model("AuthStructure", structure)
+
         const user = await AuthStructure.findOne({ username: req.body.username })
         // console.log("USER", user)
         console.log("USER", user)
@@ -29,7 +29,8 @@ const loginUser = async (req, res) => {
             })
         }
         //creating jwt 
-        const payload = { user: user.username }
+        //storing the _id instead of username
+        const payload = { user: user._id }
         const secretKey = EnvironmentVariables.jwtScretKey
         const expireAge = 1000 * 60 * 60 * 60 * 60;
         let token = jwt.sign(payload, secretKey, { expiresIn: expireAge });

@@ -188,4 +188,8 @@ export class Formlist {
     }
 }
 
-// console.log(randomBytes(16).toString("hex"))
+// // console.log(randomBytes(16).toString("hex"))
+// import { MongoClient } from "mongodb";
+// MongoClient.connect("mongodb://formx:f2EBSkkpzA2twhrB9LqQqXr4ZQ2lcMbPPkLRqGStumPqlTS5psqZBWSTCc2ur7Bbj8pBXY7KgFY6ACDb84dtsg%3D%3D@formx.mongo.cosmos.azure.com:10255/?ssl=true&retrywrites=false&maxIdleTimeMS=120000&appName=@formx@", function (err, client) {
+//   client.close()
+// });

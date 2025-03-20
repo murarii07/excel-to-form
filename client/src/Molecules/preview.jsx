@@ -20,7 +20,7 @@ function Preview() {
     }
     const handleds = () => {
         try {
-            navigate("/preview")
+            navigate("/edit")
         } catch (e) {
             console.log(e)
         }

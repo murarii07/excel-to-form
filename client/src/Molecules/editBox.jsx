@@ -28,7 +28,8 @@ function EditBox(props) {
         dispatch(changeSpecificFieldValue([q2, obj]))
     }
     const handlTypeChange = (e) => {
-        console.log(e.target.id)
+        console.log(e.target.id,field)
+        console.log("YEHH",e.target.id,field.Id,field.Id === e.target.id)
         if (field.Id === e.target.id) {
             changeFieldState({ Type: e.target.value })
             updateFieldList({ Type: e.target.value }, e.target.id)
@@ -162,12 +163,12 @@ function EditBox(props) {
                         inputTypes={inputTypes} />
 
 
-                    {/* using default checked as f.required  so if server give required is true then it indicate in togglr */}
+                    {/* using default checked as f.Required  so if server give required is true then it indicate in togglr */}
                     <Label
                         labelname={
                             <>
                                 <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Required</span>
-                                <InputField type="checkbox" value="required" defaultChecked={f.required || false} onClick={toggleRequiredField} className="sr-only peer pl-10" />
+                                <InputField type="checkbox" value="required" defaultChecked={f.Required || false} onClick={toggleRequiredField} className="sr-only peer pl-10" />
                                 <div className="relative w-7 h-4   rounded-full peer dark:bg-purple-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[0px] after:start-[1px] after:bg-purple-900 after:border-purple-900 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-purple-900 peer-checked:bg-purple-900"></div>
                             </>}
                         className=" inline-flex gap-3 items-center cursor-pointer justify-end"
@@ -225,12 +226,12 @@ function EditBox(props) {
                         inputTypes={inputTypes} />
 
 
-                    {/* using default checked as f.required  so if server give required is true then it indicate in togglr */}
+                    {/* using default checked as f.Required  so if server give required is true then it indicate in togglr */}
                     <Label
                         labelname={
                             <>
                                 <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Required</span>
-                                <InputField type="checkbox" value="required" defaultChecked={f.required || false} onClick={toggleRequiredField} className="sr-only peer pl-10" />
+                                <InputField type="checkbox" value="required" defaultChecked={f.Required || false} onClick={toggleRequiredField} className="sr-only peer pl-10" />
                                 <div className="relative w-7 h-4   rounded-full peer dark:bg-purple-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[0px] after:start-[1px] after:bg-purple-900 after:border-purple-900 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-purple-900 peer-checked:bg-purple-900"></div>
                             </>}
                         className=" inline-flex gap-3 items-center cursor-pointer justify-end"
@@ -278,12 +279,12 @@ function EditBox(props) {
                         inputTypes={inputTypes} />
 
 
-                    {/* using default checked as f.required  so if server give required is true then it indicate in togglr */}
+                    {/* using default checked as f.Required  so if server give required is true then it indicate in togglr */}
                     <Label
                         labelname={
                             <>
                                 <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Required</span>
-                                <InputField type="checkbox" value="required" defaultChecked={f.required || false} onClick={toggleRequiredField} className="sr-only peer pl-10" />
+                                <InputField type="checkbox" value="required" defaultChecked={f.Required || false} onClick={toggleRequiredField} className="sr-only peer pl-10" />
                                 <div className="relative w-7 h-4   rounded-full peer dark:bg-purple-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[0px] after:start-[1px] after:bg-purple-900 after:border-purple-900 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-purple-900 peer-checked:bg-purple-900"></div>
                             </>}
                         className=" inline-flex gap-3 items-center cursor-pointer justify-end"

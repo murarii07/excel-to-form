@@ -37,6 +37,7 @@ html {
 body {
   line-height: inherit;
   margin: 0;
+  background-color:#f5f5f5;
 }
 hr {
   border-top-width: 1px;
