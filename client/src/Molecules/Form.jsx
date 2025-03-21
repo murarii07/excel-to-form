@@ -38,12 +38,11 @@ const FormField = ({ x, index }) => {
     }
 }
 
-function Form(props) {
-    const { field, formHandles } = props
+function Form({field,formHandles,formClass,buttonType,buttonName}) {
     console.log("Fields", field)
     return (
         <>
-            <form onSubmit={formHandles} encType="multipart/form-data" className={`w-full  ${props.formClass}  `} >
+            <form onSubmit={formHandles} encType="multipart/form-data" className={`w-full  ${formClass}  `} >
                 {field.map(
                     (x, index) => (
                         <div key={x.key} className=" flex flex-col  px-2 shadow-md   border-white  bg-purple-50 rounded-3xl p-6 hover:shadow-xl transform transition-transform hover:-translate-y-1 z-10 " style={{ borderWidth: "10px" }}>
@@ -56,8 +55,8 @@ function Form(props) {
                 )}
                 <Button
                     className="bg-purple-500 text-purple-50 font-medium rounded-2xl h-[48px] px-6 hover:bg-purple-600 focus:outline-none focus:ring focus:ring-purple-400 transition z-20 md:w-1/4"
-                    buttonType={props.buttonType}
-                    name={props.buttonName}
+                    buttonType={buttonType}
+                    name={buttonName}
                 />
             </form>
         </>

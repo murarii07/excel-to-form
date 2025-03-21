@@ -1,7 +1,7 @@
 import express from "express";
 import CryptoJS from "crypto-js";
 import multer from "multer";
-import blobFunction from "../../src/blobstorage.js";
+import blobFunction, { storingFiles } from "../../src/blobstorage.js";
 export const formSubmissionRouter = express.Router();
 import { EnvironmentVariables } from "../../config/config.js";
 import { formInfo } from "../../models/FormInfoSchema.js";
@@ -194,10 +194,23 @@ const formResponse1 = async (req, res) => {
                 message: "Form not found."
             });
         }
+
+        let file_metadata = []
+        for await (const file of req.files) {
+            let r = await storingFiles(metaData._id, file.originalname, file.buffer, file.mimetype)
+            console.log(r)
+            //extracting buffer key
+            // ...fileWithoutBuffer i act like  the rest operator.
+            const { buffer, ...fileWithoutBuffer } = file;
+            file_metadata.push({ ...fileWithoutBuffer, file_url: r })
+
+        }
+        console.log(file_metadata)
         let formResponseModel = formResponse
         let result = new formResponseModel({
             form_id: metaData._id,
-            response_data: req.body
+            response_data: req.body,
+            file_metadata: file_metadata
         })
         await result.save();
         // await blobFunction(user, id, JSON.stringify([req.body]))
@@ -206,6 +219,7 @@ const formResponse1 = async (req, res) => {
             success: true,
             message: "form response submission is successfull...."
         })
+
     } catch (e) {
         console.log(e)
         res.status(500).json({
@@ -218,4 +232,4 @@ const formResponse1 = async (req, res) => {
 }
 formSubmissionRouter.route("/v1/:encryptedUrl")
     .get(getForm1)
-    .post(upload.none(), formResponse1)
+    .post(upload.array("file"), formResponse1)

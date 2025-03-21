@@ -71,3 +71,17 @@ export async function getBlobSize(containername) {
   }
   return size
 }
+
+
+export async function storingFiles(formId, fileName, fileBuffer, fileMimeType) {
+  const containerName = `form-${formId}`.toLowerCase();
+  const containerClient = blobClient.getContainerClient(containerName);
+  await containerClient.createIfNotExists();
+  const blockBlobClient = containerClient.getBlockBlobClient(fileName);
+  await blockBlobClient.uploadData(fileBuffer, {
+    blobHTTPHeaders: { blobContentType: fileMimeType }
+  })
+  console.log(`File ${fileName} uploaded successfully to ${containerName}`);
+  return blockBlobClient.url; // Return file URL for reference
+
+}
