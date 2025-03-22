@@ -136,15 +136,6 @@ const FormUpload = () => {
 
                 <div className="formDescription  text-sm md:text-base text-neutral-700 mb-8 leading-relaxed "   >
                     {formDetails.description}
-                    {/* {isEdit.isEditDes ?
-                        <InputField placeholder={formDetails.description} type="text-area" className="outline-none bg-transparent changeAbleLabelNamePara" onChange={handleDescription} />
-                        :
-                        <Label labelname={formDetails.description} onDoubleClick={
-                            () => {
-                                console.log("Sd")
-                                setIsEdit({ ...isEdit, isEditDes: true })
-                            }
-                        } />} */}
                 </div>
                 <Form field={fields} Name={"form1"} buttonName={"Submit"} formClass="flex flex-col gap-6" >
 

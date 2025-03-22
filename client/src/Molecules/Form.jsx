@@ -79,7 +79,7 @@ function Form({ field, formHandles, formClass, buttonType, buttonName }) {
                     )
                 )}
                 <Button
-                    className="bg-purple-500 text-purple-50 font-medium rounded-2xl h-[48px] px-6 hover:bg-purple-600 focus:outline-none focus:ring focus:ring-purple-400 transition z-20 md:w-1/4"
+                    className="bg-purple-500 text-purple-50 font-medium rounded-2xl h-[48px] px-6 hover:bg-purple-600 focus:outline-none focus:ring focus:ring-purple-400 transition  md:w-1/4"
                     buttonType={buttonType}
                     name={buttonName}
                 />

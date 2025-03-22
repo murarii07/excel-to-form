@@ -64,9 +64,9 @@ function XlUpload() {
             setEr(true);
             console.log();
             setDialog({ flag: true, message: "OOPS!!! error occurs Try again Later" });
-            // setTimeout(() => window.location.reload(), 2000);
+            setTimeout(() => window.location.reload(), 2000);
         }
-    }, [response, error]);
+    }, [response, error,navigate]);
 
     useEffect(() => {
         console.log("sd");
