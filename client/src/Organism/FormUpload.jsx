@@ -83,6 +83,11 @@ const FormUpload = () => {
         console.log(fields)
     }, [fields])
 
+    const handleFormUpload = () => {
+        if (formDetails.formName.trim()) {
+            FormUpload();
+        }
+    };
     useEffect(() => {
         if (formDetails.formName.trim()) {
             FormUpload()
@@ -110,8 +115,11 @@ const FormUpload = () => {
         };
     }, [isEdit]);
 
-    if (!fields.length)
-        return nav("/")
+    useEffect(() => {
+        if (!fields.length)
+            nav("/")
+
+    }, [])
     return (
 
         <>

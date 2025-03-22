@@ -4,11 +4,13 @@ import Select from "../Atoms/SelectField"
 import InputField from "../Atoms/inputField";
 import Label from "../Atoms/Label";
 import { useDispatch, } from "react-redux";
-import { changeSpecificFieldValue } from "../redux/formElement";
+import { addNewKey, changeSpecificFieldValue } from "../redux/formElement";
 import useDebounce from "../CustomHooks/debounce";
 import '../Working.css'
 function EditBox(props) {
     const { field } = props
+    const [regexTrue, setRegexTrue] = useState(false);
+    const [regex, setRegex] = useState("")
     const [f, setF] = useState(field)
     const [input, setInput] = useState(true)
     const dispatch = useDispatch();
@@ -18,6 +20,17 @@ function EditBox(props) {
         "text", "password", "email", "url", "number", "checkbox",
         "radio", "file", "date"
     ]
+    const regexHandle = useDebounce((e) => {
+        if (e.target.value) {
+            setRegex(e.target.value)
+          
+        }
+    }, 500)
+    useEffect(()=>{
+        if(regex){
+            dispatch(addNewKey([f.Name, { Regex:regex }]))
+        }
+    },[regex])
     const changeFieldState = (obj) => {
         setF((prevField) => ({
             ...prevField,
@@ -28,8 +41,8 @@ function EditBox(props) {
         dispatch(changeSpecificFieldValue([q2, obj]))
     }
     const handlTypeChange = (e) => {
-        console.log(e.target.id,field)
-        console.log("YEHH",e.target.id,field.Id,field.Id === e.target.id)
+        console.log(e.target.id, field)
+        console.log("YEHH", e.target.id, field.Id, field.Id === e.target.id)
         if (field.Id === e.target.id) {
             changeFieldState({ Type: e.target.value })
             updateFieldList({ Type: e.target.value }, e.target.id)
@@ -75,6 +88,7 @@ function EditBox(props) {
                 if (e.key === "Enter") {
                     setInput(true)
                     setInputLabel(true)
+                    setRegexTrue(false)
                 }
             }
         };
@@ -83,6 +97,8 @@ function EditBox(props) {
             document.querySelector("body").removeEventListener("keypress", handleClickOutsidee);
         };
     }, [input]);
+
+
     if ((f.Type === "radio" || f.Type === "checkbox")) {
         return (
 
@@ -206,8 +222,23 @@ function EditBox(props) {
                     selcetName={f.Name}
                     // key={props.index}
                     inputTypes={f.Options}
-
                 />
+                {/* {!(inputLabel) ? <InputField
+                            className="changeAbleLabelName  cursor-pointer  outline-none"
+                            onChange={updateOptionValue}
+                            data-field-id={x}
+                            type={"text"}
+                            placeholder={x}
+
+
+                        /> : <Label
+                            htmlFor={f.Name}
+                            className="text-black"
+                            labelname={x}
+                            onDoubleClick={() => {
+                                setInputLabel(false)
+                            }} />} */}
+
                 <Button
                     // data-field-id={f.Id}  this is used for event delegation using data-* attribute
                     buttonName={"absolute material-symbols-outlined w-7 max-h-4 text-white   top-1 right-2 bg-red-500 "}
@@ -291,6 +322,18 @@ function EditBox(props) {
                     />
 
                 </div>
+                {
+                    !regexTrue ?
+                        <button className="bg-blue-500 text-white max-w-32" onClick={() => setRegexTrue(true)}>Add Regex</button> :
+                        <InputField name={"regex"}
+                            key={`${props.index}00`}
+                            type={"text"}
+                            placeholder={f.Regex || ""}
+                            onChange={(e) => regexHandle(e)}
+                            className={"changeAbleLabelName"}
+                        />
+
+                }
             </div>
 
 

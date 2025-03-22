@@ -21,7 +21,7 @@
     "Name": "age",
     "Type": "text",
     "Required": true,
-    "Regex": "^[0-9]{1,2}$"
+    "Regex": "^[0-9]{1,3}$"
   },
   {
     "LabelName": "PNR No",
@@ -37,7 +37,7 @@
     "Name": "coach_no",
     "Type": "text",
     "Required": true,
-    "Regex": "^[A-Z][0-9]+$"
+    "Regex": "^[A-Z][0-9]+$" 
   },
   {
     "LabelName": "Seat No",

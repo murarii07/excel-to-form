@@ -3,14 +3,37 @@ import Radio from "../Atoms/RadioButton";
 import Label from "../Atoms/Label";
 import InputField from "../Atoms/inputField";
 import Select from "../Atoms/SelectField";
+import { useEffect, useState } from "react";
+import useDebounce from "../CustomHooks/debounce";
 
 const FormField = ({ x, index }) => {
+    const [error, setError] = useState({ error: "", flag: false })
+    useEffect(() => {
+        console.log(error)
+    }, [error])
+    const handleChange = useDebounce((e) => {
+        console.log(e.target.value);
+        if (x.Regex) {
+            console.log(x.Regex)
+            const d = new RegExp(x.Regex);
+            const isCorrect = d.test(e.target.value);
+            console.log(isCorrect)
+            if (!isCorrect) {
+                setError({ error: `Invalid ${x.Name}`, flag: true })
+                return
+            }
+            setError({ error: "", flag: false })
+        }
+    }, 500)
     if (x.Type === 'radio' || x.Type === 'checkbox') {
         return (
-            <Radio
-                radioInputs={x.Value || []}
-                type={x.Type}
-                name={x.Name} />
+            <>
+                <Radio
+                    radioInputs={x.Value || []}
+                    type={x.Type}
+                    name={x.Name} />
+
+            </>
         )
     }
     else if (x.Type === "select") {
@@ -19,26 +42,28 @@ const FormField = ({ x, index }) => {
             <Select
                 selcetName={x.Name}
                 inputTypes={x.Options}
-
             />
         )
     }
     else {
         return (
-            <InputField
-                type={x.Type}
-                required={x.Required}
-                name={x.Name}
-                key={index}
-                id={x.Id}
-                placeholder={x.Placeholder}
-
-                className="w-full border border-purple-500 rounded-full h-[48px] px-4 focus:outline-none focus:ring focus:ring-purple-400 transition" />
+            <>
+                <InputField
+                    type={x.Type}
+                    required={x.Required}
+                    name={x.Name}
+                    key={index}
+                    id={x.Id}
+                    placeholder={x.Placeholder}
+                    onChange={handleChange}
+                    className="w-full border border-purple-500 rounded-full h-[48px] px-4 focus:outline-none focus:ring focus:ring-purple-400 transition" />
+                <div className="text-red-300">{error.error}</div>
+            </>
         )
     }
 }
 
-function Form({field,formHandles,formClass,buttonType,buttonName}) {
+function Form({ field, formHandles, formClass, buttonType, buttonName }) {
     console.log("Fields", field)
     return (
         <>
