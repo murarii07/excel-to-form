@@ -67,7 +67,9 @@ const extractingFields = async (path) => {
     else if (worksheet.actualRowCount > 1) {
         // const csvContent = await excelToCSVConversion(path);
         const csvContent = await excelToCSVConversion(worksheet);
+        // console.log("YES",csvContent)
         obj = await responseGeneration(csvContent)
+        // console.log("sd",obj)
     }
     return (obj)
 }
@@ -90,7 +92,7 @@ const generateFormFields = async (req, res) => {
         // //when excel file contains more than 5 row or it contains data
         // const obj2 = await ExtractingFields(path)
         const obj = await extractingFields(path)
-
+        
         FormListObj.add(formId) //create a id and push in this
         // console.log(FormListObj.formIdList)
         res

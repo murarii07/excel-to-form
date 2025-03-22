@@ -8,9 +8,11 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 // console.log(prompts)
 
 const responseGeneration = async (csvContent) => {
-    const prompts = fs.readFileSync("/home/murarii/codeBase/collegeCodebase/excel-to-form/backend/src/ModifyPrompt.txt", "utf-8")
+    console.log("ohh yes",csvContent)
+    const prompts = fs.readFileSync("../backend/src/ModifyPrompt.txt", "utf-8")
     const result = await model.generateContentStream(csvContent + prompts);
-    const rr = fs.createWriteStream("./ss.json")
+    // const rr = fs.createWriteStream("./ss.json")
+    let obj=[]
     for await (const chunk of result.stream) {
         // Best for Streaming
         // console.log(chunk.candidates[0].content.parts[0].text)
@@ -19,12 +21,14 @@ const responseGeneration = async (csvContent) => {
         process.stdout.write(r); // Print streamed text
         r = r.replace(/```/g, "").trim() //trim() remvoing white spaces
         r = r.replace(/^json/i, "").trim()  // Removes "json" if it's the first word
-        rr.write(r)
+        obj.push(r)
+        // rr.write(r)
     }
     rr.end()
-    const readingJSONFile = fs.readFileSync("./ss.json", "utf-8")
-    let objRespo = JSON.parse(readingJSONFile)
-    return (objRespo) //retruning object
+    // const readingJSONFile = fs.readFileSync("./ss.json", "utf-8")
+    // let objRespo = JSON.parse(readingJSONFile)
+    // return (objRespo) //retruning object
+    return (obj)
 }
 
 //if excel has data more than 5
@@ -57,7 +61,8 @@ async function excelToCSVConversion(worksheet) {
 }
 // fieldCreationWhenData()
 
-
+const reas=fs.readFileSync("../backend/src/ModifyPrompt.txt","utf-8")
+console.log(reas)
 // responseGeneration(` 
 //     Full name of the student,Gender,Age,PNR No,Coach NO,Seat No
 // Prince sharma,MALE,19,,G6,1

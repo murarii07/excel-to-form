@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+
 import Button from "../Atoms/Button"
 import Select from "../Atoms/SelectField"
 import InputField from "../Atoms/inputField";
@@ -7,11 +7,94 @@ import { useDispatch, } from "react-redux";
 import { addNewKey, changeSpecificFieldValue } from "../redux/formElement";
 import useDebounce from "../CustomHooks/debounce";
 import '../Working.css'
+import { Dialog } from "@headlessui/react";
+import { DialogPanel, DialogTitle } from '@headlessui/react'
+import { useEffect, useState } from 'react'
+
+ function ValueList({ isOpen,  setIsOpen, values }) {
+    const [valueArray, setValueArray] = useState(values);
+    const [value, setValue] = useState(0)
+    const dispatch = useDispatch()
+    console.log(valueArray)
+    const addValue = () => {
+        if (!value)
+            return
+        setValueArray([...valueArray, value])
+    }
+    const deleteValue = (val) => {
+        if (!val)
+            return
+        setValueArray(valueArray.filter(x => x !== val))
+    }
+    const close = () => {
+        setIsOpen(false)
+    }
+    useEffect(() => {
+        console.log("Dialog state changed:", isOpen);
+    }, [isOpen]);
+    return (
+        <Dialog
+            open={isOpen}
+            as="div"
+            className="relative z-10 focus:outline-none"
+            onClose={close}
+        >
+            {/* Background overlay */}
+            <div className="fixed inset-0  w-screen bg-black/50 backdrop-blur-sm " />
+
+            <div className="fixed inset-0 flex items-center justify-center p-4">
+                <DialogPanel
+                    className="w-full max-w-md rounded-xl bg-neutral-800 p-6  shadow-xl transition-all duration-300 ease-out"
+                >
+                    <DialogTitle as="h3" className="text-lg font-semibold text-white">
+                        Confirm Action
+                    </DialogTitle>
+
+                    <div className=" flex  items-center justify-around gap-2">
+                        <InputField
+                            value={value}
+                            onChange={(e) => setValue(e.target.value)}
+                            className="text-white bg-white p-2 border-slate-100"
+                        />
+                        <button className="text-white bg-green-300 min-w-14" onClick={addValue}>add</button>
+                    </div>
+                    {/* Action Buttons */}
+                    <div className="overflow-auto border-slate-200">
+                        {values.map((x,index) => (
+                            <>
+                                <div className="border-2 m-0 flex  gap-10 items-center justify-between" key={index}>
+                                    <span className="text-white">{x}</span>
+                                    <button className="text-white bg-red-300" onClick={() => deleteValue(x)}>delete</button>
+                                </div>
+                            </>
+                        ))}
+                    </div>
+                    <div className="mt-4 flex justify-end gap-3">
+                        <button
+                            className="rounded-md bg-gray-700 px-4 py-2 text-sm font-semibold text-white shadow-inner shadow-white/10 focus:outline-none hover:bg-red-600 focus:ring-1 focus:ring-white"
+                            onClick={close}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            className="rounded-md bg-[#8A2BE2] px-4 py-2 text-sm font-semibold text-white shadow-inner shadow-white/10 focus:outline-none hover:bg-green-500 focus:ring-1 focus:ring-white"
+                            onClick={() => {
+                                close()
+                            }}
+                        >
+                            OK
+                        </button>
+                    </div>
+                </DialogPanel>
+            </div>
+        </Dialog>
+    );
+}
 function EditBox(props) {
     const { field } = props
     const [regexTrue, setRegexTrue] = useState(false);
-    const [regex, setRegex] = useState(f.Regex || "")
     const [f, setF] = useState(field)
+    const [regex, setRegex] = useState(field.Regex || "")
     const [input, setInput] = useState(true)
     const dispatch = useDispatch();
     const [arr, setArr] = useState(field.Value || ["option1"])
@@ -20,17 +103,18 @@ function EditBox(props) {
         "text", "password", "email", "url", "number", "checkbox",
         "radio", "file", "date"
     ]
+    const [isOpen, setIsOpen] = useState(false)
     const regexHandle = useDebounce((e) => {
         if (e.target.value) {
             setRegex(e.target.value)
-          
+
         }
     }, 500)
-    useEffect(()=>{
-        if(regex){
-            dispatch(addNewKey([f.Name, { Regex:regex }]))
+    useEffect(() => {
+        if (regex) {
+            dispatch(addNewKey([f.Name, { Regex: regex }]))
         }
-    },[regex])
+    }, [regex])
     const changeFieldState = (obj) => {
         setF((prevField) => ({
             ...prevField,
@@ -185,7 +269,7 @@ function EditBox(props) {
                             <>
                                 <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Required</span>
                                 <InputField type="checkbox" value="required" defaultChecked={f.Required || false} onClick={toggleRequiredField} className="sr-only peer pl-10" />
-                                <div className="relative w-7 h-4   rounded-full peer dark:bg-purple-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[0px] after:start-[1px] after:bg-purple-900 after:border-purple-900 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-purple-900 peer-checked:bg-purple-900"></div>
+                                <div className="relative w-7 h-4   rounded-full peer bg-purple-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[0px] after:start-[1px] after:bg-purple-900 after:border-purple-900 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-purple-900 peer-checked:bg-purple-900"></div>
                             </>}
                         className=" inline-flex gap-3 items-center cursor-pointer justify-end"
                     />
@@ -213,32 +297,15 @@ function EditBox(props) {
                         className="changeAbleLabelName outline-none"
 
                     />}
-                {/* <InputField name={f.Name}
-                    key={props.index}
-                    type={f.Type}
 
-                /> */}
                 <Select
                     selcetName={f.Name}
                     // key={props.index}
                     inputTypes={f.Options}
                 />
-                {/* {!(inputLabel) ? <InputField
-                            className="changeAbleLabelName  cursor-pointer  outline-none"
-                            onChange={updateOptionValue}
-                            data-field-id={x}
-                            type={"text"}
-                            placeholder={x}
-
-
-                        /> : <Label
-                            htmlFor={f.Name}
-                            className="text-black"
-                            labelname={x}
-                            onDoubleClick={() => {
-                                setInputLabel(false)
-                            }} />} */}
-
+                <button className="bg-green-500 text-white w-[30%] p-2" onClick={() => setIsOpen(true)}>modify values</button>
+                {/* <div className="absolute top-[10px] bg-red-300 z-10">write</div> */}
+                {<ValueList values={f.Options} setIsOpen={setIsOpen()} isOpen={isOpen} />}
                 <Button
                     // data-field-id={f.Id}  this is used for event delegation using data-* attribute
                     buttonName={"absolute material-symbols-outlined w-7 max-h-4 text-white   top-1 right-2 bg-red-500 "}
@@ -263,11 +330,12 @@ function EditBox(props) {
                             <>
                                 <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Required</span>
                                 <InputField type="checkbox" value="required" defaultChecked={f.Required || false} onClick={toggleRequiredField} className="sr-only peer pl-10" />
-                                <div className="relative w-7 h-4   rounded-full peer dark:bg-purple-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[0px] after:start-[1px] after:bg-purple-900 after:border-purple-900 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-purple-900 peer-checked:bg-purple-900"></div>
+                                <div className="relative w-7 h-4   rounded-full peer bg-purple-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[0px] after:start-[1px] after:bg-purple-900 after:border-purple-900 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-purple-900 peer-checked:bg-purple-900"></div>
                             </>}
                         className=" inline-flex gap-3 items-center cursor-pointer justify-end"
                     />
                 </div>
+
             </div>
 
         )
@@ -316,7 +384,7 @@ function EditBox(props) {
                             <>
                                 <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-900">Required</span>
                                 <InputField type="checkbox" value="required" defaultChecked={f.Required || false} onClick={toggleRequiredField} className="sr-only peer pl-10" />
-                                <div className="relative w-7 h-4   rounded-full peer dark:bg-purple-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[0px] after:start-[1px] after:bg-purple-900 after:border-purple-900 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-purple-900 peer-checked:bg-purple-900"></div>
+                                <div className="relative w-7 h-4   rounded-full peer bg-purple-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[0px] after:start-[1px] after:bg-purple-900 after:border-purple-900 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-purple-900 peer-checked:bg-purple-900"></div>
                             </>}
                         className=" inline-flex gap-3 items-center cursor-pointer justify-end"
                     />
