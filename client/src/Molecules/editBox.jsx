@@ -10,7 +10,7 @@ import '../Working.css'
 function EditBox(props) {
     const { field } = props
     const [regexTrue, setRegexTrue] = useState(false);
-    const [regex, setRegex] = useState("")
+    const [regex, setRegex] = useState(f.Regex || "")
     const [f, setF] = useState(field)
     const [input, setInput] = useState(true)
     const dispatch = useDispatch();
@@ -328,7 +328,7 @@ function EditBox(props) {
                         <InputField name={"regex"}
                             key={`${props.index}00`}
                             type={"text"}
-                            placeholder={f.Regex || ""}
+                            placeholder={regex || ""}
                             onChange={(e) => regexHandle(e)}
                             className={"changeAbleLabelName"}
                         />
