@@ -11,6 +11,7 @@ export const formMetadataSchema = new Schema({
     fields: { type: Array, required: true },
     description: { type: String },
     response: { type: Number, required: true, default: 0 },
+    storage:{type:Number, default:0}
 
 }, { timestamps: true })
 export const formMetadata=UserDB.model("forms", formMetadataSchema, "forms")

@@ -171,14 +171,20 @@ const FormDetails = () => {
                                             <span className="material-symbols-outlined text-sm">download</span>
                                             download
                                         </>}
+                                       
                                     />
 
                                     <Button
                                         className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-lg font-semibold hover:from-indigo-700 hover:to-blue-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center gap-2"
                                         name={<>
                                             <span className="material-symbols-outlined text-sm">settings</span>
-                                            Settings
+                                            See Responses
                                         </>}
+                                         onClick={(e)=>{
+                                            // e.preventDefault();
+                                            navigate(`/responses/${form.name}`)
+                                            // e.stopPropogation()
+                                        }}
                                     />
 
                                     <Button

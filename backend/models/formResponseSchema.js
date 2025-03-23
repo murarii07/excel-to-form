@@ -1,7 +1,7 @@
 import { Schema } from "mongoose";
 import { UserDB } from "../config/DBconfig.js";
 import { MongoAPIError } from "mongodb";
-export const formResponseSchema = new Schema({
+const formResponseSchema = new Schema({
     // form_id  is like a Foreign key -> form_metadata._id
     form_id: { type: String, required: true }, // you can say _id of formMetaData
     response_data: { type: Object, required: true }, // Key-value pair of responses

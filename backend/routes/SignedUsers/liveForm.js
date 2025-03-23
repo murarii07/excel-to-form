@@ -11,7 +11,8 @@ import { AuthStructure } from "../../models/AuthSchema.js";
 export const liveFormRouter = express.Router();
 // const USERDB = EnvironmentVariables.userDB
 // import { UserDB } from "../../config/DBconfig.js";
-import { formMetadata, formMetadataSchema } from "../../models/formMetadataSchema.js";
+import { formMetadata } from "../../models/formMetadataSchema.js";
+import { formResponse } from "../../models/formResponseSchema.js";
 //url generator
 const urlGenerator = (userName, id) => {
     let obj = JSON.stringify({ user: userName, id: id });
@@ -38,6 +39,12 @@ const cookieCheckingMiddleware = (req, res, next) => {
             success: false,
             message: "user has not login yet..."
         })
+    }
+    if (req.cookies.jwt) {
+        const userId = extractDataFromToken(req.cookies.jwt)
+        req.userInfo = {
+            userId: userId
+        }
     }
     next();
 }
@@ -188,7 +195,9 @@ const cookieCheckingMiddleware = (req, res, next) => {
 // }
 const getUserDetails = async (req, res) => {
     try {
-        const userId = extractDataFromToken(req.cookies?.jwt)
+        // const userId = extractDataFromToken(req.cookies?.jwt)
+        const userId = req.userInfo.userId
+        console.log("this is user Id", userId)
         let result = AuthStructure
         let userDetails = await result.findOne({ _id: userId }, { username: 1, email: 1 })
 
@@ -202,25 +211,25 @@ const getUserDetails = async (req, res) => {
         //getting user  used storage size 
         console.log("ds", userDetails)
         let result2 = formMetadata
-        let formList = await result2.find({ user_id: userId }, { name: 1, _id: 0 })
-        if (formList.length > 0) {
-            formList = formList.map(x => x.name)
+
+        let formsInfo = await result2.find({ user_id: userId }, { name: 1, _id: 0, storage: 1 })
+
+
+        let formList = []
+        if (formsInfo.length > 0) {
+            formList = formsInfo.map(x => x.name)
         }
         console.log("Result:", userDetails, formList)
-        let storageSize = 0
-        // try {
-        //     storageSize = await getBlobSize(user)
-        // } catch (e) {
-        //     console.log("Storage size error", e.message)
-        // }
 
-        console.log("storageSize:", storageSize, userDetails)
+        //getting data here
+        let totalFormStorage = formsInfo.reduce((x, y) => x + y.storage, 0)
+        console.log("storageSize:", totalFormStorage)
         res.status(200).json({
             data: {
                 email: userDetails.email,
                 name: userDetails.username,
                 formlist: formList,
-                storageInBytes: storageSize,
+                storageInBytes: totalFormStorage,
             },
             success: true,
             message: "successfull...."
@@ -254,7 +263,7 @@ const uploadForm1 = async (req, res) => {
                 message: "Bad request"
             })
         }
-        const userId = extractDataFromToken(req.cookies?.jwt)
+        const userId = req.userInfo.userId
         const url = urlGenerator(userId, req.body.formId);
         // console.log(user)
         const col2 = AuthStructure
@@ -292,7 +301,7 @@ const uploadForm1 = async (req, res) => {
 
 const getFormList1 = async (req, res) => {
     try {
-        const userId = extractDataFromToken(req.cookies?.jwt)
+        const userId = req.userInfo.userId
         console.log("Registered User", userId)
         //bydefault colname is set  by name of modelname if it not given
         // let autcol = AuthStructure
@@ -320,7 +329,7 @@ const getFormList1 = async (req, res) => {
 
 const getSpecificFormDetails1 = async (req, res) => {
     try {
-        const userId = extractDataFromToken(req.cookies?.jwt);
+        const userId = req.userInfo.userId
 
         // let autcol = AuthStructure
         // let userInfo = await autcol.findOne({ username: user }, { _id: 1 })
@@ -351,7 +360,7 @@ const getSpecificFormDetails1 = async (req, res) => {
 
 const removeSpecificForm1 = async (req, res) => {
     try {
-        const userId = extractDataFromToken(req.cookies?.jwt)
+        const userId = req.userInfo.userId
 
 
 
@@ -370,30 +379,28 @@ const removeSpecificForm1 = async (req, res) => {
                 message: "something went wrong try again later"
             })
         }
-        // //deleting data on cloud when responses is there
-        // if (result.response) {
-        //     deletingBlob(user, req.params.formName)
-        //         .then(() => {
-        //             console.log("successfull deleted")
-        //             res.status(200).json({
-        //                 success: true,
-        //                 message: "successfully deleted form"
-        //             })
-        //         })
-        //         .catch((err) => {
-        //             console.error(err)
-        //             res.status(500).json({
-        //                 success: false,
-        //                 message: "something went wrong try again later"
-        //             })
-        //         })
-        // }
-        console.log("successfull deleted")
-        res.status(200).json({
-            success: true,
-            message: "successfully deleted form"
-        })
-        console.log("Result:", result)
+        //deleting data on cloud when responses is there
+
+        // let fileNameArray = responseDoc.map(x => x.file_metadata.originalname)
+        if (result.response) {
+            let responseDoc = await formResponse.deleteMany({ form_id: result._id });
+            console.log(responseDoc)
+            deletingBlob(result._id)
+                .then(() => {
+                    console.log("successfull deleted form ")
+                    res.status(200).json({
+                        success: true,
+                        message: "successfully deleted form"
+                    })
+                })
+                .catch((err) => {
+                    console.error(err)
+                    res.status(500).json({
+                        success: false,
+                        message: "something went wrong try again later"
+                    })
+                })
+        }
     }
     catch (e) {
         res.status(404).json({
@@ -409,3 +416,31 @@ liveFormRouter.delete("/v1/delete/:formName", removeSpecificForm1)
 liveFormRouter.get("/v1/formDetails/:formName", getSpecificFormDetails1)
 liveFormRouter.post("/v1/upload", uploadForm1)
 liveFormRouter.get("/v1/formlist", getFormList1)
+liveFormRouter.get("/v1/response/:formName", async (req, res) => {
+    try {
+        const userId = req.userInfo.userId
+
+        console.log("USER FORMID", req.params.formName)
+        let rDBModel = formMetadata
+        let result2 = await rDBModel.findOne(
+            { user_id: userId, name: req.params.formName }, { _id: 1, fields: 1 }
+        )
+        let colname = result2.fields.map(x => x.Name)
+        let formResponses = await formResponse.find({ form_id: result2._id }, { response_data: 1, "file_metadata": 1 })
+        console.log(formResponses);
+        //_doc field contain acutal info
+        console.log("FormDetails", result2)
+        return res.status(200).json({
+            data: { responses: formResponses, fields: colname },
+            success: true,
+            message: "successfull...."
+        })
+
+    }
+    catch (e) {
+        res.status(500).json({
+            success: false,
+            message: e.message
+        })
+    }
+})

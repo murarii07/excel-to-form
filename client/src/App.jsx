@@ -13,12 +13,14 @@ import UserForm from './Organism/userForm';
 import FormDetails from './Organism/FormDetails'; import Submit from './Atoms/Submit';
 import EditForm from './Organism/EditForm';
 import { useEffect } from 'react';
+import Responses from './Organism/Responses';
 function Tasks() {
   return (
 
     <Routes>
       <Route path='/' element={<MyTask />} />
       <Route path='*' element={<FormDetails />} />
+      
     </Routes>
   )
 }
@@ -40,6 +42,7 @@ function App() {
         <Route path='submit' element={<Submit />} />
         <Route path='*' element={<NotFound />} />
         <Route path='edit' element={<EditForm />} />
+        <Route path="responses/*" element={ <Responses />} />
 
       </Routes>
 

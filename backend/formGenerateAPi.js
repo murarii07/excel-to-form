@@ -7,7 +7,6 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 // console.log(prompts)
 
 const responseGeneration = async (csvContent) => {
-    console.log("ohh yes", csvContent)
     const prompts = fs.readFileSync("../backend/src/ModifyPrompt.txt", "utf-8")
     const result = await model.generateContentStream(csvContent + prompts);
     const rr = fs.createWriteStream("./ss.json")

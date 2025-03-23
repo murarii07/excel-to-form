@@ -6,7 +6,7 @@ import Select from "../Atoms/SelectField";
 import { useEffect, useState } from "react";
 import useDebounce from "../CustomHooks/debounce";
 
-const FormField = ({ x, index }) => {
+const FormField = ({ x, index, errorHandle }) => {
     const [error, setError] = useState({ error: "", flag: false })
     useEffect(() => {
         console.log(error)
@@ -20,9 +20,11 @@ const FormField = ({ x, index }) => {
             console.log(isCorrect)
             if (!isCorrect) {
                 setError({ error: `Invalid ${x.Name}`, flag: true })
+                errorHandle(true)
                 return
             }
             setError({ error: "", flag: false })
+            errorHandle(false)
         }
     }, 500)
     if (x.Type === 'radio' || x.Type === 'checkbox') {
@@ -64,15 +66,26 @@ const FormField = ({ x, index }) => {
 }
 
 function Form({ field, formHandles, formClass, buttonType, buttonName }) {
+    const [error, setError] = useState(false)
+    const errorHandle = (val) => {
+        setError(val)
+    }
     console.log("Fields", field)
+    const onSubmit = (e) => {
+        e.preventDefault();
+        if (!error) {
+            formHandles(e)
+        }
+
+    }
     return (
         <>
-            <form onSubmit={formHandles} encType="multipart/form-data" className={`w-full  ${formClass}  `} >
+            <form onSubmit={onSubmit} encType="multipart/form-data" className={`w-full  ${formClass}  `} >
                 {field.map(
                     (x, index) => (
                         <div key={x.key} className=" flex flex-col  px-2 shadow-md   border-white  bg-purple-50 rounded-3xl p-6 hover:shadow-xl transform transition-transform hover:-translate-y-1 z-10 " style={{ borderWidth: "10px" }}>
                             <Label labelname={x.LabelName} htmlFor={x.Name} required={x.Required || false} className={"block text-sm font-medium text-neutral-950 mb-2"} />
-                            <FormField x={x} index={index} />
+                            <FormField x={x} index={index} errorHandle={errorHandle} />
 
                         </div>
 

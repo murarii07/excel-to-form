@@ -13,6 +13,7 @@ const UserForm = () => {
     const [response, error] = useFetchData(newUrl, {
         method: "GET",
     })
+    const [loading, setLoading] = useState(false)
     const [res, err, setSubmitOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/public/v1/${ext[1]}`)
     async function dataSubmission(e) {
         e.preventDefault();
@@ -20,6 +21,7 @@ const UserForm = () => {
             const form = new FormData(e.target);
             console.log("Form Entries", [...form.entries()]);
             setSubmitOptions({ method: "POST", body: form });
+            setLoading(true)
         } catch (error) {
             console.error("Submission Error:", error);
         }
@@ -38,6 +40,7 @@ const UserForm = () => {
 
     useEffect(() => {
         if (res && !err) {
+            setLoading(false)
             navigate("/submit");
         }
         else if (err) {
@@ -46,7 +49,7 @@ const UserForm = () => {
         }
     }, [res, err])
     return (
-        !(response) ? <SkeletonLoading /> :
+        !(response) || loading ? <SkeletonLoading /> :
             <>
                 <div className="w-full min-h-screen bg-gradient-to-b from-purple-100 to-purple-200 shadow-lg rounded-lg p-8 md:p-10">
 

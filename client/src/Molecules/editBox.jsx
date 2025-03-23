@@ -10,16 +10,16 @@ import '../Working.css'
 import React, { memo, useCallback, useEffect, useState } from 'react'
 import ValueList from "../Atoms/ValueList";
 
-const SelectEdit = ({ f, index,changeFieldState }) => {
+const SelectEdit = ({ f, index, changeFieldState }) => {
     const [isOpen, setIsOpen] = useState(false)
-    const dispatch=useDispatch()
-    const handleOptions=(valueArray)=>{
-        dispatch(addNewKey([f.Name, {Options:[...valueArray]}]))
-        changeFieldState({Options:[...valueArray]})
+    const dispatch = useDispatch()
+    const handleOptions = (valueArray) => {
+        dispatch(addNewKey([f.Name, { Options: [...valueArray] }]))
+        changeFieldState({ Options: [...valueArray] })
     }
-    useEffect(()=>{
+    useEffect(() => {
         console.log(f)
-    },[f])
+    }, [f])
     const openHandle = useCallback(() => {
         setIsOpen(false)
     }, [])
@@ -35,7 +35,7 @@ const SelectEdit = ({ f, index,changeFieldState }) => {
                 setIsOpen(true)
                 e.stopPropagation();
             }}>modify values</button>
-            <ValueList isOpen={isOpen} values={f.Options} openHandle={openHandle}  handleOptions={handleOptions}/>
+            <ValueList isOpen={isOpen} values={f.Options} openHandle={openHandle} handleOptions={handleOptions} />
         </>
 
     )
@@ -211,10 +211,13 @@ function EditBox(props) {
 
     const toggleRequiredField = useDebounce((e) => {
         let r = f.required
-        changeFieldState({ required: !r });
-        updateFieldList({ required: !r }, f.Id)
+        changeFieldState({ Required: !r });
+        updateFieldList({ Required: !r }, f.Id)
 
     }, 500)
+    useEffect(() => {
+        console.log(f)
+    }, [f])
 
     useEffect(() => {
         const handleClickOutsidee = (e) => {

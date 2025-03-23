@@ -16,6 +16,7 @@ export default async function storingOnCloud(containername, blobname, data) {
   await containerClient.createIfNotExists();
   //blob
   const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
   // console.log("createdddddddddddd")
   //if blob exists
   const r = await blockBlobClient.exists()
@@ -52,14 +53,17 @@ async function streamToBuffer(readableStream) {
   });
 }
 
-export async function deletingBlob(containername, blobname) {
-  const containerName = containername.toLowerCase();
-  const blobName = `${blobname}.json`;
+export async function deletingBlob(containername) {
+  const containerName = `form-${containername}`;
   const containerClient = blobClient.getContainerClient(containerName);
-  const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-  await blockBlobClient.deleteIfExists();
-  console.log("deleted")
-
+  const r = await containerClient.delete();
+  console.log("DELETED successfullyy")
+  // for await (const element of fileName) {
+  //   const blobName = element;
+  //   const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+  //   await blockBlobClient.deleteIfExists();
+  //   console.log("deleted")
+  // }
 }
 export async function getBlobSize(containername) {
   const containerName = containername.toLowerCase();
@@ -76,12 +80,24 @@ export async function getBlobSize(containername) {
 export async function storingFiles(formId, fileName, fileBuffer, fileMimeType) {
   const containerName = `form-${formId}`.toLowerCase();
   const containerClient = blobClient.getContainerClient(containerName);
+
   await containerClient.createIfNotExists();
   const blockBlobClient = containerClient.getBlockBlobClient(fileName);
   await blockBlobClient.uploadData(fileBuffer, {
     blobHTTPHeaders: { blobContentType: fileMimeType }
   })
   console.log(`File ${fileName} uploaded successfully to ${containerName}`);
-  return blockBlobClient.url; // Return file URL for reference
+
+  //generating sas token for usercan see the files
+  const timeDuration = new Date();
+  timeDuration.setMonth(timeDuration.getMonth() + 1)
+  const fileUrl = blockBlobClient.generateSasUrl({
+    permissions: "r", //givng read acces only
+    expiresOn: timeDuration
+  })
+  return fileUrl; // Return file URL for reference
 
 }
+
+
+// SAS (Shared Access Signature) is a URI (Uniform Resource Identifier) used to grant limited access to resources in Azure Storage. A SAS token allows you to grant specific permissions to clients (users or applications) to access Azure Blob Storage, File Storage, Queue Storage, or Table Storage without exposing your account keys.

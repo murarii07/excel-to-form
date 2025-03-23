@@ -158,17 +158,17 @@ const downloadForm = (req, res) => {
 }
 router.post("/generate", uploads.single('excelFile'), generateFormFields)
 router.get("/download", downloadForm)
-router.post("/generatee", uploads.single('excelFile'), async (req, res) => {
-    let formId = FormListObj.generateUniqueElement()
-    const path = `./uploads/${formId}.xlsx`
-    console.log("path:", path, "\n")
-    fs.writeFileSync(path, req.file.buffer)
-    // await excelToCSVConversion(path, formId);
-    const csvContent = await excelToCSVConversion(path);
+// router.post("/generatee", uploads.single('excelFile'), async (req, res) => {
+//     let formId = FormListObj.generateUniqueElement()
+//     const path = `./uploads/${formId}.xlsx`
+//     console.log("path:", path, "\n")
+//     fs.writeFileSync(path, req.file.buffer)
+//     // await excelToCSVConversion(path, formId);
+//     const csvContent = await excelToCSVConversion(path);
 
-    // const ee = fs.readFileSync(`./uploads/${formId}.csv`);
-    const respo = await responseGeneration(csvContent)
-    console.log(typeof (respo))
-    // res.json(JSON.parse(respo))
-    res.json(respo)
-})
+//     // const ee = fs.readFileSync(`./uploads/${formId}.csv`);
+//     const respo = await responseGeneration(csvContent)
+//     console.log(typeof (respo))
+//     // res.json(JSON.parse(respo))
+//     res.json(respo)
+// })
