@@ -20,15 +20,15 @@ function Tasks() {
     <Routes>
       <Route path='/' element={<MyTask />} />
       <Route path='*' element={<FormDetails />} />
-      
+
     </Routes>
   )
 }
 function App() {
-  useEffect(()=>{
-    let r =document.querySelector("body")
-    r.setAttribute("class","bg-gradient-to-br from-indigo-50 to-purple-50")
-  },[])
+  useEffect(() => {
+    let r = document.querySelector("body")
+    r.setAttribute("class", "bg-gradient-to-br from-indigo-50 to-purple-50")
+  }, [])
   return (
     <BrowserRouter>
       <Routes>
@@ -42,7 +42,7 @@ function App() {
         <Route path='submit' element={<Submit />} />
         <Route path='*' element={<NotFound />} />
         <Route path='edit' element={<EditForm />} />
-        <Route path="responses/*" element={ <Responses />} />
+        <Route path="responses/*" element={<Responses />} />
 
       </Routes>
 

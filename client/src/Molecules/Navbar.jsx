@@ -1,6 +1,7 @@
 import UserDp from "../Atoms/userdp";
 import { lazy, Suspense, useEffect, useState } from "react";
 import SideBar from "./SideBar";
+import { useNavigate } from "react-router-dom";
 // const ProfileDp = lazy(() => import("../Atoms/img"))
 
 function Nav(props) {
@@ -11,6 +12,7 @@ function Nav(props) {
         console.log(sideBarFlag);
         if (sideBarFlag) setSideBarFlag(false);
     };
+    const navigate= useNavigate()
 
     useEffect(() => {
         const handleClickOutsidee = () => {
@@ -89,14 +91,17 @@ function Nav(props) {
                                 className: "bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-2 rounded-md text-white font-medium shadow-sm hover:shadow-md transition-all duration-200 hover:scale-105"
                             }
                         ].map((x, index) =>
-                            <a
+                            <span
                                 key={index}
-                                href={x.href}
+                                onClick={(e)=>{
+                                    navigate(x.href)
+                                    e.stopPropagation()
+                                }}
                                 className={x.className}
                                 target="_blank"
                             >
                                 <li>{x.name}</li>
-                            </a>
+                            </span>
                         )}
                     </div>
                 </ul>
