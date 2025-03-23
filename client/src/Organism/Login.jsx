@@ -159,14 +159,14 @@ animate-in slide-in-from-top-full duration-700">
                                     <div className="absolute inset-0 flex items-center">
                                         <div className="w-full border-t border-white/30"></div>
                                     </div>
-                                    <div className="relative flex justify-center text-sm">
+                                    {/* <div className="relative flex justify-center text-sm">
                                         <span className="px-2 bg-gradient-to-br from-violet-600 to-indigo-800 text-white/80">
                                             or Sign In With
                                         </span>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 
-                                <div className="flex justify-center">
+                                {/* <div className="flex justify-center">
                                     <button 
                                         className="flex items-center justify-center bg-white rounded-lg px-6 py-2 hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50"
                                         onClick={() => navigate("/signup")}
@@ -179,7 +179,7 @@ animate-in slide-in-from-top-full duration-700">
                                         />
                                         <span className="text-gray-800 font-medium">Google</span>
                                     </button>
-                                </div>
+                                </div> */}
                                 
                                 {error && (
                                     <div className="bg-red-500/20 text-white p-3 rounded-lg text-center text-sm animate-pulse">

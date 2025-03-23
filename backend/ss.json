@@ -37,11 +37,12 @@
     "Name": "coach_no",
     "Type": "text",
     "Required": true,
-    "Regex": "^[A-Z]{1,2}[0-9]{1,2}$" 
+    "Regex": "^[A-Z][0-9]+$" 
   },
   {
     "LabelName": "Seat No",
-    "Placeholder": "Enter your Seat No","Id": "seat_no",
+    "Placeholder": "Enter your Seat No",
+    "Id": "seat_no",
     "Name": "seat_no",
     "Type": "text",
     "Required": true,

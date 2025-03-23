@@ -98,7 +98,7 @@ function Nav(props) {
                                     e.stopPropagation()
                                 }}
                                 className={x.className}
-                                target="_blank"
+                                
                             >
                                 <li>{x.name}</li>
                             </span>

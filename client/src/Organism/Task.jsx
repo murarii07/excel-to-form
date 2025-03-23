@@ -31,9 +31,15 @@ const MyTask = () => {
     //response render
     useEffect(() => {
         if (response && !error) {
-            setFormListFilter(response.data.formlist);
-            setFormList(response.data.formlist);
-            console.log(response.data);
+            const l=response.data.formlist.map(x => {
+                const date=new Date(x.createdAt);
+                const r=date.toDateString()
+                return({
+                    ...x, timeStamp:r
+                })  }  )
+                setFormListFilter(l);
+            setFormList(l);
+            console.log(l);
             setIsLoading(false)
         }
         else if (error) {
@@ -81,10 +87,6 @@ const MyTask = () => {
                                         <summary className="material-symbols-outlined text-neutral-400 hover:text-neutral-600 cursor-pointer">
                                             more_vert
                                         </summary>
-                                        <ul className="absolute right-0 mt-2 bg-white rounded-md shadow-lg p-2 text-neutral-900 space-y-1 z-[20]">
-                                            <li className="cursor-pointer hover:text-purple-500">Edit</li>
-                                            <li className="cursor-pointer hover:text-purple-500">Delete</li>
-                                        </ul>
                                     </details>
                                 </div>
                                 <p className="mt-4 font-semibold text-lg hover:text-purple-900" onClick={(e) => {

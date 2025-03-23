@@ -149,7 +149,7 @@ const FormDetails = () => {
                                             Created On
                                         </div>
                                         <div className="text-neutral-700 bg-purple-50 p-3 rounded-lg shadow-sm border border-purple-200">
-                                            {form.timeStamp}
+                                            {(new Date(form.timeStamp)).toDateString()}
                                         </div>
                                     </div>
 
