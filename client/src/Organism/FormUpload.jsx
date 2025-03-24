@@ -64,7 +64,8 @@ const FormUpload = () => {
             // navigate(`/public/${response.data.url}`)
             console.log("Response", response);
             setDialog({ flag: true, message: response.message })
-            nav(`/formhost/${response.data.url}`)
+            setTimeout(()=>nav(`/formhost/${response.data.url}`),2000)
+           
 
         }
         else if (error) {
