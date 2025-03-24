@@ -273,7 +273,7 @@ const Register = () => {
                             </div>
 
                             <div className="flex space-x-4">
-                                <button
+                                {/* <button
                                     type="button"
                                     className="flex items-center justify-center w-full p-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-300"
                                     onClick={() => navigate("/signup")}
@@ -281,7 +281,7 @@ const Register = () => {
                                 >
                                     <img src="assets/google.png" alt="Google logo" className="w-6 h-6 mr-2" />
                                     <span className="text-sm font-medium text-gray-700">Google</span>
-                                </button>
+                                </button> */}
                             </div>
                         </div>
                     </div>
