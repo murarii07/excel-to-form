@@ -63,7 +63,7 @@ function XlUpload() {
             setIsLoad(false);
             setEr(true);
             console.log();
-            setDialog({ flag: true, message: "OOPS!!! error occurs Try again Later" });
+            setDialog({ flag: true, message: error.message ||"OOPS!!! error occurs Try again Later" });
             setTimeout(() => window.location.reload(), 2000);
         }
     }, [response, error,navigate]);

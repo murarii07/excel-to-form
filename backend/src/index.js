@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
 //if use signed cookie then i need to add  secret key also
-app.use(cookieParser(EnvironmentVariables.cookieSecretKey))
+app.use(cookieParser())
 
 // if use cookie then i need to add  below code only
 // app.use(cookieParser())

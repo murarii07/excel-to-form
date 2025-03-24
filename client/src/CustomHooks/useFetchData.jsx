@@ -9,12 +9,13 @@ const useFetchData = (url, opt = {}) => {
         // const signal = controller.signal
         try {
             let response = await fetch(url, { ...options })
+            let res = await response.json();
             if (!response.ok) {
                 throw new Error("Bad request");
             }
-            let res = await response.json();
+        
             if (!res.success) {
-                throw new Error(res.message);
+                throw new Error(res);
             }
             console.log("FFFFFFF", res)
             setResponse({ ...res })

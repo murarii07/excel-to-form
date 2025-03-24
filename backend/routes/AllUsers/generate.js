@@ -81,7 +81,20 @@ const generateFormFields = async (req, res) => {
         if (!fs.existsSync("./uploads")) {
             fs.mkdirSync("./uploads")
         }
-        console.log("ReqFile", req.file, "\n");
+        //checking whether file is valid or not
+        const { originalname } = req.file
+        let extension = (originalname.split(".")).pop();
+        if (extension !== "xlsx") {
+            console.log(extension)
+            return res.status(400).json({
+                data: null,
+                success: false,
+                message: "Invalid file please provide valid file"
+            })
+        }
+
+        // if (req.file, originalname)
+        //     console.log("ReqFile", req.file, "\n");
         const path = `./uploads/${formId}.xlsx`
         console.log("path:", path, "\n")
         fs.writeFileSync(path, req.file.buffer)
@@ -92,14 +105,13 @@ const generateFormFields = async (req, res) => {
         // //when excel file contains more than 5 row or it contains data
         // const obj2 = await ExtractingFields(path)
         const obj = await extractingFields(path)
-        
+
         FormListObj.add(formId) //create a id and push in this
         // console.log(FormListObj.formIdList)
         res
             .cookie('formId', formId, {
                 maxAge: 1000 * 60 * 10,  //10minute
                 httpOnly: true,
-                signed: true,
                 sameSite: 'none',
                 secure: true, // Only secure in production,
                 path: "/"

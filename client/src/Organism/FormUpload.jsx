@@ -9,6 +9,7 @@ import useDebounce from "../CustomHooks/debounce";
 import useFetchData from "../CustomHooks/useFetchData";
 import DialogBox from "../Atoms/DialogBox";
 import PromptBox from "../Atoms/PromptBox";
+import { changeFieldValue } from "../redux/formElement";
 const FormUpload = () => {
     const nav = useNavigate()
     const fields = useSelector(state => state.Field.value)
@@ -48,12 +49,24 @@ const FormUpload = () => {
 
     const FormUpload = () => {
         console.log("User Fields", fields, { fieldDetails: fields, formId: formDetails.formName, title: formDetails.title, description: formDetails.description })
-
+        const fieldValues = fields.map((x) => {
+            if (x.newField) {
+                const { newField, ...field } = x
+                return ({
+                    ...field,
+                    Name: field.LabelName,
+                })
+            }
+            return ({
+                ...x
+            })
+        })
+        console.log("dsfffffffffffffffffffffffffffffff", fieldValues)
         const options = {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': "application/json" },
-            body: JSON.stringify({ fieldDetails: fields, formId: formDetails.formName, title: formDetails.title, description: formDetails.description })
+            body: JSON.stringify({ fieldDetails: fieldValues, formId: formDetails.formName, title: formDetails.title, description: formDetails.description })
         }
         setOptions(options)
     }
@@ -64,8 +77,12 @@ const FormUpload = () => {
             // navigate(`/public/${response.data.url}`)
             console.log("Response", response);
             setDialog({ flag: true, message: response.message })
-            setTimeout(()=>nav(`/formhost/${response.data.url}`),2000)
-           
+            setTimeout(() => {
+                nav(`/formhost/${response.data.url}`)
+                dispatch(changeFieldValue([]))
+            }, 2000)
+
+
 
         }
         else if (error) {

@@ -6,14 +6,14 @@ import { addSpecificField, changeFieldValue, removeSpecificField } from "../redu
 import { useNavigate } from "react-router-dom";
 import useDebounce from "../CustomHooks/debounce";
 const toolboxFields = [
-    { Id: `file`, LabelName: "file", Type: "file", Name: "file", icon: "files", },
-    { Id: `text`, LabelName: "Text Field", Type: "text", Name: "text", icon: "text_fields", },
-    { Id: `email`, LabelName: "Email", Type: "email", Name: "email", icon: "alternate_email" },
-    { Id: `number`, LabelName: "Number", Type: "number", Name: "number", icon: "pin" },
-    { Id: `textarea`, LabelName: "Textarea", Type: "textarea", Name: "textarea", icon: "short_text" },
+    { Id: `file`, LabelName: "file", Type: "file", Name: "file", icon: "files", newField: true },
+    { Id: `text`, LabelName: "Text Field", Type: "text", Name: "text", icon: "text_fields", newField: true },
+    { Id: `email`, LabelName: "Email", Regex:`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`, Type: "email", Name: "email", icon: "alternate_email", newField: true },
+    { Id: `number`, LabelName: "Number", Type: "number", Name: "number", icon: "pin", newField: true },
+    { Id: `textarea`, LabelName: "Textarea", Type: "textarea", Name: "textarea", icon: "short_text", newField: true },
     { Id: `radio`, LabelName: "Radios", Type: "radio", Name: "radio", icon: "radio_button_checked" },
-    { Id: `checkbox`, LabelName: "Checkboxes", Type: "checkbox", Name: "checkbox", icon: "select_check_box" },
-    { Id: `Dropbox`, LabelName: "DropDown", Type: "select", Name: "select", icon: "dropdown", Options: ["Value1", "Value2"] },
+    { Id: `checkbox`, LabelName: "Checkboxes", Type: "checkbox", Name: "checkbox", icon: "select_check_box", newField: true },
+    { Id: `Dropbox`, LabelName: "DropDown", Type: "select", Name: "select", icon: "dropdown", Options: ["Value1", "Value2"], newField: true },
 
 ];
 

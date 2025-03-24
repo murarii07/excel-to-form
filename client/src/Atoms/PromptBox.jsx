@@ -90,7 +90,7 @@ export default function PromptBox({ isOpen, message, setDialog, setFormDetails }
                 alert("please enter form details");
               }}
             >
-              OK
+              upload form
             </Button>
           </div>
         </DialogPanel>
