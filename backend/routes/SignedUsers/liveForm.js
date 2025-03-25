@@ -263,6 +263,17 @@ const uploadForm1 = async (req, res) => {
                 message: "Bad request"
             })
         }
+        const col = formMetadata
+        const isExist = await col.findOne({ name: req.body.formId });
+        
+        if (isExist) {
+            return res.status(400).json({
+                data: null,
+                success: false,
+                message: "formname exists"
+            })
+        }
+
         const userId = req.userInfo.userId
         const url = urlGenerator(userId, req.body.formId);
         // console.log(user)
@@ -271,7 +282,7 @@ const uploadForm1 = async (req, res) => {
         //mongo operation
         //creating collection name same as the user
 
-        const col = formMetadata
+        
         console.log(userInfo)
         const result2 = await col.create({
             name: req.body.formId,
@@ -426,10 +437,10 @@ liveFormRouter.get("/v1/response/:formName", async (req, res) => {
             { user_id: userId, name: req.params.formName }, { _id: 1, fields: 1 }
         )
         let colname = result2.fields.map(x => x.Name)
-        let formResponses = await formResponse.find({ form_id: result2._id }, { response_data: 1, "file_metadata": 1 })
-        console.log(formResponses);
+        let formResponses = await formResponse.find({ form_id: result2._id }, { response_data: 1, })
+        console.log("dsadsadsds", formResponses);
         //_doc field contain acutal info
-        console.log("FormDetails", result2)
+        // console.log("FormDetails", result2)
         return res.status(200).json({
             data: { responses: formResponses, fields: colname },
             success: true,

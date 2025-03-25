@@ -86,9 +86,9 @@ const FormUpload = () => {
 
         }
         else if (error) {
-            alert("something went wrong")
+            alert("something went wrong ,try again")
             console.log(error)
-            nav("/error")
+            // nav("/error")
         }
 
     }, [response, error])

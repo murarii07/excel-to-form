@@ -81,8 +81,9 @@ const getForm1 = async (req, res) => {
 
 const formResponse1 = async (req, res) => {
     try {
+        console.log(req.files)
         // !req.body is used to check if req.body is "falsy. means empty or undefined or null"
-        if (!req.body || Object.keys(req.body).length == 0) {
+        if ((!req.body || Object.keys(req.body).length == 0) && !req.files.length) {
             return res.status(400).json({
                 success: false,
                 message: "requst error",
@@ -110,6 +111,7 @@ const formResponse1 = async (req, res) => {
 
         let file_metadata = [];
         let storage = 0;
+        const response_data={}
         for await (const file of req.files) {
             let r = await storingFiles(
                 metaData._id,
@@ -123,12 +125,13 @@ const formResponse1 = async (req, res) => {
             // ...fileWithoutBuffer i act like  the rest operator.
             const { buffer, ...fileWithoutBuffer } = file;
             file_metadata.push({ ...fileWithoutBuffer, file_url: r });
+            response_data[file.fieldname]=r  //storing file_url
         }
         console.log(file_metadata);
         let formResponseModel = formResponse;
         let result = new formResponseModel({
             form_id: metaData._id,
-            response_data: req.body,
+            response_data: {...req.body,...response_data},
             file_metadata: file_metadata,
         });
         await result.save();
@@ -155,5 +158,7 @@ const formResponse1 = async (req, res) => {
         });
     }
 };
+
+//upload.any() will take any files or any no. of file with differnet fieldname
 formSubmissionRouter.get("/v1/:encryptedUrl", formMiddleware, getForm1)
-formSubmissionRouter.post("/v1/:encryptedUrl", upload.array("file"), formMiddleware, formResponse1);
+formSubmissionRouter.post("/v1/:encryptedUrl", upload.any(), formMiddleware, formResponse1);

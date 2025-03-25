@@ -12,7 +12,7 @@ const responseGeneration = async (csvContent) => {
     const rr = fs.createWriteStream("./ss.json")
     for await (const chunk of result.stream) {
         // Best for Streaming
-        console.log(chunk.candidates[0].content.parts[0].text)
+        // console.log(chunk.candidates[0].content.parts[0].text)
         let r = chunk.candidates[0].content.parts[0].text
 
         process.stdout.write(r); // Print streamed text
@@ -40,7 +40,7 @@ async function excelToCSVConversion(worksheet) {
 }
 // fieldCreationWhenData()
 
-const reas = fs.readFileSync("../backend/src/ModifyPrompt.txt", "utf-8")
-console.log(reas)
+// const reas = fs.readFileSync("../backend/src/ModifyPrompt.txt", "utf-8")
+// console.log(reas)
 
 export { excelToCSVConversion, responseGeneration }

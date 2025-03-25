@@ -46,7 +46,7 @@ const Responses = () => {
                 <table className="w-full text-sm text-left text-gray-500">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-100 border-b border-gray-200">
                         <tr>
-                            <th scope="col" className="px-6 py-4 font-semibold tracking-wider">
+                            {/* <th scope="col" className="px-6 py-4 font-semibold tracking-wider">
                                 <div className="flex items-center space-x-1">
                                     <span>
 
@@ -56,7 +56,7 @@ const Responses = () => {
                                     </span>
 
                                 </div>
-                            </th>
+                            </th> */}
                             {col.map((field) => (
                                 <th scope="col" className="px-6 py-4 font-semibold tracking-wider" key={field}>
                                     {field}
@@ -68,30 +68,10 @@ const Responses = () => {
                         {data.length > 0 ? (
                             data.map((x) => (
                                 <tr key={x._id} className="hover:bg-gray-50 transition-colors duration-150 ease-in-out">
-                                    <td className="px-6 py-4">
-                                        {x.file_metadata && x.file_metadata.length ? (
-                                            <div className="space-y-2">
-                                                {x.file_metadata.map((z) => (
-                                                    <a
-                                                        key={z.file_url}
-                                                        href={z.file_url}
-                                                        className="block text-blue-600 hover:text-blue-800 hover:underline transition-colors duration-150 truncate max-w-xs"
-                                                        target="_blank"
-
-                                                    >
-                                                        {/* not showing which url is occurred */}
-                                                        {z.file_url.split('/').pop()}
-                                                    </a>
-                                                ))}
-                                            </div>
-                                        ) : (
-                                            <span className="text-gray-400 italic">No files</span>
-                                        )}
-                                    </td>
                                     {col.map((field) => (
                                         <td className="px-6 py-4" key={`${x._id}-${field}`}>
                                             {x.response_data[field] ? (
-                                                <span>{x.response_data[field]}</span>
+                                                <span className="block max-w-xs">{x.response_data[field]}</span>
                                             ) : (
                                                 <span className="text-gray-400 italic">N/A</span>
                                             )}
