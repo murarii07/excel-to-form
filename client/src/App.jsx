@@ -8,7 +8,6 @@ import Register from './Organism/Register';
 import Home from './Organism/Home';
 import './Working.css'
 import NotFound from './Atoms/NotFound';
-// import PrivateRoute from './Organism/PrivateRoute';
 import UserForm from './Organism/userForm';
 import FormDetails from './Organism/FormDetails'; import Submit from './Atoms/Submit';
 import EditForm from './Organism/EditForm';
@@ -19,7 +18,7 @@ function Tasks() {
 
     <Routes>
       <Route path='/' element={<MyTask />} />
-      <Route path='*' element={<FormDetails />} />
+      <Route path=':formName' element={<FormDetails />} />
 
     </Routes>
   )
@@ -38,11 +37,11 @@ function App() {
         <Route path='my-profile' element={<Profile />} />
         <Route path='tasks/*' element={<Tasks />} />
         <Route path='preview' element={<FormUpload />} />
-        <Route path='formhost/*' element={<UserForm />} />
+        <Route path='formhost/:formId' element={<UserForm />} />
         <Route path='submit' element={<Submit />} />
-        <Route path='*' element={<NotFound />} />
         <Route path='edit' element={<EditForm />} />
-        <Route path="responses/*" element={<Responses />} />
+        <Route path="responses/:formName" element={<Responses />} />
+        <Route path='*' element={<NotFound />} />
 
       </Routes>
 

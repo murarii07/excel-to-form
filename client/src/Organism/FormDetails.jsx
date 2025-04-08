@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import Button from "../Atoms/Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Nav from "../Molecules/Navbar";
 import useFetchData from "../CustomHooks/useFetchData";
 import SkeletonLoading from "../Atoms/SkeletionLoading";
@@ -13,7 +13,7 @@ const FormDetails = () => {
     const [dialog, setDialog] = useState({ flag: false, message: "error....." })
     const [isLoading, setLoading] = useState(true)
     const navigate = useNavigate()
-    const [formName] = useState(window.location.pathname.split("/").pop());
+    const { formName } = useParams();
     const [response, error] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/v1/formDetails/${formName}`, {
         method: "GET",
         credentials: "include" // Sends cookies with the request
@@ -114,7 +114,7 @@ const FormDetails = () => {
                                         <div className="flex gap-2 items-center bg-purple-50 p-2 rounded-lg shadow-inner border border-purple-100">
                                             <p className="truncate text-sm text-neutral-700 px-2 py-1 rounded-md flex-grow">
                                                 <a
-                                                    href= {`http://localhost:5173/formhost/${form.link}`}
+                                                    href={`http://localhost:5173/formhost/${form.link}`}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="w-full hover:text-indigo-600 transition-colors duration-200 overflow-hidden"
@@ -171,7 +171,7 @@ const FormDetails = () => {
                                             <span className="material-symbols-outlined text-sm">download</span>
                                             download
                                         </>}
-                                       
+
                                     />
 
                                     <Button
@@ -180,7 +180,7 @@ const FormDetails = () => {
                                             <span className="material-symbols-outlined text-sm">settings</span>
                                             See Responses
                                         </>}
-                                         onClick={(e)=>{
+                                        onClick={(e) => {
                                             // e.preventDefault();
                                             navigate(`/responses/${form.name}`)
                                             // e.stopPropogation()

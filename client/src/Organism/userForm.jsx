@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
 import Form from '../Molecules/Form'
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useFetchData from "../CustomHooks/useFetchData";
 import SkeletonLoading from "../Atoms/SkeletionLoading";
 // import "../form.css"
 const UserForm = () => {
     const navigate = useNavigate();
     const [details, setDetails] = useState({ title: "", description: "", fields: [] })
-    const [url] = useState(window.location.pathname)
-    const ext = url.split("/formhost/")
-    const newUrl = `${import.meta.env.VITE_SERVER_API_URL}/public/v1/${ext[1]}`;
+    const { formId } = useParams()
+    const newUrl = `${import.meta.env.VITE_SERVER_API_URL}/public/v1/${formId}`;
     const [response, error] = useFetchData(newUrl, {
         method: "GET",
     })
     const [loading, setLoading] = useState(false)
-    const [res, err, setSubmitOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/public/v1/${ext[1]}`)
+    const [res, err, setSubmitOptions] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/public/v1/${formId}`)
     async function dataSubmission(e) {
         e.preventDefault();
         try {

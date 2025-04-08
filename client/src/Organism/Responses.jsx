@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useFetchData from "../CustomHooks/useFetchData";
 import { useState, useEffect } from "react";
 
@@ -7,7 +7,7 @@ const Responses = () => {
     const [col, setCol] = useState([]);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-    const [formName] = useState(window.location.pathname.split("/").pop());
+    const { formName } = useParams() //to get the paramater  present in url
     const [response, error] = useFetchData(`${import.meta.env.VITE_SERVER_API_URL}/user/v1/response/${formName}`, {
         method: "GET",
         credentials: "include" // Sends cookies with the request
